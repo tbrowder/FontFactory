@@ -15,42 +15,41 @@ FreeSerif
 say $f.size;  # OUTPUT:
 12.5
 say $f.file;  # OUTPUT:
-/usr/share/fonts/free/..
+/usr/share/fonts/opentype/
 say $f.alias; # OUTPUT:
-Times-Roman
+Times
 =end code
 
 =head1 DESCRIPTION
 
-B<FreeFont> is a package that provides
-easy handling of the GNU FreeFont set
-of OpenType fonts which
-closely match the classic Adobe 
-Type 1 free fonts shown in the 
-following table. Unlike the original
-Adobe fonts, these fonts also 
-include
-thousands of Unicode characters. The
-fonts are also among the few,
-freely-available fonts that have Type 1 
-kerning.
+B<FreeFont> is a package that provides easy handling of the GNU
+FreeFont set of OpenType fonts which closely match the classic Adobe
+Type 1 free fonts shown in the following table. Unlike the original
+Adobe fonts, these fonts also include thousands of Unicode
+characters. The fonts are also among the few, freely-available fonts
+that have Type 1 kerning.
+
+Note the I<Code> and I<Code2> columns. Each row contains equivalent
+code you may use to select the FreeFont face. You can also use the
+complete name (with or without spaces) if desired.
 
 =begin table
-Name | Code | Adobe Alias
------+------+------------
-FreeSerif | t | Times
-FreeSerifBold | tb | Times Bold
-FreeSerifItalic | ti | Times Italic
-FreeSerifBoldItalic | tbi | Times Bold Italic
-FreeSans | h | Helvetica
-FreeSansBold | hb | Helvetica Bold
-FreeSansOblique | ho | Helvetica Oblique
-FreeSansBoldOblique | ubo | Helvetica Bold Oblique
-FreeMono | c | Courier
-FreeMonoBold | cb | Courier Bold
-FreeMonoOblique | co | Courier Oblique
-FreeMonoBoldOblique | cbo | Courier Bold Oblique
+Name                   | Code | Code2 | Adobe Type 1
+-----------------------+------+------------
+Free Serif             | se   | t     | Times
+Free Serif Bold        | seb  | tb    | Times Bold
+Free Serif Italic      | sei  | ti    | Times Italic
+Free Serif Bold Italic | sebi | tbi   | Times Bold Italic
+Free Sans              | sa   | h     | Helvetica
+Free Sans Bold         | sab  | hb    | Helvetica Bold
+Free Sans Oblique      | sao  | ho    | Helvetica Oblique
+Free Sans Bold Oblique | sabo | hbo   |  Helvetica Bold Oblique
+Free Mono              | m    | c     | Courier
+Free Mono Bold         | mb   | cb    | Courier Bold
+Free Mono Oblique      | mo   | co    | Courier Oblique
+Free Mono Bold Oblique | mbo  | cbo   | Courier Bold Oblique
 =end table
+
 =head1 AUTHOR
 
 Tom Browder <tbrowder@acm.org>

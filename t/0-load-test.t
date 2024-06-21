@@ -1,6 +1,7 @@
 use Test;
+
 use FreeFont;
 
-pass "replace me";
+use-ok "FreeFont";
 
 done-testing;
