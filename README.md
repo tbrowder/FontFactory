@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/tbrowder/FreeFont/actions/workflows/linux.yml/badge.svg)](https://github.com/tbrowder/FreeFont/actions) [![Actions Status](https://github.com/tbrowder/FreeFont/actions/workflows/macos.yml/badge.svg)](https://github.com/tbrowder/FreeFont/actions) [![Actions Status](https://github.com/tbrowder/FreeFont/actions/workflows/windows.yml/badge.svg)](https://github.com/tbrowder/FreeFont/actions)
+
 NAME
 ====
 
@@ -30,7 +32,7 @@ DESCRIPTION
 <th>Name</th> <th>Code</th> <th>Adobe Alias</th>
 </tr></thead>
 <tbody>
-<tr> <td>FreeSerif FreeSerifBold FreeSerifItalic FreeSerifBoldItalic</td> <td>t tb ti tbi</td> <td>Times Times Bold Times Italic Times Bold Italic</td> </tr> <tr> <td>FreeSans FreeSansBold FreeSansOblique FreeSansBoldOblique</td> <td>h hb ho ubo</td> <td>Helvetica Helvetica Bold Helvetica Oblique Helvetica Bold Oblique</td> </tr> <tr> <td>FreeMono FreeMonoBold FreeMonoOblique FreeMonoBoldOblique</td> <td>c cb co cbo</td> <td>Courier Courier Bold Courier Oblique Courier Bold Oblique</td> </tr>
+<tr> <td>FreeSerif</td> <td>t</td> <td>Times</td> </tr> <tr> <td>FreeSerifBold</td> <td>tb</td> <td>Times Bold</td> </tr> <tr> <td>FreeSerifItalic</td> <td>ti</td> <td>Times Italic</td> </tr> <tr> <td>FreeSerifBoldItalic</td> <td>tbi</td> <td>Times Bold Italic</td> </tr> <tr> <td>FreeSans</td> <td>h</td> <td>Helvetica</td> </tr> <tr> <td>FreeSansBold</td> <td>hb</td> <td>Helvetica Bold</td> </tr> <tr> <td>FreeSansOblique</td> <td>ho</td> <td>Helvetica Oblique</td> </tr> <tr> <td>FreeSansBoldOblique</td> <td>ubo</td> <td>Helvetica Bold Oblique</td> </tr> <tr> <td>FreeMono</td> <td>c</td> <td>Courier</td> </tr> <tr> <td>FreeMonoBold</td> <td>cb</td> <td>Courier Bold</td> </tr> <tr> <td>FreeMonoOblique</td> <td>co</td> <td>Courier Oblique</td> </tr> <tr> <td>FreeMonoBoldOblique</td> <td>cbo</td> <td>Courier Bold Oblique</td> </tr>
 </tbody>
 </table>
 

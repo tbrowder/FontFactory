@@ -42,17 +42,14 @@ FreeSerif | t | Times
 FreeSerifBold | tb | Times Bold
 FreeSerifItalic | ti | Times Italic
 FreeSerifBoldItalic | tbi | Times Bold Italic
-
 FreeSans | h | Helvetica
 FreeSansBold | hb | Helvetica Bold
 FreeSansOblique | ho | Helvetica Oblique
 FreeSansBoldOblique | ubo | Helvetica Bold Oblique
-
 FreeMono | c | Courier
 FreeMonoBold | cb | Courier Bold
 FreeMonoOblique | co | Courier Oblique
 FreeMonoBoldOblique | cbo | Courier Bold Oblique
-
 =end table
 =head1 AUTHOR
 
