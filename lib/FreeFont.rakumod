@@ -1,26 +1,47 @@
 unit class FreeFont;
 
-has %.codes; # key: font code (see table)
-has %.fonts; # font names, LC;
+use PDF::Font::Loader :find-font, :load-font;
+
+# several ways to lookup font faces:
+# user enters one of:
+#   code
+#   code2
+#   complete name
+# number
+# name (various)
+# code (see table)
+# code2 (see table)
+has %.code;      # code -> number
+has %.code2;     # code2 -> number
+# font names, LC, no spaces -> number:
+has %.shortname;
+has %.number; # 1-13 -> subkeys:
+              # code, code2, shortname
+              # name, fullname, path,
+              # font object
 
 my @fontnames =
-"Free Mono",
-"Free Mono Bold",
-"Free Mono Bold Oblique",
-"Free Mono Oblique",
-"Free Sans",
-"Free Sans Bold",
-"Free Sans Bold Oblique",
-"Free Sans Oblique",
-"Free Serif",
-"Free Serif Bold",
-"Free Serif Bold Italic",
-"Free Serif Italic",
+# full name, code, code2
+# Courier equivalent
+"Free Mono m c",
+"Free Mono Bold mb cb",
+"Free Mono Bold Oblique mbo cbo",
+"Free Mono Oblique mo co",
+# Helvetica equivalent
+"Free Sans sa h",
+"Free Sans Bold sab hb",
+"Free Sans Bold Oblique sabo hbo",
+"Free Sans Oblique sao ho",
+# Times equivalent
+"Free Serif se t",
+"Free Serif Bold seb tb",
+"Free Serif Bold Italic sebi tbi",
+"Free Serif Italic sei ti",
 ;
 
-class Font {
+class DocFont {
     has $.size;
-    has $.fullname;  # full name
+    has $.fullname;  # full name with spaces
     has $.name;      # full with no spaces
     has $.shortname; # name.lc
 
@@ -35,14 +56,23 @@ class Font {
 }
 
 submethod TWEAK {
-    for @fontnames {
-        my $full-name  = $_;
-        my $name = $_;
-        my $short-name = $_;
-        $short-name ~~ s:g/\s+//;  # delete spaces
+    for @fontnames.kv -> $i, $v is copy {
+        my $n = $i + 1; # for user
+        # the last two words are 'code'
+        #   and 'code2', respectively
+        my @w = $v.words;
+        my $code2 = @w.unshift;
+        my $code  = @w.unshift;
+        # reassemble
+        $v = @w.join(" ");
+        my $full-name  = $v;
+        my $name       = $v;
+        my $short-name = $v;
+        # delete spaces
+        $short-name ~~ s:g/\s+//; 
         $short-name .= lc;
-        my $f = $_.lc;
-        %!fonts{$short-name} = $_;
+        my $f = $v.lc;
+        #%!fonts{$short-name} = $v;
     }
 }
 
@@ -102,8 +132,8 @@ multi method get-font($code, :$debug --> Font) {
         default {
             note "FATAL: You entered the desired font code '$code'.";
             die q:to/HERE/;
-            The desired font code entry must be in the format "<code><size>"
-            where "<code>" is a valid font code or and "<size>"
+            The desired font code entry must be in the format "\<code>\<size>"
+            where "\<code>" is a valid font code or and "\<size>"
             is either an integral number or a decimal number in
             the form "\d+d\d+" (e.g., '12d5' which means '12.5' PS points).
             HERE

@@ -1,0 +1,23 @@
+#!/usr/bin/env raku
+
+# run by Build.rakumod upon zef install
+# install MICR font and license
+
+my $home = %*ENV<HOME>:exists ??
+           %*ENV<HOME> !! 0;
+if not $home {
+    die "FATAL: Unable to determine a \$HOME directory for the user.";
+}
+
+my $fil  = "micrenc.ttf";
+my $dir  = "$home/.FreeFont";
+
+# need some args to allow testing and
+# installation
+my $test = @*ARGS;
+if $test {
+    $home = $*CWD; 
+    $dir  = "$home/xt/.FreeFont";
+}
+
+

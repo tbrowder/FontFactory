@@ -1,0 +1,29 @@
+Add the MICR font to be installed
++ put in /resources
+  - Build.rakumod
+  - install in $HOME/.FreeFont/*
+    (unless it's already there
++ add doc stuff from FFT1
+
+Decide on the interface details:
+  the user asks for a font by
+    code
+    code2
+    number
+    name (with or without spaces)
+    adobe namr (with or without spaces)
+  the factory first looks in its
+    hash to see if there is already a font object
+    if not, 
+      find the path, 
+        check the user's home dir first
+        if not
+          use :find-font 
+          update user's home dir
+      load the font
+      and reference it in the hash
+
+    the hash is %fonts with a number key
+      with a value of the object
+
+another option should be downloading the GNU file archive directly and unpacking   it

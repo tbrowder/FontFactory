@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-B<FreeFont> - Provides a convenience class to ease FreeFont font handling in different faces and sizes
+B<FreeFont> - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes
 
 =head1 SYNOPSIS
 
@@ -19,7 +19,7 @@ say $f1.alias; # OUTPUT: «Times␤»
 
 =head1 Installation requirements
 
-The following packages need to be installed to use this module:
+The following system packages need to be installed to use this module:
 
 =begin item
 The FontConfig library
@@ -43,6 +43,29 @@ $ sudo aptitude install fonts-freefont-otf
 
 =end item
 
+On other systems the files may be downloaded from
+L<https://ftp.gnu.org/gnu/freefont> and installed in any desired
+place. The paths to the installed files should then be entered
+manually in the C<$HOME/.FreeFont/config.yml> file which is created
+upon installation.  That file should look like this (replace the '?'
+with the full path to the '.otf' file):
+
+=begin code
+# Font face name    : /path/to/file.otf
+FreeSerif           : ?
+FreeSerifBold       : ?
+FreeSerifItalic     : ?
+FreeSerifBoldItalic : ?
+FreeSans            : ?
+FreeSansBold        : ?
+FreeSansOblique     : ?
+FreeSansBoldOblique : ?
+FreeMono            : ?
+FreeMonoBold        : ?
+FreeMonoOblique     : ?
+FreeMonoBoldOblique : ?
+=end code
+
 =head1 DESCRIPTION
 
 B<FreeFont> is a package that provides easy handling of the GNU
@@ -52,28 +75,84 @@ Adobe fonts, these fonts also include thousands of Unicode
 characters. The fonts are also among the few, freely-available fonts
 that have Type 1 kerning.
 
+See L<https://www.gnu.org/software/freefont/sources/> for much more
+information on the sources and Unicode coverage of the GNU FreeFont
+collection.
+
 Note the I<Code> and I<Code2> columns. Each row contains equivalent
 code you may use to select the FreeFont face. You can also use the
 complete name (with or without spaces) if desired.
 
-=begin table
-Name                   | Code | Code2 | Adobe Type 1 name
------------------------+------+------------
-Free Serif             | se   | t     | Times
-Free Serif Bold        | seb  | tb    | Times Bold
-Free Serif Italic      | sei  | ti    | Times Italic
-Free Serif Bold Italic | sebi | tbi   | Times Bold Italic
-Free Sans              | sa   | h     | Helvetica
-Free Sans Bold         | sab  | hb    | Helvetica Bold
-Free Sans Oblique      | sao  | ho    | Helvetica Oblique
-Free Sans Bold Oblique | sabo | hbo   | Helvetica Bold Oblique
-Free Mono              | m    | c     | Courier
-Free Mono Bold         | mb   | cb    | Courier Bold
-Free Mono Oblique      | mo   | co    | Courier Oblique
-Free Mono Bold Oblique | mbo  | cbo   | Courier Bold Oblique
+=head2 Table 1
+=begin table :caption<The GNU FreeFont Collection>
+FreeFont Name          | Code | Code2 | Reference No.
+-----------------------+------+--------------------------
+Free Serif             | se   | t     | 1
+Free Serif Bold        | seb  | tb    | 2
+Free Serif Italic      | sei  | ti    | 3
+Free Serif Bold Italic | sebi | tbi   | 4
+Free Sans              | sa   | h     | 5
+Free Sans Bold         | sab  | hb    | 6
+Free Sans Oblique      | sao  | ho    | 7
+Free Sans Bold Oblique | sabo | hbo   | 8
+Free Mono              | m    | c     | 9
+Free Mono Bold         | mb   | cb    | 10
+Free Mono Oblique      | mo   | co    | 11
+Free Mono Bold Oblique | mbo  | cbo   | 12
+MICRE                  | mi   | mi    | 13 (not a FreeFont)
 =end table
 
-=head2
+=head2 Table 2
+
+=begin table :caption<The Equivalent Adobe Type 1 Fonts>
+Adobe Type 1 Name      | Code | Code2 | Reference No.
+-----------------------+------+--------------------------
+Times                  | se   | t     | 1
+Times Bold             | seb  | tb    | 2
+Times Italic           | sei  | ti    | 3
+Times Bold Italic      | sebi | tbi   | 4
+Helvetica              | sa   | h     | 5
+Helvetica Bold         | sab  | hb    | 6
+Helvetica Oblique      | sao  | ho    | 7
+Helvetica Bold Oblique | sabo | hbo   | 8
+Courier                | m    | c     | 9
+Courier Bold           | mb   | cb    | 10
+Courier Oblique        | mo   | co    | 11
+Courier Bold Oblique   | mbo  | cbo   | 12
+MICRE                  | mi   | mi    | 13 (not an Adobe Type 1 font)
+=end table
+
+
+=head2 Notes on the MICR Encoding (MICRE) font
+
+Each table above shows one more font that is included in the '/resources' directory,
+along with two more files, that will be installed into your '$HOME'
+directory.  That is a MICRE font in TrueType format ('.ttf').  The
+MICR Encoding font, used for bank checks, was obtained from
+L<1001fonts.com|https://www.1001fonts.com/micr-encoding-font.html>.
+
+The downloaded file was named C<micr-encoding.zip> (which was deleted
+after unzipping it).  When file C<micr-encoding.zip> was unzipped into
+an C<unzipped> directory, the following files were found:
+
+=begin code
+  '!DigitalGraphicLabs.html'
+  '!license.txt'
+  micrenc.ttf
+=end code
+
+The two files in single quotes were renamed to:
+
+=begin code
+DigitalGraphicLabs.html
+license.txt
+=end code
+
+and all three files will be installed in your '$HOME' directory.
+
+The license basically says the font is free to use for non-commercial
+purposes. Consult the license carefully if you do intend to so use it.
+
 =head1 The Font class
 
 =head1 AUTHOR
