@@ -15,14 +15,20 @@
   "perl": "6.d",
   "provides": {
     "FreeFont": "lib/FreeFont.rakumod",
+    "FreeFont::BuildUtils": "lib/FreeFont/BuildUtils.rakumod",
+    "FreeFont::Classes": "lib/FreeFont/Classes.rakumod",
+    "FreeFont::FontHashes": "lib/FreeFont/FontHashes.rakumod",
+    "FreeFont::Resources": "lib/FreeFont/Resources.rakumod",
     "FreeFont::Utils": "lib/FreeFont/Utils.rakumod"
   },
   "resources": [
     "micrenc.ttf",
+    "DigitalGraphicLabs.html",
     "license.txt"
   ],
   "source-url": "https://github.com/tbrowder/FreeFont.git",
   "tags": [
+    "FreeFont GNU Font OpenType otf ttf"
   ],
   "test-depends": [
   ],
