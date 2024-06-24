@@ -1,6 +1,6 @@
 #!/usr/bin/env raku
 
-use FreeFont::BuildUtils;
+# creates file FreeFont::BuildUtils
 
 =begin comment
 all font files in dir /usr/share/fonts/opentype/freefont
@@ -110,7 +110,7 @@ for %number.keys.sort({$^a <=> $^b}) {
 # the hashes are assembled, write all
 # to the new module 
 
-my $f = "$*CWD/lib/FreeFont/BuilUtils.rakumod";
+my $f = "$*CWD/lib/FreeFont/BuildUtils.rakumod";
 my $fh = open $f, :w;
 $fh.print: q:to/HERE/;
 # AUTO-GENERATED DO NOT EDIT
@@ -118,45 +118,60 @@ $fh.print: q:to/HERE/;
 
 unit module FreeFont::BuildUtils;
 
-constant %core is export = %(
+constant %code is export = %(
 HERE
-for %core.kv -> $k, $v {
-    $k => $v,
+for %code.sort(*.keys) {
+    my ($k, $v) = .key, .value;
+    $fh.say: "    $k => $v,"
 }
 
 $fh.print: q:to/HERE/;
-# close the preceding hash
+    # close the preceding hash
 );
 
-constant %core2 is export = %(
+constant %code2 is export = %(
 HERE
-for %core2.kv -> $k, $v {
-    $k => $v,
+for %code2.sort(*.keys) {
+    my ($k, $v) = .key, .value;
+    $fh.say: "    $k => $v,"
 }
 
 $fh.print: q:to/HERE/;
-# close the preceding hash
+    # close the preceding hash
 );
 
 constant %shortname is export = %(
 HERE
-for %shortname.kv -> $k, $v {
-    $k => $v,
+for %shortname.sort(*.keys) {
+    my ($k, $v) = .key, .value;
+    $fh.say: "    $k => $v,"
 }
 
 $fh.print: q:to/HERE/;
-# close the preceding hash
+    # close the preceding hash
 );
 
 constant %number is export = %(
 HERE
-for %shortname.k.sort({$^a <=> $^ b}) -> $k {
-    $k => {
-    },
+for %number.keys.sort({$^a <=> $^b}) -> $k {
+    $fh.say: "    $k => \{";
+    my %h = %(%number{$k});
+    for %h.sort(*.keys) {
+        my ($key, $val) = .key, .value;
+        # most values are strings, but
+        # fontobj
+        if $val ~~ Numeric {
+            $fh.say: "        $key => $val"
+        }
+        else {
+            $fh.say: "        $key => '$val'"
+        }
+    }
+    $fh.say: "    },";
 }
 
 $fh.print: q:to/HERE/;
-# close the preceding hash
+    # close the preceding hash
 );
 HERE
 
