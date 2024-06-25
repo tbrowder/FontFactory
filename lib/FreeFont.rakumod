@@ -31,13 +31,14 @@ has %.number; # 1-13 -> subkeys:
 #   fullname
 #   path
 #   font object
+has %.fonts; # keep fontinfo by number key
 
 submethod TWEAK {
-    %!code      = get-code-hash;      # code -> number
-    %!code2     = get-code2-hash;     # code2 -> number
+    # %!code      = get-code-hash;      # code -> number
+    # %!code2     = get-code2-hash;     # code2 -> number
     # font names, LC, no spaces -> number:
-    %!shortname = get_shortname-hash;
-    %!number    = get-number-hash;    # 1-13 -> subkeys:
+    # %!shortname = get_shortname-hash;
+    # %!number    = get-number-hash;    # 1-13 -> subkeys:
 }
 
 multi method get-font($name, Numeric :$size, :$debug --> DocFont) {
