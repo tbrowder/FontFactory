@@ -44,6 +44,10 @@ constant @fontnames =
 my $debug = 0;
 # the 4 hashes
 my (%code, %code2, %shortname, %number);
+# track the max size of each set of keys
+my ($num-s, $cod-s, $cod2-s, $sho-s) = 0, 0, 0, 0;
+my $siz;
+# $num-s $cod-s $cod2-s $sho-s
 for @fontnames.kv -> $i, $v is copy {
     my $n = $i + 1;
     # the last three words are 'code'
@@ -53,12 +57,24 @@ for @fontnames.kv -> $i, $v is copy {
     say @w.raku if $debug;
     # error check
     my $N = @w.pop;
+    $siz = $N.chars;
+    $num-s = $siz if $siz > $num-s;
+# $num-s $cod-s $cod2-s $sho-s
+
     if $N != $n {
         die "FATAL: n != N";
     }
     my $code2 = @w.pop;
+    $siz = $code2.chars;
+    $cod2-s = $siz if $siz > $cod2-s;
+# $num-s $cod-s $cod2-s $sho-s
+
     say "code2 = '$code2'" if $debug;
     my $code  = @w.pop;
+    $siz = $code.chars;
+    $cod-s = $siz if $siz > $cod-s;
+# $num-s $cod-s $cod2-s $sho-s
+
     say "code = '$code'" if $debug;
     # reassemble
     say @w.raku if $debug;
@@ -71,6 +87,9 @@ for @fontnames.kv -> $i, $v is copy {
     my $shortname = $name;
     # all lower-case
     $shortname .= lc;
+    $siz = $shortname.chars;
+    $sho-s = $siz if $siz > $sho-s;
+# $num-s $cod-s $cod2-s $sho-s
 
     # insert into the hashes
     %code{$code}           = $n;
@@ -122,17 +141,21 @@ constant %code is export = %(
 HERE
 for %code.sort(*.keys) {
     my ($k, $v) = .key, .value;
-    $fh.say: "    $k => $v,"
+# $num-s $cod-s $cod2-s $sho-s
+    $n = $cod-s;
+    my $ks = sprintf = '%-*.*s', $n, $n, $k;
+    $fh.say: "    $ks => $v,"
 }
 
 $fh.print: q:to/HERE/;
     # close the preceding hash
-);
+)
 
 constant %code2 is export = %(
 HERE
 for %code2.sort(*.keys) {
     my ($k, $v) = .key, .value;
+# $num-s $cod-s $cod2-s $sho-s
     $fh.say: "    $k => $v,"
 }
 
@@ -144,6 +167,7 @@ constant %shortname is export = %(
 HERE
 for %shortname.sort(*.keys) {
     my ($k, $v) = .key, .value;
+# $num-s $cod-s $cod2-s $sho-s
     $fh.say: "    $k => $v,"
 }
 
@@ -154,6 +178,7 @@ $fh.print: q:to/HERE/;
 constant %number is export = %(
 HERE
 for %number.keys.sort({$^a <=> $^b}) -> $k {
+# $num-s $cod-s $cod2-s $sho-s
     $fh.say: "    $k => \{";
     my %h = %(%number{$k});
     for %h.sort(*.keys) {
