@@ -139,11 +139,14 @@ unit module FreeFont::BuildUtils;
 
 constant %code is export = %(
 HERE
+
+my $n;
+
 for %code.sort(*.keys) {
     my ($k, $v) = .key, .value;
 # $num-s $cod-s $cod2-s $sho-s
     $n = $cod-s;
-    my $ks = sprintf = '%-*.*s', $n, $n, $k;
+    my $ks = sprintf '%-*.*s', $n, $n, $k;
     $fh.say: "    $ks => $v,"
 }
 
@@ -156,7 +159,9 @@ HERE
 for %code2.sort(*.keys) {
     my ($k, $v) = .key, .value;
 # $num-s $cod-s $cod2-s $sho-s
-    $fh.say: "    $k => $v,"
+    $n = $cod2-s;
+    my $ks = sprintf '%-*.*s', $n, $n, $k;
+    $fh.say: "    $ks => $v,"
 }
 
 $fh.print: q:to/HERE/;
@@ -168,7 +173,9 @@ HERE
 for %shortname.sort(*.keys) {
     my ($k, $v) = .key, .value;
 # $num-s $cod-s $cod2-s $sho-s
-    $fh.say: "    $k => $v,"
+    $n = $sho-s;
+    my $ks = sprintf '%-*.*s', $n, $n, $k;
+    $fh.say: "    $ks => $v,"
 }
 
 $fh.print: q:to/HERE/;
@@ -177,19 +184,24 @@ $fh.print: q:to/HERE/;
 
 constant %number is export = %(
 HERE
+
+my $n2 = "shortname".chars; # max length of second keys
 for %number.keys.sort({$^a <=> $^b}) -> $k {
 # $num-s $cod-s $cod2-s $sho-s
-    $fh.say: "    $k => \{";
+    $n = $num-s;
+    my $ks = sprintf '%-*.*s', $n, $n, $k;
+    $fh.say: "    $ks => \{";
     my %h = %(%number{$k});
     for %h.sort(*.keys) {
         my ($key, $val) = .key, .value;
+        my $ks2 = sprintf '%-*.*s', $n2, $n2, $key;
         # most values are strings, but
         # fontobj
         if $val ~~ Numeric {
-            $fh.say: "        $key => $val"
+            $fh.say: "        $ks2 => $val"
         }
         else {
-            $fh.say: "        $key => '$val'"
+            $fh.say: "        $ks2 => '$val'"
         }
     }
     $fh.say: "    },";
