@@ -66,6 +66,7 @@ multi method get-font($name, Numeric :$size, :$debug --> DocFont) {
 }
 
 multi method get-font($code, :$debug --> DocFont) {
+    my ($name, $size);
     # e.g.: t12d5 OR t12
     my ($cp1, $cp2);
     with $code {
