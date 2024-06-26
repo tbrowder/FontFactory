@@ -3,9 +3,9 @@ unit class FreeFont;
 use PDF::Font::Loader :find-font, :load-font;
 
 use FreeFont::Classes;
-use FreeFont::FontHashes;
 use FreeFont::Resources;
 use FreeFont::Utils;
+use FreeFont::X::FontHashes;
 
 # several ways to lookup font faces:
 # user enters one of:
@@ -34,14 +34,15 @@ has %.number; # 1-13 -> subkeys:
 has %.fonts; # keep fontinfo by number key
 
 submethod TWEAK {
-    # %!code      = get-code-hash;      # code -> number
-    # %!code2     = get-code2-hash;     # code2 -> number
+    %!code      = %FreeFont::X::FontHashes::code;      # code -> number
+    %!code2     = %FreeFont::X::FontHashes::code2;     # code2 -> number
     # font names, LC, no spaces -> number:
-    # %!shortname = get_shortname-hash;
-    # %!number    = get-number-hash;    # 1-13 -> subkeys:
+    %!shortname = %FreeFont::X::FontHashes::shortname;
+    %!number    = %FreeFont::X::FontHashes::number;    # 1-13 -> subkeys:
+    #note "DEBUG: successful TWEAK and exit"; exit;
 }
 
-multi method get-font($name, Numeric :$size, :$debug --> DocFont) {
+multi method get-font($name, Numeric :$size!, :$debug --> DocFont) {
     # e.g.: FreeSans, :size(12.5)
     my $fname = $name;
     $fname ~~ s:g/\s+//;  # delete spaces
@@ -50,15 +51,16 @@ multi method get-font($name, Numeric :$size, :$debug --> DocFont) {
 
     note "DEBUG: \$fname = '$fname'";
     with $fname {
-        when %!fonts{$fname}:exists {
+        when %!shortname{$fname}:exists {
             ; # ok
         }
         default {
             note "FATAL: You entered the desired font name '$name'.";
-            die q:to/HERE/;
+            note qq:to/HERE/;
             Font name '$name' is not recognized. It must be one of the following:
               {say "  $_" for %!fonts.keys.sort}
             HERE
+            exit;
         }
     }
 
@@ -66,28 +68,50 @@ multi method get-font($name, Numeric :$size, :$debug --> DocFont) {
     $o
 }
 
-multi method get-font($code, :$debug --> DocFont) {
-    my ($name, $size);
+multi method get-font($Code, :$debug --> DocFont) {
+    my ($num, $name, $size);
     # e.g.: t12d5 OR t12
-    my ($cp1, $cp2);
-    with $code {
+    my ($code, $code2, $cp1, $cp2, $sizint, $sizfrac);
+    with $Code {
         when /^ :i (se|sa|m)  (b|i|o)?  (\d+)    [['d'| '.'] (\d+)]? $/ {
             # Code
-            ; # ok for now
+            $cp1     = ~$0;
+            $cp2     = $1.defined ?? ~$1 !! "";
+            $sizint  = +$2;
+            $sizfrac = $3.defined ?? +$3 !! "";
+
+            $code    = $cp1 ~ $cp2;
+            $size    = "{$sizint}.{$sizfrac}".Numeric;
         }
         when /^ :i (t|h|c)    (b|i|o)? (\d+)     [['d'|'.'] (\d+)]? $/ {
             # Code2
-            ; # ok for now
+            $cp1     = ~$0;
+            $cp2     = $1.defined ?? ~$1 !! "";
+            $sizint  = +$2;
+            $sizfrac = $3.defined ?? +$3 !! "";
+
+            $code2   = $cp1 ~ $cp2;
+            $size    = "{$sizint}.{$sizfrac}".Numeric;
         }
         default {
             note "FATAL: You entered the desired font code '$code'.";
-            die q:to/HERE/;
+            note q:to/HERE/;
             The desired font code entry must be in the format "\<code>\<size>"
-            where "\<code>" is a valid font code or and "\<size>"
+            where "\<code>" is a valid font code and "\<size>"
             is either an integral number or a decimal number in
             the form "\d+d\d+" (e.g., '12d5' which means '12.5' PS points).
             HERE
+            exit;
         }
+    }
+
+    if $code.defined {
+        $num  = %!code{$code};
+        $name = %!number{$num}<shortname>;
+    }
+    elsif $code2.defined {
+        $num  = %!code2{$code2};
+        $name = %!number{$num}<shortname>;
     }
 
     my $o = DocFont.new: :$name, :$size;
