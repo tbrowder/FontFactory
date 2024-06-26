@@ -1,5 +1,8 @@
 #!/usr/bin/env raku
 
+use QueryOS;
+use PDF::Font::Loader :find-font;
+
 # run by Build.rakumod upon zef install
 # install MICR font and license
 
@@ -20,4 +23,5 @@ if $test {
     $dir  = "$home/xt/.FreeFont";
 }
 
+mkdir $dir;
 

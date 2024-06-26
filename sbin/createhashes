@@ -1,6 +1,18 @@
 #!/usr/bin/env raku
 
-# creates file FreeFont::BuildUtils
+# creates file FreeFont::X::FontHashes
+
+my $bnam = "FontHashes";
+my $f = "$*CWD/lib/FreeFont/X/{$bnam}.rakumod";
+my $fh = open $f, :w;
+$fh.print: qq:to/HERE/;
+# AUTO-GENERATED DO NOT EDIT
+# CREATED BY /sbin/createhashes
+
+unit module FreeFont::X::{$bnam};
+
+constant %code is export = %\(
+HERE
 
 =begin comment
 all font files in dir /usr/share/fonts/opentype/freefont
@@ -129,17 +141,6 @@ for %number.keys.sort({$^a <=> $^b}) {
 # the hashes are assembled, write all
 # to the new module 
 
-my $f = "$*CWD/lib/FreeFont/BuildUtils.rakumod";
-my $fh = open $f, :w;
-$fh.print: q:to/HERE/;
-# AUTO-GENERATED DO NOT EDIT
-# CREATED BY /sbin/install
-
-unit module FreeFont::BuildUtils;
-
-constant %code is export = %(
-HERE
-
 my $n;
 
 for %code.sort(*.keys) {
@@ -152,7 +153,7 @@ for %code.sort(*.keys) {
 
 $fh.print: q:to/HERE/;
     # close the preceding hash
-)
+);
 
 constant %code2 is export = %(
 HERE
@@ -198,10 +199,10 @@ for %number.keys.sort({$^a <=> $^b}) -> $k {
         # most values are strings, but
         # fontobj
         if $val ~~ Numeric {
-            $fh.say: "        $ks2 => $val"
+            $fh.say: "        $ks2 => $val,"
         }
         else {
-            $fh.say: "        $ks2 => '$val'"
+            $fh.say: "        $ks2 => '$val',"
         }
     }
     $fh.say: "    },";

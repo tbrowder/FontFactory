@@ -6,6 +6,7 @@
   "build-depends": [
   ],
   "depends": [
+    "QueryOS",
     "PDF::Font::Loader",
     "File::file"
   ],
@@ -17,9 +18,9 @@
     "FreeFont": "lib/FreeFont.rakumod",
     "FreeFont::BuildUtils": "lib/FreeFont/BuildUtils.rakumod",
     "FreeFont::Classes": "lib/FreeFont/Classes.rakumod",
-    "FreeFont::FontHashes": "lib/FreeFont/FontHashes.rakumod",
     "FreeFont::Resources": "lib/FreeFont/Resources.rakumod",
-    "FreeFont::Utils": "lib/FreeFont/Utils.rakumod"
+    "FreeFont::Utils": "lib/FreeFont/Utils.rakumod",
+    "FreeFont::X::FontHashes": "lib/FreeFont/X/FontHashes.rakumod"
   },
   "resources": [
     "micrenc.ttf",

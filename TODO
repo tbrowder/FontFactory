@@ -11,7 +11,7 @@ Decide on the interface details:
     code2
     number
     name (with or without spaces)
-    adobe namr (with or without spaces)
+    adobe name (with or without spaces)
   the factory first looks in its
     hash to see if there is already a font object
     if not, 
