@@ -59,7 +59,7 @@ DESCRIPTION
 
 See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the GNU FreeFont collection.
 
-Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FreeFont face. You can also use the complete name (with or without spaces) if desired.
+Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FreeFont face. You can also use the reference number or the complete name (with or without spaces) if desired.
 
 Table 1
 -------

@@ -9,12 +9,18 @@ use FreeFont::X::FontHashes;
 
 # several ways to lookup font faces:
 # user enters one of:
-#   code
-#   code2
-#   fullname  -  complete name (with spaces)
+#   code or code2 (+ size, default: 12)
+#   name (may be fragments), size
+#   number, size
+
+# the first two sigs are resolved 
+# into the third which is further
+# resolved into a DocFont with 
+# attributes of:
+#   fullname  - complete name, with spaces
+#   name      - complete name, without spaces
 #   shortname - LC, no spaces -> number:
-#   name - complete name, without spaces
-#   number    - with subkeys fpr cross-reference
+#   number    - with subkeys for cross-reference
 
 # name (various)
 # code (see table)
@@ -42,7 +48,12 @@ submethod TWEAK {
     #note "DEBUG: successful TWEAK and exit"; exit;
 }
 
-multi method get-font($name, Numeric :$size!, :$debug --> DocFont) {
+multi method get-font(
+    Str $name, # can be fragments
+    Numeric $size!,
+    :$debug,
+     --> DocFont
+) {
     # e.g.: FreeSans, :size(12.5)
     my $fname = $name;
     $fname ~~ s:g/\s+//;  # delete spaces
@@ -117,3 +128,7 @@ multi method get-font($Code, :$debug --> DocFont) {
     my $o = DocFont.new: :$name, :$size;
     $o
 }
+
+multi method find-font(:$number, :$size, :$debug) {
+}
+

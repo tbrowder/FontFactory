@@ -81,7 +81,7 @@ collection.
 
 Note the I<Code> and I<Code2> columns. Each row contains equivalent
 code you may use to select the FreeFont face. You can also use the
-complete name (with or without spaces) if desired.
+reference number or the complete name (with or without spaces) if desired.
 
 =head2 Table 1
 =begin table :caption<The GNU FreeFont Collection>
@@ -121,7 +121,6 @@ Courier Oblique        | mo   | co    | 11
 Courier Bold Oblique   | mbo  | cbo   | 12
 MICRE                  | mi   | mi    | 13 (not an Adobe Type 1 font)
 =end table
-
 
 =head2 Notes on the MICR Encoding (MICRE) font
 

@@ -6,11 +6,13 @@
   "build-depends": [
   ],
   "depends": [
+    "Text::Utils:ver<3.4.4>",
     "QueryOS",
+    "YAMLish",
     "PDF::Font::Loader",
     "File::file"
   ],
-  "description": "Provides a convenience class to ease font handling in different faces and sizes",
+  "description": "Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes",
   "license": "Artistic-2.0",
   "name": "FreeFont",
   "perl": "6.d",
@@ -29,7 +31,7 @@
   ],
   "source-url": "https://github.com/tbrowder/FreeFont.git",
   "tags": [
-    "FreeFont GNU Font OpenType otf ttf"
+    "FreeFont GNU Font OpenType otf ttf MICRE"
   ],
   "test-depends": [
   ],
