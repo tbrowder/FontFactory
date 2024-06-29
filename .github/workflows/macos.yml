@@ -24,8 +24,7 @@ jobs:
           raku-version: ${{ matrix.raku-version }}
       - name: Install Dependencies
         run: |
-          brew install locate libharfbuzz-dev
-          updatedb
+          brew install libharfbuzz-dev
           zef install --/test --deps-only .
       - name: Install
         run: zef install --debug .
