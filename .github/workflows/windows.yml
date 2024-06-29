@@ -1,7 +1,4 @@
 name: Win64
-  
-env:
-  TEST_JOBS: 1
 
 on:
   push:
@@ -10,7 +7,7 @@ on:
     tags-ignore:
       - '*'
   pull_request:
-
+1
 jobs:
   raku:
     strategy:
@@ -28,4 +25,4 @@ jobs:
             choco install rakudostar
             zef --exclude="z" install --debug --/test --test-depends --deps-only .
       - name: Run Tests
-        run: zef install . --debug
+        run: zef install --debug .
