@@ -5,9 +5,11 @@ use PDF::Font::Loader :find-font;
 
 use FreeFont;
 
+my $debug = 0;
+
 my $font = "FreeSerif";
 my $f = find-font :family($font);
-note "DEBUG: response from find-font: '$f'";
+note "DEBUG: response from find-font: '$f'" if $debug;
 
 my $os = OS.new;
 if $os.is-windows {

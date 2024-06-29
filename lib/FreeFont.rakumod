@@ -60,7 +60,7 @@ multi method get-font(
     $fname ~~ s/\.\w+$//; # delete suffix
     $fname .= lc;
 
-    note "DEBUG: \$fname = '$fname'";
+    note "DEBUG: \$fname = '$fname'" if $debug;
     with $fname {
         when %!shortname{$fname}:exists {
             ; # ok
