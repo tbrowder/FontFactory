@@ -25,7 +25,6 @@ jobs:
       - name: Install Dependencies
         run: |
           brew reinstall fontconfig 
-k
           brew install --cask font-freefont
           zef install --/test --deps-only .
       - name: Install
