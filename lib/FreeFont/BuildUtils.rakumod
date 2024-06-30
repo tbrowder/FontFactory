@@ -1,9 +1,10 @@
 unit module FreeFont::BuildUtils;
 
-use PDF::Font::Loaderti :load-font;;
+use PDF::Font::Loader :load-font;
 use Text::Utils :split-line;
 
 use FreeFont::X::FontHashes;
+use FreeFont::Utils;
 
 sub find-freefont(
     $number,
@@ -52,6 +53,6 @@ sub find-freefont(
     }
 
     # make the query
-    $path = find-font $query;
+    $path = locate-font $query;
 
 }
