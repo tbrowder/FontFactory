@@ -27,7 +27,7 @@ my $f1 = "FreeSerif.otf";
 my $f2 = "XbrzaChiuS";
 
 # expect at least one find and no error
-$proc  = run $cmd, "$f1", :out;
+$proc  = run $cmd, $f1, :out;
 @lines = $proc.out.slurp(:close).lines;
 $exit  = $proc.exitcode;
 is $exit, 0, "$cmd '$f1' works";
@@ -37,7 +37,7 @@ $s = @lines.head // "";
 say "DEBUG s = '$s'" if $debug;
 
 # expect zero finds but no error
-$proc  = run $cmd, "$f2", :out, :err;
+$proc  = run $cmd, $f2, :out, :err;
 @lines  = $proc.out.slurp(:close).lines;
 @lines2 = $proc.err.slurp(:close).lines;
 $exit   = $proc.exitcode;

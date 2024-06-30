@@ -19,7 +19,7 @@ if $os.is-linux {
 my $f1 = "harfbuzz";
 
 # expect to find harfbuzz
-$proc  = run "locate", "$f1", :out;
+$proc  = run "locate", $f1, :out;
 @lines = $proc.out.slurp(:close).lines;
 $exit  = $proc.exitcode;
 is $exit, 0, "locate harfbuzz works";
