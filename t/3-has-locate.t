@@ -17,30 +17,22 @@ if $os.is-linux {
     $cmd = "locate";
 }
 elsif $os.is-macos {
-    #$cmd = "myfind -literal";
     $cmd = "mdfind -name";
 }
 elsif $os.is-windows {
     $cmd = "locate";
 }
 
-my $f1;
-if $os.is-macos {
-    $f1 = "mdfind";
-}
-else {
-    $f1 = "locate";
-}
-
+my $f1 "FreeSerif.otf";;
 my $f2 = "XbrzaChiuS";
 
 # expect at least one find and no error
 $proc  = run $cmd, "$f1", :out;
 @lines = $proc.out.slurp(:close).lines;
 $exit  = $proc.exitcode;
-is $exit, 0, "$cmd locate works";
+is $exit, 0, "$cmd '$f1' works";
 $n = @lines.elems;
-cmp-ok $n, '>', 1, "multiple files found";
+cmp-ok $n, '>', 0, "one or more files found";
 $s = @lines.head // "";
 say "DEBUG s = '$s'" if $debug;
 
@@ -49,7 +41,6 @@ $proc  = run $cmd, "$f2", :out, :err;
 @lines  = $proc.out.slurp(:close).lines;
 @lines2 = $proc.err.slurp(:close).lines;
 $exit   = $proc.exitcode;
-
 
 is $exit, 1, "file not found, exitcode 1";
 $n  = @lines.elems;
