@@ -1,6 +1,6 @@
 unit module FreeFont::BuildUtils;
 
-use PDF::Font::Loader :find-font;
+use PDF::Font::Loaderti :load-font;;
 use Text::Utils :split-line;
 
 use FreeFont::X::FontHashes;

@@ -24,7 +24,6 @@ jobs:
           raku-version: ${{ matrix.raku-version }}
       - name: Install Dependencies
         run: |
-          brew install freetype glib cairo
           zef install --/test --deps-only .
       - name: Install
         run: zef install --debug .

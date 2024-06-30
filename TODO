@@ -1,3 +1,11 @@
+Use system locate instead of find-font
+  for finding Free Font .otf files
+  - how to do on Mac and Win?
+
+Subs to build:
+  locate-font
+  install-config (paths to font files)
+
 Add the MICR font to be installed
 + put in /resources
   - Build.rakumod

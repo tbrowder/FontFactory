@@ -1,15 +1,16 @@
 use Test;
 
 use QueryOS;
-use PDF::Font::Loader :find-font;
+use PDF::Font::Loader;
 
 use FreeFont;
 
 my $debug = 0;
 
-my $font = "FreeSerif";
-my $f = find-font :family($font);
-note "DEBUG: response from find-font: '$f'" if $debug;
+# TODO fix this:
+# my $font = "FreeSerif";
+# my $f = find-font :family($font);
+# note "DEBUG: response from find-font: '$f'" if $debug;
 
 my $os = OS.new;
 if $os.is-windows {

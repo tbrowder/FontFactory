@@ -1,6 +1,6 @@
 unit class FreeFont;
 
-use PDF::Font::Loader :find-font, :load-font;
+use PDF::Font::Loader :load-font;
 
 use FreeFont::Classes;
 use FreeFont::Resources;
