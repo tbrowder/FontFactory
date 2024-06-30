@@ -24,7 +24,14 @@ elsif $os.is-windows {
     $cmd = "locate";
 }
 
-my $f1 = "locate";
+my $f1;
+if $os.is-macos {
+    $f1 = "mdfind";
+}
+else {
+    $f1 = "locate";
+}
+
 my $f2 = "XbrzaChiuS";
 
 # expect at least one find and no error
