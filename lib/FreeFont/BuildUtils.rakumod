@@ -10,49 +10,37 @@ sub find-freefont(
     $number,
 ) is export {
     # return path to the file
+    # use the font basename
     my ($path, $nam);
-    $nam = %FreeFont::X::FontHashes::number{$number}<shortname>;
-    if $nam.starts-with("m") {
-        # it should be in $HOME/.FreeFont/fonts
-        $path = "%*ENV<HOME>/.FreeFont/fonts/micrenc.ttf";
-        return $path;
+    $nam = %FreeFont::X::FontHashes::number{$number}<name>;
+    # we need to add '.otf' or '.ttf'
+    # to get the basename
+    if $nam.starts-with("M") {
+        # special case for this one,
+        # basename is a bit different
+        $nam = "micrenc.ttf";
+    }
+    else {
+        # the GNU fonts just need proper
+        # suffix
+        $nam ~= ".otf";
     }
 
-    my ($fam, $wgt, $slnt) = 0, 0, 0;
-
-    # what family
-    if $nam.contains<sans> {
-        $fam = "FreeSans"
+    # If the config.yml file exists, it
+    # should already have the 13 paths
+    # without using sub locate-font.
+    
+    my $config = "%*ENV<HOME>/.FreeFont/config.yml";
+    if $config.IO.r {
+        # read yml
+        $path = 0;       
     }
-    if $nam.contains<serif> {
-        $fam = "FreeSerif"
-    }
-    if $nam.contains<mono> {
-        $fam = "FreeMono"
-    }
-    # what weight
-    if $nam.contains<bold> {
-        $wgt = "Bold"
-    }
-    # what slant
-    if $nam.contains<italic> {
-        $slnt = "Italic"
-    }
-    if $nam.contains<oblique> {
-        $slnt = "Oblique"
+    else {
+        # Make the query to sub
+        # locate-font
+        # in module FreeFont::Utils
+        $path = locate-font $nam;
     }
 
-    # assemble the input to ;find-font
-    my $query = "";
-    $query = ":family<{$fam}>";
-    if $wgt {
-        $query ~= " :weight<{$wgt}>";
-    }
-    if $slnt {
-        $query ~= " :slant<{$slnt}>";
-    }
-
-    # make the query
-    $path = locate-font $query;
-
+    $path
 }
