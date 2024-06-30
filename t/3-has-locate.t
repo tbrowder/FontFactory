@@ -23,7 +23,7 @@ elsif $os.is-windows {
     $cmd = "locate";
 }
 
-my $f1 "FreeSerif.otf";;
+my $f1 = "FreeSerif.otf";
 my $f2 = "XbrzaChiuS";
 
 # expect at least one find and no error
