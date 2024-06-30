@@ -2,6 +2,7 @@ unit module FreeFont::BuildUtils;
 
 use PDF::Font::Loader :load-font;
 use Text::Utils :split-line;
+use YAMLish;
 
 use FreeFont::X::FontHashes;
 use FreeFont::Utils;
@@ -33,7 +34,9 @@ sub find-freefont(
     my $config = "%*ENV<HOME>/.FreeFont/config.yml";
     if $config.IO.r {
         # read yml
-        $path = 0;       
+        my $str  = $config.IO.slurp;
+        my %conf = load-yaml $str;
+        $path    = %conf{$nam};
     }
     else {
         # Make the query to sub

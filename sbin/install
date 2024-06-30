@@ -23,5 +23,16 @@ if $test {
     $dir  = "$home/xt/.FreeFont";
 }
 
-mkdir $dir;
+my $f = "$dir/config.yml";
+# don't continue if it exists
+return if $f.IO.r;
 
+# get the path data if and only if
+# the collection is on the local file
+# system. notify the user if it's not
+
+# query locate-font
+
+# write the data
+mkdir $dir;
+my $fh = open $f, :w; 
