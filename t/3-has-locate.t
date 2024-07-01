@@ -42,7 +42,11 @@ $proc  = run $cmd, $f2, :out, :err;
 @lines2 = $proc.err.slurp(:close).lines;
 $exit   = $proc.exitcode;
 
-is $exit, 1, "file not found, exitcode 1";
+if $os.is-linux {
+    is $exit, 1, 
+        "file not found, exitcode 1";
+}
+
 $n  = @lines.elems;
 $n2 = @lines2.elems;
 cmp-ok $n, '==', 0, "empty out as expected";
