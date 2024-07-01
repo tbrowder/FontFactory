@@ -32,8 +32,8 @@ $proc  = run $cmd, $f1, :out;
 $exit  = $proc.exitcode;
 is $exit, 0, "$cmd '$f1' works";
 $n = @lines.elems;
-cmp-ok $n, '>', 0, "one or more files found";
 $s = @lines.head // "";
+cmp-ok $n, '>', 0, "1st found: '$s'";
 say "DEBUG s = '$s'" if $debug;
 
 # expect zero finds but no error
