@@ -18,7 +18,7 @@ if $os.is-linux {
 }
 elsif $os.is-macos {
     # basename?
-    $cmd = "mdfind -name";
+    $cmd = "find / -name";
 }
 elsif $os.is-windows {
     $cmd = "locate";
