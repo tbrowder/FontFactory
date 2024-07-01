@@ -5,7 +5,7 @@ use QueryOS;
 # we rely on the system locate comand,
 # ensure it is available
 
-my $debug = 0;
+my $debug = 1;
 
 my ($n, $s, $exit, $proc, @lines);
 my ($n2, $s2, @lines2);
@@ -17,7 +17,8 @@ if $os.is-linux {
     $cmd = "locate";
 }
 elsif $os.is-macos {
-    $cmd = "mdfind";
+    # basename?
+    $cmd = "mdfind -name";
 }
 elsif $os.is-windows {
     $cmd = "locate";
@@ -34,7 +35,7 @@ is $exit, 0, "$cmd '$f1' works";
 $n = @lines.elems;
 $s = @lines.head // "";
 cmp-ok $n, '>', 0, "1st found: '$s'";
-say "DEBUG s = '$s'" if $debug;
+say "DEBUG first found = '$s'" if $debug;
 
 # expect zero finds but no error
 $proc  = run $cmd, $f2, :out, :err;
