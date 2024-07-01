@@ -17,7 +17,8 @@ if $os.is-linux {
     $cmd = "locate";
 }
 elsif $os.is-macos {
-    $cmd = "mdfind -name";
+    #$cmd = "mdfind -name";
+    $cmd = "mdfind";
 }
 elsif $os.is-windows {
     $cmd = "locate";
@@ -45,7 +46,6 @@ $exit   = $proc.exitcode;
 if $os.is-linux {
     is $exit, 1, 
         "file not found, exitcode 1";
-}
 
 $n  = @lines.elems;
 $n2 = @lines2.elems;
@@ -54,5 +54,6 @@ $s  = @lines.head // "";
 $s2 = @lines2.head // "";
 say "DEBUG s  = '$s'" if $debug;
 say "DEBUG s2 = '$s2'" if $debug;
+}
 
 done-testing;
