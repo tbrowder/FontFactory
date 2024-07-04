@@ -18,7 +18,7 @@ if $os.is-linux {
 }
 elsif $os.is-macos {
     # basename?
-    $cmd = "rak --find";
+    $cmd = "locate";
 }
 elsif $os.is-windows {
     $cmd = "locate";
