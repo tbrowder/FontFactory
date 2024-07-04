@@ -5,7 +5,7 @@ use QueryOS;
 # we rely on the system locate comand,
 # ensure it is available
 
-my $debug = 0;
+my $debug = 1;
 
 my ($n, $s, $exit, $proc, @lines);
 my ($n2, $s2, @lines2);
