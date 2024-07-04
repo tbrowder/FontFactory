@@ -1,7 +1,7 @@
 #!/usr/bin/env raku
 
 use QueryOS;
-use PDF::Font::Loader :find-font;
+use FreeFont::Utils;
 
 # run by Build.rakumod upon zef install
 # install MICR font and license
@@ -17,22 +17,47 @@ my $dir  = "$home/.FreeFont";
 
 # need some args to allow testing and
 # installation
-my $test = @*ARGS;
-if $test {
+my $tfil = "dev/Build.rakumod";
+if $tfil.IO.e {
     $home = $*CWD; 
-    $dir  = "$home/xt/.FreeFont";
+    $dir  = "$home/xt/FreeFont";
 }
 
 my $f = "$dir/config.yml";
 # don't continue if it exists
-return if $f.IO.r;
+my $res = True;;
+if $f.IO.r {
+    say "File '$f' exists.";
+    say "Checking for validity...";
+    $res = check-config $f;
+    if $res {
+        say "Installation complete.";
+    }
+    else {
+        say "Invalid file...correcting it.";
+    }
+}
+if not $res {
+    say "Creating file '$f'...";
+}
+
 
 # get the path data if and only if
 # the collection is on the local file
 # system. notify the user if it's not
+
+# some files are in /resources:
+#   DigitalGraphicLabs.html
+#   license.txt
+#   micrenc.ttf
+
+my $r1 = $?DISTRIBUTION.content("resources/DigitalGraphicLabs.html");
+my $r2 = $?DISTRIBUTION.content("resources/license.txt");
+my $r3 = $?DISTRIBUTION.content("resources/micrenc.ttf");
 
 # query locate-font
 
 # write the data
 mkdir $dir;
 my $fh = open $f, :w; 
+$fh.close;

@@ -6,6 +6,7 @@
   "build-depends": [
   ],
   "depends": [
+    "App::Rak",
     "Text::Utils:ver<3.4.4>",
     "QueryOS",
     "YAMLish",

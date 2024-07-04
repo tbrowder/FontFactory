@@ -30,11 +30,19 @@ The following system packages need to be installed to use this module:
 
         $ sudo aptitude install fontconfig
 
+    On MacOS:
+
+        $ brew install fontconfig
+
   * The FreeFont font files
 
     On Debian:
 
         $ sudo aptitude install fonts-freefont-otf
+
+    On MacOS:
+
+        $ brew install --cask font-freefont
 
 On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FreeFont/config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
 
@@ -103,7 +111,7 @@ The two files in single quotes were renamed to:
     DigitalGraphicLabs.html
     license.txt
 
-and all three files will be installed in your '$HOME' directory.
+and all three files will be installed in your '$HOME/.FreeFont' directory.
 
 The license basically says the font is free to use for non-commercial purposes. Consult the license carefully if you do intend to so use it.
 

@@ -1,6 +1,48 @@
 unit module FreeFont::Utils;
 
 use QueryOS;
+use YAMLish;
+
+sub check-config(
+    $path, #= path to the config file
+           #= to be checked
+    :$debug,
+    --> Bool
+) is export {
+    unless $path.IO.r {
+        return False;
+    }
+    my $status = True;
+
+    my @lines = $path.IO.lines;
+    return False if not @lines;
+    for $path.IO.lines {
+        when /^ \s* '#' / {
+            ; # ok
+        }
+        when /^ \s* 
+            (\S+)   # a key
+            \s* ':' # required colon
+            (\S+)   # its value
+            / {
+            ; # ok
+        }
+        default {
+            return False;
+        }
+    }
+
+    # format is ok, check the hash
+    my %conf = load-yaml $path.IO.slurp;
+    # check expected keys
+    my %n = %FreeFont::X::FontHashes::number;
+    for %n.keys -> $k {
+        my $name = %(%n{$k})<name>;
+        say "DEBUG: font name = '$name'";
+    }
+
+    say %conf.gist;
+}
 
 sub locate-font(
     $font, 
