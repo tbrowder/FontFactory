@@ -24,7 +24,13 @@ elsif $os.is-windows {
     $cmd = "find";
 }
 
-my $f1 = "FreeSerif.otf";
+my $f1;
+if $os.is-windows {
+    $f1 = "DejaVuSerif.ttf";
+}
+else {
+    $f1 = "FreeSerif.otf";
+}
 my $f2 = "XbrzaChiuS";
 
 # expect at least one find and no error
