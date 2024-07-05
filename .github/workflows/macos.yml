@@ -24,8 +24,7 @@ jobs:
           raku-version: ${{ matrix.raku-version }}
       - name: Install Dependencies
         run: |
-          brew install --cask font-freefont
-          sudo /usr/libexec/locate.updatedb
+          brew install fonts-freefont
           zef install --/test --deps-only .
       - name: Install
         run: zef install --debug .
