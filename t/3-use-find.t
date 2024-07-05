@@ -18,7 +18,7 @@ if $os.is-linux {
 }
 elsif $os.is-macos {
     # basename?
-    $cmd = "find / -type f -name ";
+    $cmd = "find /opt -type f -name ";
 }
 elsif $os.is-windows {
     $cmd = "find";
