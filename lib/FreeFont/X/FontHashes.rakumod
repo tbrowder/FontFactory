@@ -8,6 +8,7 @@ constant %code is export = %(
     mb   => 11,
     mbo  => 12,
     mi   => 13,
+    mi2  => 14,
     mo   => 10,
     sa   => 5,
     sab  => 7,
@@ -30,6 +31,7 @@ constant %code2 is export = %(
     hbo => 8,
     ho  => 6,
     mi  => 13,
+    mi2 => 14,
     t   => 1,
     tb  => 3,
     tbi => 4,
@@ -50,7 +52,8 @@ constant %shortname is export = %(
     freeserifbold       => 3,
     freeserifbolditalic => 4,
     freeserifitalic     => 2,
-    gnumicr             => 13,
+    gnumicr             => 14,
+    micr                => 13,
     # close the preceding hash
 );
 
@@ -166,6 +169,15 @@ constant %number is export = %(
     13 => {
         code      => 'mi',
         code2     => 'mi',
+        fontobj   => 0,
+        fullname  => 'MICR',
+        name      => 'MICR',
+        path      => 0,
+        shortname => 'micr',
+    },
+    14 => {
+        code      => 'mi2',
+        code2     => 'mi2',
         fontobj   => 0,
         fullname  => 'GnuMICR',
         name      => 'GnuMICR',

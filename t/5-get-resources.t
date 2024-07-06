@@ -7,10 +7,11 @@ use FreeFont::BuildUtils;
 
 # access the /resources/* content
 my $f1 = "resources/micrenc.ttf";
-my $f2 = "resources/DigitalGraphicLabs.html";
-my $f3 = "resources/license.txt";
+my $f2 = "resources/GnuMICR.otf";
+my $f3 = "resources/DigitalGraphicLabs.html";
+my $f4 = "resources/license.txt";
 
-for $f1, $f2, $f3 -> $f {
+for $f1, $f2, $f3, $f4 -> $f {
 #for $f1 -> $f {
     my $b = $f.IO.basename;
     my $s;
