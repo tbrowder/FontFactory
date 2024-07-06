@@ -8,22 +8,23 @@ use FreeFont::BuildUtils;
 # access the /resources/* content
 my $f1 = "resources/micrenc.ttf";
 my $f2 = "resources/GnuMICR.otf";
-my $f3 = "resources/DigitalGraphicLabs.html";
-my $f4 = "resources/license.txt";
+my $f3 = "resources/CMC7.ttf";
+my $f4 = "resources/DigitalGraphicLabs.html";
+my $f5 = "resources/micrenc-license.txt";
 
 for $f1, $f2, $f3, $f4 -> $f {
 #for $f1 -> $f {
     my $b = $f.IO.basename;
     my $s;
     my $bin = False;
-    if $b ~~ /:i micr / {
+    if $b ~~ /:i micr|cmc7 / {
         $bin = True;
     }
 
     lives-ok {
         $s = get-resource-content $f, :$bin;
     }, "get content of '$b'";
-    
+
     with $bin {
         when $_.so { is $s.^name, 'Buf[uint8]' }
         when not $_.so { is $s.^name, 'Str' }
@@ -83,7 +84,7 @@ $proc  = run $cmd.words, $f2, :out, :err;
 $exit   = $proc.exitcode;
 
 if $os.is-linux {
-    is $exit, 0, 
+    is $exit, 0,
         "file not found, exitcode $exit";
 }
 elsif $os.is-macos {

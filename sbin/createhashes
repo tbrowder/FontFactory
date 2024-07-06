@@ -30,6 +30,7 @@ FreeMonoOblique.otf
 FreeMonoBoldOblique.otf
 micrenc.ttf
 GnuMICR.otf
+CMC7.ttf
 =end comment
 
 constant @fontnames =
@@ -51,8 +52,9 @@ constant @fontnames =
 "Free Mono Oblique mo co 10",
 "Free Mono Bold mb cb 11",
 "Free Mono Bold Oblique mbo cbo 12",
-"MICR mi mi 13", # not listed in the Red Book
-"GnuMICR mi2 mi2 14", # not listed in the Red Book
+"MICR mi mi 13", # not a FreeFont
+"GnuMICR mi2 mi2 14", # not a FreeFont
+"CMC7 c7 c7 15", # not a FreeFont
 ;
 
 my $debug = 0;
@@ -65,7 +67,7 @@ my $siz;
 for @fontnames.kv -> $i, $v is copy {
     my $n = $i + 1;
     # the last three words are 'code'
-    #   'code2', and 'number', 
+    #   'code2', and 'number',
     #   respectively
     my @w = $v.words;
     say @w.raku if $debug;
@@ -141,7 +143,7 @@ for %number.keys.sort({$^a <=> $^b}) {
 }
 
 # the hashes are assembled, write all
-# to the new module 
+# to the new module
 
 my $n;
 

@@ -110,6 +110,7 @@ Free Mono Oblique      | mo   | co    | 11
 Free Mono Bold Oblique | mbo  | cbo   | 12
 MICRE                  | mi   | mi    | 13 (not a FreeFont)
 GnuMICR                | mi2  | mi2   | 14 (not a FreeFont)
+CMC7                   | c7   | c7    | 15 (not a FreeFont)
 =end table
 
 =head2 Table 2
@@ -129,15 +130,23 @@ Courier                | m    | c     | 9
 Courier Bold           | mb   | cb    | 10
 Courier Oblique        | mo   | co    | 11
 Courier Bold Oblique   | mbo  | cbo   | 12
-MICRE                  | mi   | mi    | 13 (not an Adobe Type 1 font)
+MICRE                  | mi   | mi    | 13 (not a FreeFont)
 GnuMICR                | mi2  | mi2   | 14 (not a FreeFont)
+CMC7                   | c7   | c7    | 15 (not a FreeFont)
 =end table
 
-=head2 Notes on the two MICR Encoding (MICRE) fonts
+=head2 Notes on the three additional fonts
 
-Each table above shows two more fonts that are included in the '/resources' directory,
-along with several other  files, that will be installed into your '$HOME'
-directory.
+Each table above shows three more fonts that are included in the
+'/resources' directory, along with several other files, that will be
+installed into your '$HOME/.FreeFont' directory.
+
+The MICR fonts (more formally known as E13B) are designed to produce
+the machine-readable numbers found on bank checks in the US and Canada
+and other countries around the world, promarily in Asia.
+
+An equivalent font, CMC7, is used in other countries, primarily South
+America and Europe.
 
 =head3 MICRE
 
@@ -159,7 +168,7 @@ The two files in single quotes were renamed to:
 
 =begin code
 DigitalGraphicLabs.html
-license.txt
+micrenc-license.txt
 =end code
 
 and all three files will be installed in your '$HOME/.FreeFont' directory.
@@ -169,15 +178,19 @@ purposes. Consult the license carefully if you do intend to use it commercially.
 
 =head3 GnuMICR
 
-This is a Gnu version of the MICRE
-font face, in OpenType format ('.otf'), which can be used commercially. See many more details at the author's site L<>. 
+This is a Gnu version of the MICRE font face, in OpenType format
+('.otf'), which I<can> be used commercially. See the GNU license in
+the I<COPYING.txt> file in the '/resources' directory.
 
-=head3 Publishing requirements
+See many more details and supporting files at the author's site at
+L<|https://sandeen.net/GnuMICR>.
 
-This module will not be published until
-at least one of the MICRE fonts
-has been used to
-successfully produce a check that my bank cashes.
+=head3 CMC7
+
+This is a free font designed by Harold Lohner, in 1998, and placed
+into the public domain by him. It was downloaded from
+L<https://www.fonts4free.net/cmc-7-font.html>. See more details and
+the license in the I<CMC7.txt> file in the '/resources' directory.
 
 =head1 The Font class
 
@@ -185,10 +198,39 @@ successfully produce a check that my bank cashes.
 
 Tom Browder <tbrowder@acm.org>
 
+=head1 Summary of FONTS COPYRIGHT and LICENSE
+
+=begin item
+Gnu Free Fonts - GNU GENERAL PUBLIC LICENSE Version 3
+
+See I</resources/GPL-VERSION3.txt> and more information at
+L<https://www.gnu.org/software/freefont/>.
+
+=end item
+
+=begin item
+MICRE - DISTRIBUTED AS FREEWARE
+
+See I</resources/micrenc-license.txt>
+=end item
+
+=begin item
+GnuMICRE - GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+
+See I</resources/COPYING.txt>
+=end item
+
+=begin item
+CMC7 - Public Domain
+
+See I</resources/CMC7.txt>
+=end item
+
 =head1 COPYRIGHT AND LICENSE
 
-© 2024 Tom Browder
+Copyright © 2024 Tom Browder
 
 This library is free software; you may redistribute it or modify it under the Artistic License 2.0.
+
 
 =end pod

@@ -78,7 +78,7 @@ Table 1
 <th>FreeFont Name</th> <th>Code</th> <th>Code2</th> <th>Reference No.</th>
 </tr></thead>
 <tbody>
-<tr> <td>Free Serif</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Free Serif Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Free Serif Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Free Serif Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Free Sans</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Free Sans Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Free Sans Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Free Sans Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Free Mono</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Free Mono Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Free Mono Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Free Mono Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FreeFont)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FreeFont)</td> </tr>
+<tr> <td>Free Serif</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Free Serif Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Free Serif Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Free Serif Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Free Sans</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Free Sans Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Free Sans Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Free Sans Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Free Mono</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Free Mono Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Free Mono Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Free Mono Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FreeFont)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FreeFont)</td> </tr> <tr> <td>CMC7</td> <td>c7</td> <td>c7</td> <td>15 (not a FreeFont)</td> </tr>
 </tbody>
 </table>
 
@@ -91,14 +91,18 @@ Table 2
 <th>Adobe Type 1 Name</th> <th>Code</th> <th>Code2</th> <th>Reference No.</th>
 </tr></thead>
 <tbody>
-<tr> <td>Times</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Times Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Times Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Times Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Helvetica</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Helvetica Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Helvetica Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Helvetica Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Courier</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Courier Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Courier Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Courier Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not an Adobe Type 1 font)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FreeFont)</td> </tr>
+<tr> <td>Times</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Times Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Times Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Times Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Helvetica</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Helvetica Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Helvetica Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Helvetica Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Courier</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Courier Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Courier Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Courier Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FreeFont)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FreeFont)</td> </tr> <tr> <td>CMC7</td> <td>c7</td> <td>c7</td> <td>15 (not a FreeFont)</td> </tr>
 </tbody>
 </table>
 
-Notes on the two MICR Encoding (MICRE) fonts
---------------------------------------------
+Notes on the three additional fonts
+-----------------------------------
 
-Each table above shows two more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME' directory.
+Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FreeFont' directory.
+
+The MICR fonts (more formally known as E13B) are designed to produce the machine-readable numbers found on bank checks in the US and Canada and other countries around the world, promarily in Asia.
+
+An equivalent font, CMC7, is used in other countries, primarily South America and Europe.
 
 ### MICRE
 
@@ -113,7 +117,7 @@ The downloaded file was named `micr-encoding.zip` (which was deleted after unzip
 The two files in single quotes were renamed to:
 
     DigitalGraphicLabs.html
-    license.txt
+    micrenc-license.txt
 
 and all three files will be installed in your '$HOME/.FreeFont' directory.
 
@@ -121,11 +125,13 @@ The license basically says the font is free to use for non-commercial purposes. 
 
 ### GnuMICR
 
-This is a Gnu version of the MICRE font face, in OpenType format ('.otf'), which can be used commercially. See many more details at the author's site [](). 
+This is a Gnu version of the MICRE font face, in OpenType format ('.otf'), which *can* be used commercially. See the GNU license in the *COPYING.txt* file in the '/resources' directory.
 
-### Publishing requirements
+See many more details and supporting files at the author's site at [](https://sandeen.net/GnuMICR).
 
-This module will not be published until at least one of the MICRE fonts has been used to successfully produce a check that my bank cashes.
+### CMC7
+
+This is a free font designed by Harold Lohner, in 1998, and placed into the public domain by him. It was downloaded from [https://www.fonts4free.net/cmc-7-font.html](https://www.fonts4free.net/cmc-7-font.html). See more details and the license in the *CMC7.txt* file in the '/resources' directory.
 
 The Font class
 ==============
@@ -135,10 +141,29 @@ AUTHOR
 
 Tom Browder <tbrowder@acm.org>
 
+Summary of FONTS COPYRIGHT and LICENSE
+======================================
+
+  * Gnu Free Fonts - GNU GENERAL PUBLIC LICENSE Version 3
+
+    See */resources/GPL-VERSION3.txt* and more information at [https://www.gnu.org/software/freefont/](https://www.gnu.org/software/freefont/).
+
+  * MICRE - DISTRIBUTED AS FREEWARE
+
+    See */resources/micrenc-license.txt*
+
+  * GnuMICRE - GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+
+    See */resources/COPYING.txt*
+
+  * CMC7 - Public Domain
+
+    See */resources/CMC7.txt*
+
 COPYRIGHT AND LICENSE
 =====================
 
-© 2024 Tom Browder
+Copyright © 2024 Tom Browder
 
 This library is free software; you may redistribute it or modify it under the Artistic License 2.0.
 
