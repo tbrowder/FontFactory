@@ -50,7 +50,7 @@ constant @fontnames =
 "Free Mono Oblique mo co 10",
 "Free Mono Bold mb cb 11",
 "Free Mono Bold Oblique mbo cbo 12",
-"MICRE mi mi 13", # not listed in the Ted Book
+"GnuMICR mi mi 13", # not listed in the Red Book
 ;
 
 my $debug = 0;

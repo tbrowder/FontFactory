@@ -6,6 +6,7 @@
   "build-depends": [
   ],
   "depends": [
+    "File::Temp",
     "HarfBuzz",
     "Text::Utils:ver<3.4.4>",
     "QueryOS",
@@ -32,7 +33,7 @@
   ],
   "source-url": "https://github.com/tbrowder/FreeFont.git",
   "tags": [
-    "FreeFont GNU Font OpenType otf ttf MICRE"
+    "FreeFont FreeSerif FreeSans FreeMono GNU Font OpenType otf ttf MICRE"
   ],
   "test-depends": [
   ],

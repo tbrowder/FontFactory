@@ -2,9 +2,25 @@ Use system locate instead of find-font
   for finding Free Font .otf files
   - how to do on Mac and Win?
 
+Use the GNU Micre otf font
+  - get the license and other
+    info for /resources
+  - update docs and tables
+    and FreeFont::X::FontHashes
+
 Subs to build:
   locate-font
   install-config (paths to font files)
+  get-resource-content $path
+  # from docs:
+
+  # To actually use the file's content, the user can extract it as a
+  # string in another routine in the same module:
+  sub get-resource-content {
+      say $?DISTRIBUTION.content('lib/MyFoo.rakumod').open.slurp;
+      # OUTPUT: «unit module MyFoo;␤»
+  }
+
 
 Add the MICR font to be installed
 + put in /resources
@@ -22,11 +38,11 @@ Decide on the interface details:
     adobe name (with or without spaces)
   the factory first looks in its
     hash to see if there is already a font object
-    if not, 
-      find the path, 
+    if not,
+      find the path,
         check the user's home dir first
         if not
-          use :find-font 
+          use :find-font
           update user's home dir
       load the font
       and reference it in the hash

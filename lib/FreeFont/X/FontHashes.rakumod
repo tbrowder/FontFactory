@@ -50,7 +50,7 @@ constant %shortname is export = %(
     freeserifbold       => 3,
     freeserifbolditalic => 4,
     freeserifitalic     => 2,
-    micre               => 13,
+    gnumicr             => 13,
     # close the preceding hash
 );
 
@@ -167,10 +167,10 @@ constant %number is export = %(
         code      => 'mi',
         code2     => 'mi',
         fontobj   => 0,
-        fullname  => 'MICRE',
-        name      => 'MICRE',
+        fullname  => 'GnuMICR',
+        name      => 'GnuMICR',
         path      => 0,
-        shortname => 'micre',
+        shortname => 'gnumicr',
     },
     # close the preceding hash
 );

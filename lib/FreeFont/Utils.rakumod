@@ -20,7 +20,7 @@ sub check-config(
         when /^ \s* '#' / {
             ; # ok
         }
-        when /^ \s* 
+        when /^ \s*
             (\S+)   # a key
             \s* ':' # required colon
             (\S+)   # its value
@@ -45,16 +45,16 @@ sub check-config(
 }
 
 sub locate-font(
-    $font, 
+    $font,
     :$debug,
     ) is export {
-    # this sub is called by 
-    # sub find-freefont in module 
+    # this sub is called by
+    # sub find-freefont in module
     # FreeFont::BuildUtils
     # but only if it's not already
     # in $HOME/.FreeFont/config.yml
 
-    # we rely on the system locate 
+    # we rely on the system locate
     # comand,
 
     my ($n, $s, $exit, $proc, @lines);
@@ -98,4 +98,3 @@ sub locate-font(
     say "DEBUG s2 = '$s2'" if $debug;
 
 }
-
