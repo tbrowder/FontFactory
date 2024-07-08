@@ -1,21 +1,8 @@
 unit module FreeFont::Resources;
 
-# use necessary stuff to extract and spurt the MICRE font and license
-
 #===== exported routines
 sub get-meta-hash(:$debug --> Hash) is export {
-   $?DISTRIBUTION.meta
-}
-
-sub download-resources-to(:$dir!, :$debug --> List) is export {
-    my %h = get-resources-hash;
-    say "Downloading resources:";
-    for %h.keys.sort -> $basename {
-        my $path = %h{$basename};
-        my $s = get-content $path;
-        spurt $basename, $s;
-        say "  $basename";
-    }
+   $?DISTRIBUTION.meta 
 }
 
 sub show-resources(:$debug --> List) is export {
@@ -34,7 +21,7 @@ sub download-resources(:$debug --> List) is export {
     say "Downloading resources:";
     for %h.keys.sort -> $basename {
         my $path = %h{$basename};
-        my $s = get-content $path;
+        my $s = get-resource-content $path;
         spurt $basename, $s;
         say "  $basename";
     }
@@ -51,25 +38,26 @@ sub get-resources-hash(:$debug --> Hash) is export {
     %h
 }
 
-sub get-content($path, :$nlines = 0) is export {
-    my $exists = resource-exists $path;
-    unless $exists { return 0; }
+sub get-resource-content(
+    $path
+) is export {
+    my $p = $path;
 
-    my $s = $?DISTRIBUTION.content($path).open.slurp;
-    if $nlines {
-        my @lines = $s.lines;
-        my $nl = @lines.elems;
-        if $nl >= $nlines {
-            $s.lines[0..$nlines-1].join("\n");
-        }
-        else {
-            $s;
-        }
+    #my $exists = resource-exists $path;
+    unless $p.IO.e and $p.IO.r {
+        return 0; 
     }
-    else {
-        $s
+    my $bin = False;
+    if $p ~~ /:i otf|ttf / {
+        $bin = True;
     }
-} # sub get-content($path, :$nlines = 0) is export {
+    elsif $p !~~ Str {
+        $bin = True;
+    }
+
+    my $s = $?DISTRIBUTION.content($path).open.slurp(:$bin, :close);
+    $s
+} # sub get-resource-content($path){
 
 #===== non-exported routines
 sub get-resources-paths(:$debug --> List) {
@@ -78,6 +66,7 @@ sub get-resources-paths(:$debug --> List) {
     @list
 }
 
+=begin comment
 sub resource-exists($path? --> Bool) {
     return False if not $path.defined;
 
@@ -88,3 +77,4 @@ sub resource-exists($path? --> Bool) {
         so quietly $?DISTRIBUTION.content($path).open(:r).close; # may die
     } // False;
 }
+=end comment

@@ -21,6 +21,8 @@ use FreeFont::X::FontHashes;
 #   name      - complete name, without spaces
 #   shortname - LC, no spaces -> number:
 #   number    - with subkeys for cross-reference
+#   license info
+
 
 # name (various)
 # code (see table)
@@ -30,6 +32,7 @@ has %.code2;     # code2 -> number
 # font shortname, LC, no spaces -> number:
 has %.shortname;
 has %.number; # 1-13 -> subkeys:
+
 #   code
 #   code2
 #   shortname
@@ -79,7 +82,11 @@ multi method get-font(
     $o
 }
 
-multi method get-font($Code, :$debug --> DocFont) {
+multi method get-font(
+    $Code, 
+    :$debug,
+    --> DocFont
+) {
     my ($num, $name, $size);
     # e.g.: t12d5 OR t12
     my ($code, $code2, $cp1, $cp2, $sizint, $sizfrac);
@@ -131,4 +138,3 @@ multi method get-font($Code, :$debug --> DocFont) {
 
 multi method find-font(:$number, :$size, :$debug) {
 }
-

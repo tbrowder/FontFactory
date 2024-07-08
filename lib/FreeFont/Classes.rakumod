@@ -25,4 +25,30 @@ class DocFont is export {
 
     submethod TWEAK {
     }
-}
+
+    method license() {
+        # DocFont attribute
+        # based on number
+        my $n = $.number;
+        my $lic;
+        if 0 < $n < 13 {
+            # Gnu FreeFont fonts
+            $lic = "GNU GPL V3";
+        }
+        elsif $n == 13 {
+            $lic = "FREEWARE";
+        }
+        elsif $n == 14 {
+            $lic = "GNU GPL V2";
+        }
+        elsif $n == 15 {
+            $lic = "";
+        }
+        else {
+            die "FATAL: Unexpected font number $n";
+        }
+   
+        $lic
+    } # end of method def
+
+} # end of class DocFont definition

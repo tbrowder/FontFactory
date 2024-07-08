@@ -13,10 +13,11 @@ use FreeFont;
 my $ff = FreeFont.new;
 # get a font object for use with PDF documents
 my $f1 = $ff.get-font: t12d5;
-say $f1.name:  # OUTPUT: «Free Serif␤»
-say $f1.size;  # OUTPUT: «12.5␤»
-say $f1.file;  # OUTPUT: «/usr/share/fonts/opentype/freefont/FreeSerif.otf␤»
-say $f1.alias; # OUTPUT: «Times␤»
+say $f1.name:    # OUTPUT: «Free Serif␤»
+say $f1.size;    # OUTPUT: «12.5␤»
+say $f1.file;    # OUTPUT: «/usr/share/fonts/opentype/freefont/FreeSerif.otf␤»
+say $f1.alias;   # OUTPUT: «Times␤»
+say $fi.license; # OUTPUT: «GNU GPL V3␤»
 ```
 
 Installation requirements

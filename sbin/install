@@ -1,10 +1,12 @@
 #!/usr/bin/env raku
 
 use QueryOS;
+use FreeFont::BuildUtils;
 use FreeFont::Utils;
 
 # run by Build.rakumod upon zef install
-# install MICR font and license
+# MICR et alii fonts, licenses, and 
+# supporting material
 
 my $home = %*ENV<HOME>:exists ??
            %*ENV<HOME> !! 0;
@@ -41,15 +43,17 @@ if not $res {
     say "Creating file '$f'...";
 }
 
-
-# get the path data if and only if
+# Get the path data if and only if
 # the collection is on the local file
-# system. notify the user if it's not
+# system. Notify the user if it's not.
 
-# some files are in /resources:
+# many files are in /resources:
 #   DigitalGraphicLabs.html
 #   license.txt
 #   micrenc.ttf
+#   ...
+
+my @fils = get-resources-files;
 
 my $r1 = $?DISTRIBUTION.content("resources/DigitalGraphicLabs.html");
 my $r2 = $?DISTRIBUTION.content("resources/license.txt");

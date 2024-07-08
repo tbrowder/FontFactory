@@ -27,9 +27,14 @@
     "FreeFont::X::FontHashes": "lib/FreeFont/X/FontHashes.rakumod"
   },
   "resources": [
-    "micrenc.ttf",
+    "CMC7.ttf",
+    "CMC7.txt",
+    "COPYING.txt",
     "DigitalGraphicLabs.html",
-    "license.txt"
+    "GPL-VERSION3.txt",
+    "GnuMICR.otf",
+    "micrenc-license.txt",
+    "micrenc.ttf"
   ],
   "source-url": "https://github.com/tbrowder/FreeFont.git",
   "tags": [

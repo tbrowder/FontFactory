@@ -50,11 +50,11 @@ sub locate-font(
     ) is export {
     # this sub is called by
     # sub find-freefont in module
-    # FreeFont::BuildUtils
+    # FreeFont::BuildUtils,
     # but only if it's not already
     # in $HOME/.FreeFont/config.yml
 
-    # we rely on the system locate
+    # we rely on the systems find 
     # comand,
 
     my ($n, $s, $exit, $proc, @lines);
@@ -64,13 +64,13 @@ sub locate-font(
     my $cmd;
 
     if $os.is-linux {
-    $cmd = "locate";
+        $cmd = "find /usr/share/fonts -name";
     }
     elsif $os.is-macos {
-        $cmd = "mdfind -name";
+        $cmd = "find -L /opt -name";
     }
     elsif $os.is-windows {
-        $cmd = "locate";
+        $cmd = "find / -name";
     }
 
     my $f1 = "FreeSerif.otf";

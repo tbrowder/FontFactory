@@ -1,12 +1,9 @@
-Use system locate instead of find-font
-  for finding Free Font .otf files
-  - how to do on Mac and Win?
+have fo show license
 
-Use the GNU Micre otf font
-  - get the license and other
-    info for /resources
-  - update docs and tables
-    and FreeFont::X::FontHashes
+Do resources files have to be in META6.json? check installed 
+
+option to print a font sampler PDF doc
++ see FontFactory
 
 Subs to build:
   locate-font

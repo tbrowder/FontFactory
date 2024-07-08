@@ -4,32 +4,36 @@ use QueryOS;
 use File::Temp;
 
 use FreeFont::BuildUtils;
+use FreeFont::Resources;
+
+my $debug = 0;
 
 # access the /resources/* content
-my $f1 = "resources/micrenc.ttf";
-my $f2 = "resources/GnuMICR.otf";
-my $f3 = "resources/CMC7.ttf";
-my $f4 = "resources/DigitalGraphicLabs.html";
-my $f5 = "resources/micrenc-license.txt";
+my %h = get-resources-hash;
+#my @res = (get-resources-hash).values;
+my @res = %h.values; #(get-resources-hash).values;
 
-for $f1, $f2, $f3, $f4 -> $f {
-#for $f1 -> $f {
+for @res -> $f {
+    say "DEBUG: path '$f'" if $debug;
+    next;
+
     my $b = $f.IO.basename;
+    say "DEBUG: basename '$b'" if $debug;
+
+    say "DEBUG: basename '$b'" if $debug;
     my $s;
     my $bin = False;
-    if $b ~~ /:i micr|cmc7 / {
+    if $b ~~ /:i otf|ttf $/ {
         $bin = True;
     }
-
     lives-ok {
         $s = get-resource-content $f, :$bin;
     }, "get content of '$b'";
 
     with $bin {
-        when $_.so { is $s.^name, 'Buf[uint8]' }
-        when not $_.so { is $s.^name, 'Str' }
+        when $_.so { is $f.^name, 'Buf[uint8]' }
+        when not $_.so { is $f.^name, 'Str' }
     }
-
 }
 
 done-testing;

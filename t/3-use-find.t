@@ -5,7 +5,7 @@ use QueryOS;
 # we rely on the system find comand,
 # ensure it finds the installed fonts
 
-my $debug = 1;
+my $debug = 0;
 
 my ($n, $s, $exit, $proc, @lines);
 my ($n2, $s2, @lines2);
