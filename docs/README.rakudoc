@@ -15,7 +15,7 @@ say $f1.name:    # OUTPUT: «Free Serif␤»
 say $f1.size;    # OUTPUT: «12.5␤»
 say $f1.file;    # OUTPUT: «/usr/share/fonts/opentype/freefont/FreeSerif.otf␤»
 say $f1.alias;   # OUTPUT: «Times␤»
-say $fi.license; # OUTPUT: «GNU GPL V3␤»
+say $f1.license; # OUTPUT: «GNU GPL V3␤»
 =end code
 
 =head1 Installation requirements
