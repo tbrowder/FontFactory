@@ -3,6 +3,9 @@
 use QueryOS;
 use FreeFont::BuildUtils;
 use FreeFont::Utils;
+use FreeFont::Resources;
+
+my $debug = 1;
 
 # run by Build.rakumod upon zef install
 # MICR et alii fonts, licenses, and 
@@ -14,7 +17,6 @@ if not $home {
     die "FATAL: Unable to determine a \$HOME directory for the user.";
 }
 
-my $fil  = "micrenc.ttf";
 my $dir  = "$home/.FreeFont";
 
 # need some args to allow testing and
@@ -27,20 +29,31 @@ if $tfil.IO.e {
 
 my $f = "$dir/config.yml";
 # don't continue if it exists
-my $res = True;;
+my $res = True;
 if $f.IO.r {
     say "File '$f' exists.";
     say "Checking for validity...";
-    $res = check-config $f;
+    $res = check-config $f, :$debug;
     if $res {
         say "Installation complete.";
     }
     else {
         say "Invalid file...correcting it.";
+        $res = False;
     }
 }
 if not $res {
     say "Creating file '$f'...";
+    create-config $dir, :$debug;
+    # and check again?
+    $res = check-config $f, :$debug;
+    if $res {
+        say "Installation complete.";
+    }
+    else {
+        say "Still an an invalid config file!";
+        $res = False;
+    }
 }
 
 # Get the path data if and only if
@@ -53,11 +66,15 @@ if not $res {
 #   micrenc.ttf
 #   ...
 
-my @fils = get-resources-files;
+#my @fils = get-resources-files;
+my @fils = get-resources-hash.keys.sort;
 
-my $r1 = $?DISTRIBUTION.content("resources/DigitalGraphicLabs.html");
-my $r2 = $?DISTRIBUTION.content("resources/license.txt");
-my $r3 = $?DISTRIBUTION.content("resources/micrenc.ttf");
+if $debug {
+    say "DEBUG: resources list:";
+    say "  $_" for @fils;
+}
+
+=finish
 
 # query locate-font
 

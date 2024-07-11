@@ -3,6 +3,19 @@ unit module FreeFont::Utils;
 use QueryOS;
 use YAMLish;
 
+sub create-config(
+    $dir,  #= path to the directory
+           #= for the config.yml file
+    :$debug,
+    --> Bool
+) is export {
+    unless $dir.IO.d {
+        mkdir $dir or return False;
+    }
+    # we have to do a couple of thing
+    True;
+}
+
 sub check-config(
     $path, #= path to the config file
            #= to be checked
