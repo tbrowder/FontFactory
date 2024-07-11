@@ -1,5 +1,7 @@
 unit module FreeFont::Classes;
 
+use FreeFont::X::FontHashes;
+
 class DocFont is export {
     # these are provided by FreeFont's
     # sub 'find-font'
@@ -7,23 +9,43 @@ class DocFont is export {
     has $.size   is required;
 
     # remainder are generated in TWEAK
+    #   without extension
     has $.fullname;  # full name with 
                      # spaces
     has $.name;      # full with no 
                      # spaces
     has $.shortname; # name.lc
 
-    has $.file;  # name.otf
     has $.alias; # full Type 1 name
     has $.code;
     has $.code2;
+    #   with file extension
+    has $.file;  # name.otf
     has $.path;  # provided by 
                  # find-font
-
+    #   other attrs
     has $.weight;
     has $.slant;
 
     submethod TWEAK {
+        # generated in TWEAK
+        #   without extension
+        $!fullname;  # full name with 
+                     # spaces
+        $!name;      # full with no 
+                     # spaces
+        $!shortname; # name.lc
+
+        $!alias; # full Type 1 name
+        $!code;
+        $!code2;
+        #   with file extension
+        $!file;  # name.otf
+        $!path;  # provided by 
+                 # find-font
+        #   other attrs
+        $!weight;
+        $!slant;
     }
 
     method license() {
