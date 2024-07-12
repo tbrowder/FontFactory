@@ -1,7 +1,39 @@
 #!/usr/bin/env raku
 
-# creates file FreeFont::X::FontHashes
+use QueryOS;
+my $os = OS.new;
 
+# Expected directory for installed files
+# linux
+#   /usr/share/fonts/opentype/freefont/
+# macos
+#   /opt/homebrew/Caskroom/font-freefont/20120503/freefont-20120503/
+# windows # assumed same as windows
+#   /usr/share/fonts/opentype/freefont/
+
+# Creates file FreeFont::X::FontHashes
+# ensure expected files exist
+my $fdir;
+if $os.is-linux {
+    $fdir = "/usr/share/fonts/opentype/freefont";
+}
+elsif $os.is-macos {
+    $fdir = "/opt/homebrew/Caskroom/font-freefont/20120503/freefont-20120503";
+}
+elsif $os.is-windows {
+    $fdir = "/usr/share/fonts/opentype/freefont";
+}
+else {
+    die "FATAL: Unable to determine OS";
+}
+if not $fdir.IO.d {
+    die "FATAL: Expected files are not installed."
+}
+if not $fdir.IO.r {
+    die "FATAL: Expected file directory is not readable."
+}
+ 
+# The output filename:
 my $bnam = "FontHashes";
 my $f = "$*CWD/lib/FreeFont/X/{$bnam}.rakumod";
 my $fh = open $f, :w;
@@ -15,7 +47,10 @@ constant %code is export = %\(
 HERE
 
 =begin comment
-all font files in dir /usr/share/fonts/opentype/freefont
+# on Debian
+# all font files in dir /usr/share/fonts/opentype/freefont
+# on MacOS
+# all font files in dir /opt/...
 FreeSerif.otf
 FreeSerifBold.otf
 FreeSerifItalic.otf
@@ -28,6 +63,8 @@ FreeMono.otf
 FreeMonoBold.otf
 FreeMonoOblique.otf
 FreeMonoBoldOblique.otf
+# in /resources and will be downloaded
+# into dir: $HOME/.FreeFont/fonts
 micrenc.ttf
 GnuMICR.otf
 CMC7.ttf
@@ -75,7 +112,7 @@ for @fontnames.kv -> $i, $v is copy {
     my $N = @w.pop;
     $siz = $N.chars;
     $num-s = $siz if $siz > $num-s;
-# $num-s $cod-s $cod2-s $sho-s
+    # $num-s $cod-s $cod2-s $sho-s
 
     if $N != $n {
         die "FATAL: n != N";
@@ -83,13 +120,13 @@ for @fontnames.kv -> $i, $v is copy {
     my $code2 = @w.pop;
     $siz = $code2.chars;
     $cod2-s = $siz if $siz > $cod2-s;
-# $num-s $cod-s $cod2-s $sho-s
+    # $num-s $cod-s $cod2-s $sho-s
 
     say "code2 = '$code2'" if $debug;
     my $code  = @w.pop;
     $siz = $code.chars;
     $cod-s = $siz if $siz > $cod-s;
-# $num-s $cod-s $cod2-s $sho-s
+    # $num-s $cod-s $cod2-s $sho-s
 
     say "code = '$code'" if $debug;
     # reassemble
@@ -100,24 +137,55 @@ for @fontnames.kv -> $i, $v is copy {
     # delete spaces
     $name ~~ s:g/\s+//;
 
+    # create the basename
+    my $suff = "otf";
+    # exceptions:
+    if $name eq "micrenc" {
+        $suff = "ttf";
+    }
+    elsif $name eq "CMC7" {
+        $suff = "ttf";
+    }
+    my $basename = $name ~ '.' ~ $suff;
+
     my $shortname = $name;
     # all lower-case
     $shortname .= lc;
     $siz = $shortname.chars;
     $sho-s = $siz if $siz > $sho-s;
-# $num-s $cod-s $cod2-s $sho-s
+    # $num-s $cod-s $cod2-s $sho-s
 
     # insert into the hashes
     %code{$code}           = $n;
     %code2{$code2}         = $n;
     %shortname{$shortname} = $n;
-    # 7 values
+    # 8 values
     %number{$n}<code>      = $code;
     %number{$n}<code2>     = $code2;
     %number{$n}<shortname> = $shortname;
     %number{$n}<name>      = $name;
     %number{$n}<fullname>  = $fullname;
-    %number{$n}<path>      = 0;
+    %number{$n}<basename>  = $basename;
+
+    # We should be able to get the path
+    # for a normal installation.
+    # We need specicial handling
+    # for the paths in the /resources
+    # directory. We use their final
+    # path in '$HOME/.FreeFont/fonts'.
+    my $hdir = "{%*ENV<HOME>}/.FreeFont/fonts";
+    my $path = "$fdir/$basename";
+    if $basename eq "micrenc.ttf" {
+        $path = "$hdir/$basename";
+    }
+    elsif $basename eq "GnuMICR.otf" {
+        $path = "$hdir/$basename";
+    }
+    elsif $basename eq "CMC7.ttf" {
+        $path = "$hdir/$basename";
+    }
+
+    %number{$n}<path>      = $path;
     %number{$n}<fontobj>   = 0;
 }
 
