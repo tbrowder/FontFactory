@@ -1,4 +1,4 @@
-unit module FreeFont::Classes;
+unit class module FreeFont::Classes;
 
 use FreeFont::X::FontHashes;
 
@@ -24,9 +24,10 @@ class DocFont is export {
     has $.path;  # provided by 
                  # find-font
     #   other attrs
-    has $.weight;
-    has $.slant;
+    has $.weight; # Bold
+    has $.slant;  # Italic, Oblique
 
+    =begin comment
     submethod TWEAK {
         # generated in TWEAK
         #   without extension
@@ -47,6 +48,7 @@ class DocFont is export {
         $!weight;
         $!slant;
     }
+    =end comment
 
     method license() {
         # DocFont attribute
