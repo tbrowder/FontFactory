@@ -1,6 +1,7 @@
 unit class FreeFont;
 
 use PDF::Font::Loader :load-font;
+use QueryOS;
 
 use FreeFont::Classes;
 use FreeFont::Resources;
@@ -13,9 +14,9 @@ use FreeFont::X::FontHashes;
 #   name (may be fragments), size
 #   number, size
 
-# the first two sigs are resolved 
+# The first two signatures are resolved
 # into the third which is further
-# resolved into a DocFont with 
+# resolved into a DocFont with
 # attributes of:
 #   fullname  - complete name, with spaces
 #   name      - complete name, without spaces
@@ -83,7 +84,7 @@ multi method get-font(
 }
 
 multi method get-font(
-    $Code, 
+    $Code,
     :$debug,
     --> DocFont
 ) {
