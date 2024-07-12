@@ -2,8 +2,8 @@ use Test;
 
 use QueryOS;
 
-# we rely on the system find comand,
-# ensure it finds the installed fonts
+# We rely on the system 'find' command.
+# Ensure it finds the installed fonts.	
 
 my $debug = 0;
 
@@ -14,14 +14,14 @@ my $os = OS.new;
 my $cmd;
 
 if $os.is-linux {
-    $cmd = "find /usr/share/fonts -type f -name ";
+    $cmd = "find /usr/share/fonts -type f -name";
 }
 elsif $os.is-macos {
     # basename?
-    $cmd = "find -L /opt -type f -name ";
+    $cmd = "find -L /opt -type f -name";
 }
 elsif $os.is-windows {
-    $cmd = "find";
+    $cmd = "find /usr/share/fonts -type f -name";
 }
 
 my $f1;
