@@ -1,4 +1,4 @@
-unit class module FreeFont::Classes;
+unit module FreeFont::Classes;
 
 use FreeFont::X::FontHashes;
 
