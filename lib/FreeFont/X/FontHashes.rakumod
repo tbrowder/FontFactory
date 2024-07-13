@@ -1,5 +1,7 @@
+#==============================
 # AUTO-GENERATED DO NOT EDIT
 # CREATED BY /sbin/createhashes
+#==============================
 
 unit module FreeFont::X::FontHashes;
 
