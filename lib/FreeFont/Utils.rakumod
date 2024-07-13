@@ -9,7 +9,7 @@ use FreeFont::X::FontHashes;
 %number = %FreeFont::X::FontHashes::number;
 
 # Primarily for Windows use to get GNU FreeFont
-# files. Eventually do the whole
+# files. Does the whole
 # process from download to unpacking
 # to installing in the desired
 # directory. See /dev/wget.raku.
@@ -17,7 +17,6 @@ use FreeFont::X::FontHashes;
 # if need be.
 sub install-gnu-freefont(
     :$dir is copy,
-    #$https, 
     :$debug,
     ) is export {
     # Given a target directory, 
@@ -32,18 +31,35 @@ sub install-gnu-freefont(
     $dir = $*CWD if not $dir.defined;
 
     # We unpack in a temp dir
-    my $tdir = 0;
-    my $f1 = "https://ftp.gnu.org/gnu/freefont/freefont-otf-20120503.tar.gz";
-    my $f2 = "https://ftp.gnu.org/gnu/freefont/freefont-otf-20120503.tar.gz.sig";
-    chdir $tdir;
-    run "wget", $f1;
-    #run "wget", $f2;
-    unless $f1.IO.e {
-        run("wget", $f1);
+    my $tdir0 = tempdir;
+    my $tdir  = "$tdir0/fonts";
+    mkdir $tdir;
+
+    # source links
+    my $s1 = "https://ftp.gnu.org/gnu/freefont/freefont-otf-20120503.tar.gz";
+    my $f1 = "freefont-otf-20120503.tar.gz";
+    my $r2 = "https://ftp.gnu.org/gnu/freefont/freefont-otf-20120503.tar.gz.sig";
+    my $f2 = "freefont-otf-20120503.tar.gz.sig";
+    my @tpaths;
+    #unless $f1.IO.e {
+    my $log = "";
+    unless @tpaths {
+        chdir $tdir;
+        run("wget", "-o $log", $s1);
         my $cmd = "tar -xvzf $f1";
-        run $cmd.words
+        run $cmd.words;
     }
+    # collect the files
+    @tpaths = find :dir($tdir), :name(/'.otf'$/), :type<file>;
     # reality check
+    if 1 {
+        say "DEBUG tpaths:";
+        for @tpaths -> $path {
+            say "  $path";
+        }
+        say "DEBUG EXIT"; exit;
+    }
+
     my $all = True;
     my @bnames;
     for 1...12 -> $n {
