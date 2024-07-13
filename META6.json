@@ -6,6 +6,7 @@
   "build-depends": [
   ],
   "depends": [
+    "File::Find",
     "File::Temp",
     "HarfBuzz",
     "Text::Utils:ver<3.4.4>",
