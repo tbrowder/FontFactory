@@ -27,10 +27,10 @@ else {
     die "FATAL: Unable to determine OS";
 }
 if not $fdir.IO.d {
-    die "FATAL: Expected files are not installed."
+    die "FATAL: Expected font files are not installed."
 }
 if not $fdir.IO.r {
-    die "FATAL: Expected file directory is not readable."
+    die "FATAL: Expected font file directory is not readable."
 }
  
 # The output filename:
@@ -38,8 +38,10 @@ my $bnam = "FontHashes";
 my $f = "$*CWD/lib/FreeFont/X/{$bnam}.rakumod";
 my $fh = open $f, :w;
 $fh.print: qq:to/HERE/;
+#==============================
 # AUTO-GENERATED DO NOT EDIT
 # CREATED BY /sbin/createhashes
+#==============================
 
 unit module FreeFont::X::{$bnam};
 
@@ -97,13 +99,14 @@ constant @fontnames =
 my $debug = 0;
 # the 4 hashes
 my (%code, %code2, %shortname, %number);
-# track the max size of each set of keys
+# Track the max size of each set of keys
+# to enable neat alignment
 my ($num-s, $cod-s, $cod2-s, $sho-s) = 0, 0, 0, 0;
 my $siz;
 # $num-s $cod-s $cod2-s $sho-s
 for @fontnames.kv -> $i, $v is copy {
     my $n = $i + 1;
-    # the last three words are 'code'
+    # The last three words are 'code'
     #   'code2', and 'number',
     #   respectively
     my @w = $v.words;
@@ -137,7 +140,7 @@ for @fontnames.kv -> $i, $v is copy {
     # delete spaces
     $name ~~ s:g/\s+//;
 
-    # create the basename
+    # Create the basename
     my $suff = "otf";
     # exceptions:
     if $name eq "micrenc" {
@@ -174,7 +177,9 @@ for @fontnames.kv -> $i, $v is copy {
     # directory. We use their final
     # path in '$HOME/.FreeFont/fonts'.
     my $hdir = "{%*ENV<HOME>}/.FreeFont/fonts";
+    # The FreeFont fonts stay in place
     my $path = "$fdir/$basename";
+    # /resources fonts are placed in $HOME
     if $basename eq "micrenc.ttf" {
         $path = "$hdir/$basename";
     }
@@ -186,6 +191,8 @@ for @fontnames.kv -> $i, $v is copy {
     }
 
     %number{$n}<path>      = $path;
+    # The PDF font object will be
+    # defined in the FreeFont class
     %number{$n}<fontobj>   = 0;
 }
 

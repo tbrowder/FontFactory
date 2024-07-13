@@ -20,7 +20,7 @@ say $f1.license; # OUTPUT: «GNU GPL V3␤»
 
 =head1 Installation requirements
 
-The following system packages need to be installed to use this module:
+The following system packages need to be installed to use all the features of this module.
 
 =begin item
 The FontConfig library
@@ -33,6 +33,11 @@ $ sudo aptitude install fontconfig
 On MacOS:
 =begin code
 $ brew install fontconfig
+=end code
+
+On Windows:
+=begin code
+$ choco install fontconfig # if available
 =end code
 
 =end item
@@ -48,6 +53,19 @@ $ sudo aptitude install fonts-freefont-otf
 On MacOS:
 =begin code
 $ brew install --cask font-freefont
+=end code
+
+On Windows:
+
+If available:
+=begin code
+$ choco install font-freefont 
+=end code
+
+Alternatively:
+=begin code
+$ choco install wget
+# The 'zef install' process will download and install the FreeFont files.
 =end code
 
 =end item

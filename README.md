@@ -23,7 +23,7 @@ say $f1.license; # OUTPUT: «GNU GPL V3␤»
 Installation requirements
 =========================
 
-The following system packages need to be installed to use this module:
+The following system packages need to be installed to use all the features of this module.
 
   * The FontConfig library
 
@@ -35,6 +35,10 @@ The following system packages need to be installed to use this module:
 
         $ brew install fontconfig
 
+    On Windows:
+
+        $ choco install fontconfig # if available
+
   * The FreeFont font files
 
     On Debian:
@@ -44,6 +48,17 @@ The following system packages need to be installed to use this module:
     On MacOS:
 
         $ brew install --cask font-freefont
+
+    On Windows:
+
+    If available:
+
+        $ choco install font-freefont
+
+    Alternatively:
+
+        $ choco install wget
+        # The 'zef install' process will download and install the FreeFont files.
 
 On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FreeFont/config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
 
