@@ -6,7 +6,7 @@ use QueryOS;
 use YAMLish;
 use FreeFont::X::FontHashes;
 
-%number = FreeFont::X::FontHashes.number;
+%number = %FreeFont::X::FontHashes::number;
 
 # Primarily for Windows use to get GNU FreeFont
 # files. Eventually do the whole
