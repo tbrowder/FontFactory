@@ -12,7 +12,7 @@ use FreeFont::X::FontHashes;
 # files. Does the whole
 # process from download to unpacking
 # to installing in the desired
-# directory. See /dev/wget.raku.
+# directory. See /dev/get.raku.
 # This should also work on other OSs
 # if need be.
 sub install-gnu-freefont(
@@ -46,13 +46,14 @@ sub install-gnu-freefont(
     unless @tpaths {
         chdir $tdir;
         run("wget", "-o $log", $s1);
-        my $cmd = "tar -xvzf $f1";
+        #my $cmd = "tar -xvzf $f1";
+        my $cmd = "tar -xzf $f1";
         run $cmd.words;
     }
     # collect the files
     @tpaths = find :dir($tdir), :name(/'.otf'$/), :type<file>;
     # reality check
-    if 1 {
+    if 0 and $debug {
         say "DEBUG tpaths:";
         for @tpaths -> $path {
             say "  $path";
@@ -60,16 +61,23 @@ sub install-gnu-freefont(
         say "DEBUG EXIT"; exit;
     }
 
+    # create a hash
+    my %tpaths;
+    for @tpaths -> $p {
+        my $b = $p.IO.basename;
+        %tpaths{$b} = $p;
+    }
+
     my $all = True;
     my @bnames;
     for 1...12 -> $n {
         my $bname = %number{$n}<basename>;
-        if not $bname.IO.r {
-            say "WARNING: file '$bname' not found.";
-            $all = False;
+        if %tpaths{$bname}:exists {
+            @bnames.push: $bname;
         }
         else {
-            @bnames.push: $bname;
+            say "WARNING: file '$bname' not found.";
+            $all = False;
         }
     }
     
