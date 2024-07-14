@@ -2,7 +2,12 @@
 
 =head1 NAME
 
-B<FreeFont> - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes
+B<FreeFont> - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes.
+
+B<NOTE>: The intent is for this module 
+to work on Linux, MacOS, and Windows.
+Please file an issue if you need it on
+your OS and it is not working for you.
 
 =head1 SYNOPSIS
 
