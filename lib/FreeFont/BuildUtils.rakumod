@@ -10,8 +10,20 @@ use FreeFont::Utils;
 
 my $os = OS.new;
 
+sub populate-freefont-dir(
+    :$home!,
+    :$debug,
+) is export {
+    my $dir = "$home/.FreeFont";
+    unless $dir.IO.d {
+        mkdir $dir or return False;
+    }
+}
+
 sub find-freefont(
     $number,
+    :$home!,
+    :$debug,
 ) is export {
     # return path to the file
     # use the font basename
@@ -52,15 +64,33 @@ sub find-freefont(
 } # sub find-freefont(
 
 sub create-config(
-    $dir,  #= path to the directory
-           #= for the config.yml file
+    :$home!, 
     :$debug,
     --> Bool
 ) is export {
+    # path to the directory
+    # for the config.yml file
+    my $dir = "$home/.FreeFont";
     unless $dir.IO.d {
         mkdir $dir or return False;
     }
-    # we have to do a couple of thing
+    # we have to do a couple of things:
+    #   if it exists, check it
+    #   if not, create it
+    #   We check or create two other
+    #     subdirectories:
+    #       .FreeFont/fonts
+    #       .FreeFont/docs
+    my $d1 = "$home/.FreeFont/fonts";
+    mkdir $d1;
+    my $d2 = "$home/.FreeFont/docs";
+    mkdir $d2;
+
+    # 
+
+
+
+
     True;
 }
 

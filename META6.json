@@ -23,6 +23,7 @@
     "FreeFont": "lib/FreeFont.rakumod",
     "FreeFont::BuildUtils": "lib/FreeFont/BuildUtils.rakumod",
     "FreeFont::Classes": "lib/FreeFont/Classes.rakumod",
+    "FreeFont::Config": "lib/FreeFont/Config.rakumod",
     "FreeFont::Resources": "lib/FreeFont/Resources.rakumod",
     "FreeFont::Utils": "lib/FreeFont/Utils.rakumod",
     "FreeFont::X::FontHashes": "lib/FreeFont/X/FontHashes.rakumod"

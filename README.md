@@ -3,7 +3,9 @@
 NAME
 ====
 
-**FreeFont** - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes
+**FreeFont** - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes.
+
+**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS and it is not working for you.
 
 SYNOPSIS
 ========
