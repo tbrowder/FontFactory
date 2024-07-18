@@ -1,9 +1,12 @@
 #!/usr/bin/env raku
 
 use QueryOS;
+
+use FreeFont;
 use FreeFont::BuildUtils;
 use FreeFont::Utils;
 use FreeFont::Resources;
+use FreeFont::Config;
 
 my $debug = 1;
 
@@ -17,19 +20,21 @@ if not $home {
     die "FATAL: Unable to determine a \$HOME directory for the user.";
 }
 
-my $dir  = "$home/.FreeFont";
+my $dotFreeFont = ".FreeFont";
 
 # need some args to allow testing and
 # installation
 my $tfil = "dev/Build.rakumod";
 if $tfil.IO.e {
     $home = $*CWD; 
-    $dir  = "$home/xt/FreeFont";
+    $dotFreeFont = "xt/FreeFont";
 }
 
-my $f = "$dir/config.yml";
+my $f = "$home/$dotFreeFont/Config.yml";
+say "DEBUG: config file: '$f'" if $debug;
+
 # don't continue if it exists
-my $res = True;
+my $res = False;
 if $f.IO.r {
     say "File '$f' exists.";
     say "Checking for validity...";
@@ -42,9 +47,18 @@ if $f.IO.r {
         $res = False;
     }
 }
+else {
+}
+
+
+if $debug {
+    print "DEBUG: status of \$res: ";
+    say $res
+}
+
 if not $res {
     say "Creating file '$f'...";
-    create-config $dir, :$debug;
+    create-config :$home, :$dotFreeFont, :$debug;
     # and check again?
     $res = check-config $f, :$debug;
     if $res {
@@ -66,7 +80,6 @@ if not $res {
 #   micrenc.ttf
 #   ...
 
-#my @fils = get-resources-files;
 my @fils = get-resources-hash.keys.sort;
 
 if $debug {

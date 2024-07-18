@@ -7,14 +7,16 @@ use QueryOS;
 
 use FreeFont::X::FontHashes;
 use FreeFont::Utils;
+use FreeFont::Config;
 
 my $os = OS.new;
 
 sub populate-freefont-dir(
     :$home!,
+    :$dotFreeFont!,
     :$debug,
 ) is export {
-    my $dir = "$home/.FreeFont";
+    my $dir = "$home/$dotFreeFont";
     unless $dir.IO.d {
         mkdir $dir or return False;
     }
@@ -23,6 +25,7 @@ sub populate-freefont-dir(
 sub find-freefont(
     $number,
     :$home!,
+    :$dotFreeFont!,
     :$debug,
 ) is export {
     # return path to the file
@@ -46,7 +49,7 @@ sub find-freefont(
     # should already have the 15 paths
     # without using sub locate-font.
 
-    my $config = "%*ENV<HOME>/.FreeFont/config.yml";
+    my $config = "%*ENV<HOME>/$dotFreeFont/Config.yml";
     if $config.IO.r {
         # read yml
         my $str  = $config.IO.slurp;
@@ -63,14 +66,15 @@ sub find-freefont(
     $path
 } # sub find-freefont(
 
-sub create-config(
+sub manage-freefont-home(
     :$home!, 
+    :$dotFreeFont!,
     :$debug,
     --> Bool
 ) is export {
     # path to the directory
     # for the config.yml file
-    my $dir = "$home/.FreeFont";
+    my $dir = "$home/$dotFreeFont";
     unless $dir.IO.d {
         mkdir $dir or return False;
     }
@@ -81,12 +85,12 @@ sub create-config(
     #     subdirectories:
     #       .FreeFont/fonts
     #       .FreeFont/docs
-    my $d1 = "$home/.FreeFont/fonts";
+    my $d1 = "$home/$dotFreeFont/fonts";
     mkdir $d1;
-    my $d2 = "$home/.FreeFont/docs";
+    my $d2 = "$home/$dotFreeFont/docs";
     mkdir $d2;
 
-    # 
+    create-config :$home, :$dotFreeFont, :$debug; 
 
 
 
