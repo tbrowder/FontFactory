@@ -8,7 +8,7 @@ use FreeFont::Utils;
 use FreeFont::Resources;
 use FreeFont::Config;
 
-my $debug = 1;
+my $debug = 0;
 
 # run by Build.rakumod upon zef install
 # MICR et alii fonts, licenses, and 
