@@ -60,6 +60,14 @@ sub create-config(
         my $N = $b.chars;
         $nc = $N if $N > $nc;
     }
+    # add an ennding space for neatness
+    ++$nc;
+
+    # create a comment header
+    my $t = "# Basename";
+    my $T = sprintf("%-*.*s", $nc, $nc, $t);
+    $T ~= ": Path";
+    $fh.say: $T;
 
     # take care of the GNU Free Fonts
     for 1...12 -> $n {

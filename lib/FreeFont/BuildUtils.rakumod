@@ -8,19 +8,9 @@ use QueryOS;
 use FreeFont::X::FontHashes;
 use FreeFont::Utils;
 use FreeFont::Config;
+use FreeFont::Resources;
 
 my $os = OS.new;
-
-sub populate-freefont-dir(
-    :$home!,
-    :$dotFreeFont!,
-    :$debug,
-) is export {
-    my $dir = "$home/$dotFreeFont";
-    unless $dir.IO.d {
-        mkdir $dir or return False;
-    }
-}
 
 sub find-freefont(
     $number,
@@ -66,7 +56,7 @@ sub find-freefont(
     $path
 } # sub find-freefont(
 
-sub manage-freefont-home(
+sub manage-home-freefont(
     :$home!, 
     :$dotFreeFont!,
     :$debug,
@@ -85,11 +75,27 @@ sub manage-freefont-home(
     #     subdirectories:
     #       .FreeFont/fonts
     #       .FreeFont/docs
-    my $d1 = "$home/$dotFreeFont/fonts";
-    mkdir $d1;
-    my $d2 = "$home/$dotFreeFont/docs";
-    mkdir $d2;
+    my $fdir = "$home/$dotFreeFont/fonts";
+    mkdir $fdir;
+    my $ddir = "$home/$dotFreeFont/docs";
+    mkdir $ddir;
 
+    # extract the files in /resources and place in the /fonts or /docs
+    # directory as appropriate
+    my %h = get-resources-hash;
+    for %h.kv -> $basename, $path { 
+        # get the content as a slurped string
+        my $s = get-resource-content $path;
+        # spurt location depends on type of file
+        if $basename ~~ /:i otf | ttf $/ {
+            spurt "$fdir/$basename", $s;
+        }
+        else {
+            spurt "$ddir/$basename", $s;
+        }
+    }
+
+    # don't forget the Config.yml file
     create-config :$home, :$dotFreeFont, :$debug; 
 
 

@@ -19,7 +19,6 @@ my $home = %*ENV<HOME>:exists ??
 if not $home {
     die "FATAL: Unable to determine a \$HOME directory for the user.";
 }
-
 my $dotFreeFont = ".FreeFont";
 
 # need some args to allow testing and
@@ -30,10 +29,27 @@ if $tfil.IO.e {
     $dotFreeFont = "xt/FreeFont";
 }
 
+# many files are in /resources:
+#   DigitalGraphicLabs.html
+#   license.txt
+#   micrenc.ttf
+#   ...
+if $debug {
+    my @fils = get-resources-hash.keys.sort;
+    say "DEBUG: resources list:";
+    say "  $_" for @fils;
+}
+
+# extract the files from /resources and put them
+# in /fonts or /docs
+manage-home-freefont :$home, :$dotFreeFont, :$debug;
+
+=begin comment
+my $fdir = "$home/$dotFreeFont";
+
 my $f = "$home/$dotFreeFont/Config.yml";
 say "DEBUG: config file: '$f'" if $debug;
 
-# don't continue if it exists
 my $res = False;
 if $f.IO.r {
     say "File '$f' exists.";
@@ -49,7 +65,6 @@ if $f.IO.r {
 }
 else {
 }
-
 
 if $debug {
     print "DEBUG: status of \$res: ";
@@ -73,19 +88,9 @@ if not $res {
 # Get the path data if and only if
 # the collection is on the local file
 # system. Notify the user if it's not.
+=end comment
 
-# many files are in /resources:
-#   DigitalGraphicLabs.html
-#   license.txt
-#   micrenc.ttf
-#   ...
 
-my @fils = get-resources-hash.keys.sort;
-
-if $debug {
-    say "DEBUG: resources list:";
-    say "  $_" for @fils;
-}
 
 =finish
 
