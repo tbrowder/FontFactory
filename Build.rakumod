@@ -5,7 +5,7 @@ class Build {
         my $bfile   = "createhashes";
         my $bfile2  = "install";
         my $script  = $dist-path.IO.add("sbin/$bfile").absolute;
-        my $script2 = $dist-path.IO.add("sbin/$bfile").absolute;
+        my $script2 = $dist-path.IO.add("sbin/$bfile2").absolute;
 
         # We need to set this if our script uses any dependencies that
         # may not yet be installed but are in the process of being
@@ -17,8 +17,9 @@ class Build {
         #  placed after the executable)
         #  $script name)
         my $proc  = run :cwd($dist-path), $*EXECUTABLE, @libs.map({"-I$_"}).flat,
+                   $script; #, "build"; # <= note arg 'build'
         my $proc2 = run :cwd($dist-path), $*EXECUTABLE, @libs.map({"-I$_"}).flat,
-                   $script, "build"; # <= note arg 'build'
+                   $script2; #, "build"; # <= note arg 'build'
         my $exitcode = ($proc.exitcode, $proc2.exitcode).max;
         exit $exitcode;
     }
