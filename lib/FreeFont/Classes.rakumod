@@ -2,9 +2,11 @@ unit module FreeFont::Classes;
 
 use FreeFont::X::FontHashes;
 
+my %number = %FreeFont::X::FontHashes::number;
+
 class DocFont is export {
     # these are provided by FreeFont's
-    # sub 'find-font'
+    # sub 'get-font'
     has $.number is required;
     has $.size   is required;
 
@@ -21,15 +23,15 @@ class DocFont is export {
     has $.code2;
     #   with file extension
     has $.file;  # name.otf
-    has $.path;  # provided by 
-                 # find-font
+    has $.path;  
+
     #   other attrs
-    has $.weight; # Bold
+    has $.weight; # Normal, Bold
     has $.slant;  # Italic, Oblique
 
     =begin comment
     submethod TWEAK {
-        # generated in TWEAK
+        # generated in TWEAK using %number
         #   without extension
         $!fullname;  # full name with 
                      # spaces

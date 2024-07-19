@@ -72,6 +72,8 @@ constant %number is export = %(
         name      => 'FreeSerif',
         path      => '/usr/share/fonts/opentype/freefont/FreeSerif.otf',
         shortname => 'freeserif',
+        slant     => 'None',
+        weight    => 'Normal',
     },
     2  => {
         basename  => 'FreeSerifItalic.otf',
@@ -82,6 +84,8 @@ constant %number is export = %(
         name      => 'FreeSerifItalic',
         path      => '/usr/share/fonts/opentype/freefont/FreeSerifItalic.otf',
         shortname => 'freeserifitalic',
+        slant     => 'Italic',
+        weight    => 'Normal',
     },
     3  => {
         basename  => 'FreeSerifBold.otf',
@@ -92,6 +96,8 @@ constant %number is export = %(
         name      => 'FreeSerifBold',
         path      => '/usr/share/fonts/opentype/freefont/FreeSerifBold.otf',
         shortname => 'freeserifbold',
+        slant     => 'None',
+        weight    => 'Bold',
     },
     4  => {
         basename  => 'FreeSerifBoldItalic.otf',
@@ -102,6 +108,8 @@ constant %number is export = %(
         name      => 'FreeSerifBoldItalic',
         path      => '/usr/share/fonts/opentype/freefont/FreeSerifBoldItalic.otf',
         shortname => 'freeserifbolditalic',
+        slant     => 'Italic',
+        weight    => 'Bold',
     },
     5  => {
         basename  => 'FreeSans.otf',
@@ -112,6 +120,8 @@ constant %number is export = %(
         name      => 'FreeSans',
         path      => '/usr/share/fonts/opentype/freefont/FreeSans.otf',
         shortname => 'freesans',
+        slant     => 'None',
+        weight    => 'Normal',
     },
     6  => {
         basename  => 'FreeSansOblique.otf',
@@ -122,6 +132,8 @@ constant %number is export = %(
         name      => 'FreeSansOblique',
         path      => '/usr/share/fonts/opentype/freefont/FreeSansOblique.otf',
         shortname => 'freesansoblique',
+        slant     => 'Oblique',
+        weight    => 'Normal',
     },
     7  => {
         basename  => 'FreeSansBold.otf',
@@ -132,6 +144,8 @@ constant %number is export = %(
         name      => 'FreeSansBold',
         path      => '/usr/share/fonts/opentype/freefont/FreeSansBold.otf',
         shortname => 'freesansbold',
+        slant     => 'None',
+        weight    => 'Bold',
     },
     8  => {
         basename  => 'FreeSansBoldOblique.otf',
@@ -142,6 +156,8 @@ constant %number is export = %(
         name      => 'FreeSansBoldOblique',
         path      => '/usr/share/fonts/opentype/freefont/FreeSansBoldOblique.otf',
         shortname => 'freesansboldoblique',
+        slant     => 'Oblique',
+        weight    => 'Bold',
     },
     9  => {
         basename  => 'FreeMono.otf',
@@ -152,6 +168,8 @@ constant %number is export = %(
         name      => 'FreeMono',
         path      => '/usr/share/fonts/opentype/freefont/FreeMono.otf',
         shortname => 'freemono',
+        slant     => 'None',
+        weight    => 'Normal',
     },
     10 => {
         basename  => 'FreeMonoOblique.otf',
@@ -162,6 +180,8 @@ constant %number is export = %(
         name      => 'FreeMonoOblique',
         path      => '/usr/share/fonts/opentype/freefont/FreeMonoOblique.otf',
         shortname => 'freemonooblique',
+        slant     => 'Oblique',
+        weight    => 'Normal',
     },
     11 => {
         basename  => 'FreeMonoBold.otf',
@@ -172,6 +192,8 @@ constant %number is export = %(
         name      => 'FreeMonoBold',
         path      => '/usr/share/fonts/opentype/freefont/FreeMonoBold.otf',
         shortname => 'freemonobold',
+        slant     => 'None',
+        weight    => 'Bold',
     },
     12 => {
         basename  => 'FreeMonoBoldOblique.otf',
@@ -182,6 +204,8 @@ constant %number is export = %(
         name      => 'FreeMonoBoldOblique',
         path      => '/usr/share/fonts/opentype/freefont/FreeMonoBoldOblique.otf',
         shortname => 'freemonoboldoblique',
+        slant     => 'Oblique',
+        weight    => 'Bold',
     },
     13 => {
         basename  => 'MICR.otf',
@@ -192,6 +216,8 @@ constant %number is export = %(
         name      => 'MICR',
         path      => '/usr/share/fonts/opentype/freefont/MICR.otf',
         shortname => 'micr',
+        slant     => 'None',
+        weight    => 'Normal',
     },
     14 => {
         basename  => 'GnuMICR.otf',
@@ -202,6 +228,8 @@ constant %number is export = %(
         name      => 'GnuMICR',
         path      => '/home/tbrowde/.FreeFont/fonts/GnuMICR.otf',
         shortname => 'gnumicr',
+        slant     => 'None',
+        weight    => 'Normal',
     },
     15 => {
         basename  => 'CMC7.ttf',
@@ -212,6 +240,8 @@ constant %number is export = %(
         name      => 'CMC7',
         path      => '/home/tbrowde/.FreeFont/fonts/CMC7.ttf',
         shortname => 'cmc7',
+        slant     => 'None',
+        weight    => 'Normal',
     },
     # close the preceding hash
 );

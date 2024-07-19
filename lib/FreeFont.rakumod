@@ -88,7 +88,7 @@ multi method get-font(
     :$debug,
     --> DocFont
 ) {
-    my ($num, $name, $size);
+    my ($number, $size);
     # e.g.: t12d5 OR t12
     my ($code, $code2, $cp1, $cp2, $sizint, $sizfrac);
     with $Code {
@@ -125,17 +125,12 @@ multi method get-font(
     }
 
     if $code.defined {
-        $num  = %!code{$code};
-        $name = %!number{$num}<shortname>;
+        $number = %!code{$code};
     }
     elsif $code2.defined {
-        $num  = %!code2{$code2};
-        $name = %!number{$num}<shortname>;
+        $number = %!code2{$code2};
     }
 
-    my $o = DocFont.new: :$name, :$size;
+    my $o = DocFont.new: :$number, :$size;
     $o
-}
-
-multi method find-font(:$number, :$size, :$debug) {
 }

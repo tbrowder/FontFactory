@@ -162,13 +162,26 @@ for @fontnames.kv -> $i, $v is copy {
     %code{$code}           = $n;
     %code2{$code2}         = $n;
     %shortname{$shortname} = $n;
-    # 8 values
+    # 10 values
     %number{$n}<code>      = $code;
     %number{$n}<code2>     = $code2;
     %number{$n}<shortname> = $shortname;
     %number{$n}<name>      = $name;
     %number{$n}<fullname>  = $fullname;
     %number{$n}<basename>  = $basename;
+
+    # weight: Normal, Bold
+    # slant: None, Oblique, Italic
+    my $weight = "Normal";
+    my $slant = "None";
+
+    if $basename ~~ /:i bold    / { $weight = "Bold"   }
+    if $basename ~~ /:i oblique / { $slant = "Oblique" }
+    if $basename ~~ /:i italic  / { $slant = "Italic"  }
+
+    %number{$n}<weight>    = $weight;
+    %number{$n}<slant>     = $slant;
+
 
     # We should be able to get the path
     # for a normal installation.
@@ -191,6 +204,7 @@ for @fontnames.kv -> $i, $v is copy {
     }
 
     %number{$n}<path>      = $path;
+
     # The PDF font object will be
     # defined in the FreeFont class
     %number{$n}<fontobj>   = 0;
@@ -204,6 +218,10 @@ for %number.keys.sort({$^a <=> $^b}) {
     my $shortname = %number{$n}<shortname>;
     my $name      = %number{$n}<name>;
     my $fullname  = %number{$n}<fullname>;
+
+    my $weight    = %number{$n}<weight>;
+    my $slant     = %number{$n}<slant>;
+
     my $path      = %number{$n}<path>;
     my $fontobj   = %number{$n}<fontobj>;
     if $debug {
