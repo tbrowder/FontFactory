@@ -17,13 +17,12 @@ class DocFont is export {
     has $.name;      # full with no 
                      # spaces
     has $.shortname; # name.lc
-    has $.basename;  # name.lc
 
     has $.alias; # full Type 1 name
     has $.code;
     has $.code2;
     #   with file extension
-    has $.file;  # name.otf
+    has $.basename;  # name.suffix
     has $.path;  
 
     #   other attrs
@@ -41,14 +40,13 @@ class DocFont is export {
                                               # spaces
         $!shortname = %number{$n}<shortname>; # name.lc
 
-        $!alias     = %number{$n}<alias>;   # full Type 1 name
+        $!alias     = %number{$n}<alias>;     # full Type 1 name
         $!code      = %number{$n}<code>;
         $!code2     = %number{$n}<code2>;
         #   with file extension
-        $!file      = %number{$n}<file>;     # name.otf
-        $!basename  = %number{$n}<basename>; # name.otf
-        $!path      = %number{$n}<path>;     # provided by 
-                                            # find-font
+        $!basename  = %number{$n}<basename>;   # name.otf
+        $!path      = %number{$n}<path>;       # provided by 
+                                               # find-font
         #   other attrs
         $!weight    = %number{$n}<weight>;
         $!slant     = %number{$n}<slant>;
