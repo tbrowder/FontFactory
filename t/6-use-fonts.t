@@ -31,6 +31,30 @@ is $f1.alias, "Times", "alias: Times";
 is $f1.license, "GNU GPL V3", "license: 'GNU GPL V3'";
 is $f1.basename, "FreeSerif.otf", "basename: 'FreeSerif.otf'";
 
+my $f2 = $ff.get-font: 2, 10.2;
+
+is $f2.name, "FreeSerifItalic", "is name: 'FreeSerifItalic'";
+is $f2.size, 10.2, "is size: 10.2";
+is $f2.path, "/usr/share/fonts/opentype/freefont/FreeSerifItalic.otf", "path: '.../FreeSerifItalic.otf'";
+is $f2.alias, "TimesItalic", "alias: TimesItalic";
+is $f2.license, "GNU GPL V3", "license: 'GNU GPL V3'";
+is $f2.basename, "FreeSerifItalic.otf", "basename: 'FreeSerifItalic.otf'";
+
+# check default sizes are 12
+my $f3 = $ff.get-font: 3;
+is $f3.size, 12, "is size: 12";
+
+my $f4 = $ff.get-font: "t";
+is $f4.size, 12, "is size: 12";
+
+# check some name entriy, :size is required, bu, with the default size
+my ($f5, $size = 12);
+$f5 = $ff.get-font: :find("t");
+is $f5.size, 12, "is size: 12";
+
+
+
+
 
 done-testing;
 

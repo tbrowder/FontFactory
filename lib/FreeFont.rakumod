@@ -8,8 +8,8 @@ use FreeFont::Resources;
 use FreeFont::Utils;
 use FreeFont::X::FontHashes;
 
-# several ways to lookup font faces:
-# user enters one of:
+# Several ways to lookup font faces:
+# User enters one of:
 #   code or code2 (+ size, default: 12)
 #   name (may be fragments), size
 #   number, size
@@ -48,22 +48,37 @@ submethod TWEAK {
     %!code2     = %FreeFont::X::FontHashes::code2;     # code2 -> number
     # font names, LC, no spaces -> number:
     %!shortname = %FreeFont::X::FontHashes::shortname;
-    %!number    = %FreeFont::X::FontHashes::number;    # 1-13 -> subkeys:
+    %!number    = %FreeFont::X::FontHashes::number;    # 1-15 -> subkeys:
     #note "DEBUG: successful TWEAK and exit"; exit;
 }
 
 multi method get-font(
-    Str $name, # can be fragments
-    Numeric $size!,
+    UInt $number where { 0 < $_ < 16 },
+    Numeric $size = 12,
     :$debug,
      --> DocFont
 ) {
-    # e.g.: FreeSans, :size(12.5)
-    my $fname = $name;
-    $fname ~~ s:g/\s+//;  # delete spaces
-    $fname ~~ s/\.\w+$//; # delete suffix
-    $fname .= lc;
+    my $o = DocFont.new: :$number, :$size;
+    $o
+}
 
+multi method get-font(
+    Str :$find!, # can be fragments
+    Numeric :$size = 12,
+    :$debug,
+    --> DocFont
+) {
+    # e.g.: :find<FreeSans>; # default size: 12
+    #   OR
+    #     : :find<FreeSans>, :size(12.5)
+
+    my $s = $find.lc;
+    my @w = $s.words;
+
+    # set defaults as last resort
+    my ($name = "FreeSerif", $weight = "", $slant = "", $number = 1);
+
+    =begin comment
     note "DEBUG: \$fname = '$fname'" if $debug;
     with $fname {
         when %!shortname{$fname}:exists {
@@ -78,36 +93,37 @@ multi method get-font(
             exit;
         }
     }
+    =end comment
 
-    my $o = DocFont.new: :$name, :$size;
+    my $o = DocFont.new: :$number, :$size;
     $o
 }
 
 multi method get-font(
-    $Code,
+    Str $Code,
     :$debug,
     --> DocFont
 ) {
     my ($number, $size);
-    # e.g.: t12d5 OR t12
+    # e.g.: 't12d5' OR 't12' OR 't' 
     my ($code, $code2, $cp1, $cp2, $sizint, $sizfrac);
     with $Code {
-        when /^ :i (se|sa|m)  (b|i|o)?  (\d+)    [['d'| '.'] (\d+)]? $/ {
+        when /^ :i (se|sa|m)  (b|i|o)?  (\d+)?    [['d'| '.'] (\d+)]? $/ {
             # Code
             $cp1     = ~$0;
             $cp2     = $1.defined ?? ~$1 !! "";
-            $sizint  = +$2;
-            $sizfrac = $3.defined ?? +$3 !! "";
+            $sizint  = $2.defined ?? +$2 !! 12;
+            $sizfrac = $3.defined ?? +$3 !! 0;
 
             $code    = $cp1 ~ $cp2;
             $size    = "{$sizint}.{$sizfrac}".Numeric;
         }
-        when /^ :i (t|h|c)    (b|i|o)? (\d+)     [['d'|'.'] (\d+)]? $/ {
+        when /^ :i (t|h|c)    (b|i|o)? (\d+)?     [['d'|'.'] (\d+)]? $/ {
             # Code2
             $cp1     = ~$0;
             $cp2     = $1.defined ?? ~$1 !! "";
-            $sizint  = +$2;
-            $sizfrac = $3.defined ?? +$3 !! "";
+            $sizint  = $2.defined ?? +$2 !! 12;
+            $sizfrac = $3.defined ?? +$3 !! 0;
 
             $code2   = $cp1 ~ $cp2;
             $size    = "{$sizint}.{$sizfrac}".Numeric;
