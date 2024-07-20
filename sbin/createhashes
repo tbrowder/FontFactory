@@ -73,27 +73,27 @@ CMC7.ttf
 =end comment
 
 constant @fontnames =
-# full name, code, code2, number
-#   number is in order listed in
-#   the Red Book, Appendix E.1
+# Full name, code, code2, number, alias
+#   Number is in order listed in
+#   The Red Book, Appendix E.1
 # Times equivalent (1-4)
-"Free Serif se t 1",
-"Free Serif Italic sei ti 2",
-"Free Serif Bold seb tb 3",
-"Free Serif Bold Italic sebi tbi 4",
+"Free Serif se t 1 Times",
+"Free Serif Italic sei ti 2 TimesItalic",
+"Free Serif Bold seb tb 3 TimesBold",
+"Free Serif Bold Italic sebi tbi 4 TimesBoldItalic",
 # Helvetica equivalent (5-8)
-"Free Sans sa h 5",
-"Free Sans Oblique sao ho 6",
-"Free Sans Bold sab hb 7",
-"Free Sans Bold Oblique sabo hbo 8",
+"Free Sans sa h 5 Helvetica",
+"Free Sans Oblique sao ho 6 HelveticaOblique",
+"Free Sans Bold sab hb 7 HelveticaBold",
+"Free Sans Bold Oblique sabo hbo 8 HelveticaBoldOblique",
 # Courier equivalent (9-12)
-"Free Mono m c 9",
-"Free Mono Oblique mo co 10",
-"Free Mono Bold mb cb 11",
-"Free Mono Bold Oblique mbo cbo 12",
-"MICR mi mi 13", # not a FreeFont
-"GnuMICR mi2 mi2 14", # not a FreeFont
-"CMC7 c7 c7 15", # not a FreeFont
+"Free Mono m c 9 Courier",
+"Free Mono Oblique mo co 10 CourierOblique",
+"Free Mono Bold mb cb 11 CourierBold",
+"Free Mono Bold Oblique mbo cbo 12 CourierBoldOblique",
+"MICR mi mi 13 none",      # not a FreeFont
+"GnuMICR mi2 mi2 14 none", # not a FreeFont
+"CMC7 c7 c7 15 none",      # not a FreeFont
 ;
 
 my $debug = 0;
@@ -106,11 +106,14 @@ my $siz;
 # $num-s $cod-s $cod2-s $sho-s
 for @fontnames.kv -> $i, $v is copy {
     my $n = $i + 1;
-    # The last three words are 'code'
-    #   'code2', and 'number',
+    # The last four words are 'code'
+    #   'code2', 'number', and 'alias',
     #   respectively
     my @w = $v.words;
     say @w.raku if $debug;
+
+    my $alias = @w.pop;
+
     # error check
     my $N = @w.pop;
     $siz = $N.chars;
@@ -169,6 +172,7 @@ for @fontnames.kv -> $i, $v is copy {
     %number{$n}<name>      = $name;
     %number{$n}<fullname>  = $fullname;
     %number{$n}<basename>  = $basename;
+    %number{$n}<alias>     = $alias;   
 
     # weight: Normal, Bold
     # slant: None, Oblique, Italic
@@ -182,7 +186,6 @@ for @fontnames.kv -> $i, $v is copy {
     %number{$n}<weight>    = $weight;
     %number{$n}<slant>     = $slant;
 
-
     # We should be able to get the path
     # for a normal installation.
     # We need specicial handling
@@ -192,6 +195,7 @@ for @fontnames.kv -> $i, $v is copy {
     my $hdir = "{%*ENV<HOME>}/.FreeFont/fonts";
     # The FreeFont fonts stay in place
     my $path = "$fdir/$basename";
+
     # /resources fonts are placed in $HOME
     if $basename eq "micrenc.ttf" {
         $path = "$hdir/$basename";
@@ -208,6 +212,7 @@ for @fontnames.kv -> $i, $v is copy {
     # The PDF font object will be
     # defined in the FreeFont class
     %number{$n}<fontobj>   = 0;
+
 }
 
 for %number.keys.sort({$^a <=> $^b}) {

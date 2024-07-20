@@ -101,8 +101,8 @@ FreeMonoBoldOblique : ?
 =head1 DESCRIPTION
 
 B<FreeFont> is a package that provides easy handling of the GNU
-FreeFont set of OpenType fonts which closely match the classic Adobe
-Type 1 free fonts shown in the following table. Unlike the original
+FreeFont set of OpenType fonts which descended from the classic Adobe
+Type 1 free fonts shown in Table 2 below. Unlike the original
 Adobe fonts, these fonts also include thousands of Unicode
 characters. The fonts are also among the few, freely-available fonts
 that have Type 1 kerning.

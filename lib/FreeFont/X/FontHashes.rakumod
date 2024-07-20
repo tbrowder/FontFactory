@@ -64,6 +64,7 @@ constant %shortname is export = %(
 
 constant %number is export = %(
     1  => {
+        alias     => 'Times',
         basename  => 'FreeSerif.otf',
         code      => 'se',
         code2     => 't',
@@ -76,6 +77,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     2  => {
+        alias     => 'TimesItalic',
         basename  => 'FreeSerifItalic.otf',
         code      => 'sei',
         code2     => 'ti',
@@ -88,6 +90,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     3  => {
+        alias     => 'TimesBold',
         basename  => 'FreeSerifBold.otf',
         code      => 'seb',
         code2     => 'tb',
@@ -100,6 +103,7 @@ constant %number is export = %(
         weight    => 'Bold',
     },
     4  => {
+        alias     => 'TimesBoldItalic',
         basename  => 'FreeSerifBoldItalic.otf',
         code      => 'sebi',
         code2     => 'tbi',
@@ -112,6 +116,7 @@ constant %number is export = %(
         weight    => 'Bold',
     },
     5  => {
+        alias     => 'Helvetica',
         basename  => 'FreeSans.otf',
         code      => 'sa',
         code2     => 'h',
@@ -124,6 +129,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     6  => {
+        alias     => 'HelveticaOblique',
         basename  => 'FreeSansOblique.otf',
         code      => 'sao',
         code2     => 'ho',
@@ -136,6 +142,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     7  => {
+        alias     => 'HelveticaBold',
         basename  => 'FreeSansBold.otf',
         code      => 'sab',
         code2     => 'hb',
@@ -148,6 +155,7 @@ constant %number is export = %(
         weight    => 'Bold',
     },
     8  => {
+        alias     => 'HelveticaBoldOblique',
         basename  => 'FreeSansBoldOblique.otf',
         code      => 'sabo',
         code2     => 'hbo',
@@ -160,6 +168,7 @@ constant %number is export = %(
         weight    => 'Bold',
     },
     9  => {
+        alias     => 'Courier',
         basename  => 'FreeMono.otf',
         code      => 'm',
         code2     => 'c',
@@ -172,6 +181,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     10 => {
+        alias     => 'CourierOblique',
         basename  => 'FreeMonoOblique.otf',
         code      => 'mo',
         code2     => 'co',
@@ -184,6 +194,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     11 => {
+        alias     => 'CourierBold',
         basename  => 'FreeMonoBold.otf',
         code      => 'mb',
         code2     => 'cb',
@@ -196,6 +207,7 @@ constant %number is export = %(
         weight    => 'Bold',
     },
     12 => {
+        alias     => 'CourierBoldOblique',
         basename  => 'FreeMonoBoldOblique.otf',
         code      => 'mbo',
         code2     => 'cbo',
@@ -208,6 +220,7 @@ constant %number is export = %(
         weight    => 'Bold',
     },
     13 => {
+        alias     => 'none',
         basename  => 'MICR.otf',
         code      => 'mi',
         code2     => 'mi',
@@ -220,6 +233,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     14 => {
+        alias     => 'none',
         basename  => 'GnuMICR.otf',
         code      => 'mi2',
         code2     => 'mi2',
@@ -232,6 +246,7 @@ constant %number is export = %(
         weight    => 'Normal',
     },
     15 => {
+        alias     => 'none',
         basename  => 'CMC7.ttf',
         code      => 'c7',
         code2     => 'c7',
