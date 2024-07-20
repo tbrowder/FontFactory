@@ -30,7 +30,8 @@ class DocFont is export {
     has $.slant;  # Italic, Oblique
 
     submethod TWEAK {
-        my $n = $!number;
+
+        my $n = $!number // 1;
 
         # generated in TWEAK using %number
         #   without extension

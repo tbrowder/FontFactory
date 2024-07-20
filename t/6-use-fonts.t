@@ -43,6 +43,8 @@ is $f2.basename, "FreeSerifItalic.otf", "basename: 'FreeSerifItalic.otf'";
 # check default sizes are 12
 my $f3 = $ff.get-font: 3;
 is $f3.size, 12, "is size: 12";
+my $b = "FreeSerifBold.otf";
+is $f3.basename, "$b", "basename: '$b'";
 
 my $f4 = $ff.get-font: "t";
 is $f4.size, 12, "is size: 12";
