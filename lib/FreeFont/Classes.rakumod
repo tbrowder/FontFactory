@@ -2,7 +2,7 @@ unit module FreeFont::Classes;
 
 use FreeFont::X::FontHashes;
 
-my %number = %FreeFont::X::FontHashes::number;
+%number = %FreeFont::X::FontHashes::number;
 
 class DocFont is export {
     # these are provided by FreeFont's
@@ -17,6 +17,7 @@ class DocFont is export {
     has $.name;      # full with no 
                      # spaces
     has $.shortname; # name.lc
+    has $.basename;  # name.lc
 
     has $.alias; # full Type 1 name
     has $.code;
@@ -29,28 +30,29 @@ class DocFont is export {
     has $.weight; # Normal, Bold
     has $.slant;  # Italic, Oblique
 
-    =begin comment
     submethod TWEAK {
+        my $n = $!number;
+
         # generated in TWEAK using %number
         #   without extension
-        $!fullname;  # full name with 
-                     # spaces
-        $!name;      # full with no 
-                     # spaces
-        $!shortname; # name.lc
+        $!fullname  = %number{$n}<fullname>;  # full name with 
+                                              # spaces
+        $!name      = %number{$n}<name>;      # full with no 
+                                              # spaces
+        $!shortname = %number{$n}<shortname>; # name.lc
 
-        $!alias; # full Type 1 name
-        $!code;
-        $!code2;
+        $!alias     = %number{$n}<alias>;   # full Type 1 name
+        $!code      = %number{$n}<code>;
+        $!code2     = %number{$n}<code2>;
         #   with file extension
-        $!file;  # name.otf
-        $!path;  # provided by 
-                 # find-font
+        $!file      = %number{$n}<file>;     # name.otf
+        $!basename  = %number{$n}<basename>; # name.otf
+        $!path      = %number{$n}<path>;     # provided by 
+                                            # find-font
         #   other attrs
-        $!weight;
-        $!slant;
+        $!weight    = %number{$n}<weight>;
+        $!slant     = %number{$n}<slant>;
     }
-    =end comment
 
     method license() {
         # DocFont attribute

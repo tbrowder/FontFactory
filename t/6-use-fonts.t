@@ -24,8 +24,8 @@ say $f1.alias;   # OUTPUT: «Times␤»
 say $f1.license; # OUTPUT: «GNU GPL V3␤»
 =end comment
 
-is $f1.name, "Free Serif", "name: 'Free Serif'";
-is $f1.size, 12.5, "size: 12.5";
+is $f1.name, "FreeSerif", "is name: 'FreeSerif'";
+is $f1.size, 12.5, "is size: 12.5";
 is $f1.file, "/usr/share/fonts/opentype/freefont/FreeSerif.otf", "file: '.../FreeSerif.otf'";
 is $f1.path, "/usr/share/fonts/opentype/freefont/FreeSerif.otf", "path: '.../FreeSerif.otf'";
 is $f1.alias, "Times", "alias: Times";
