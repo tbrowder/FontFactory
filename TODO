@@ -25,7 +25,7 @@ Subs to build:
   }
 
 
-Add the MICR font to be installed
+DONE: Add the MICR font to be installed
 + put in /resources
   - Build.rakumod
   - install in $HOME/.FreeFont/*
@@ -53,4 +53,5 @@ Decide on the interface details:
     the hash is %fonts with a number key
       with a value of the object
 
-another option should be downloading the GNU file archive directly and unpacking   it
+another option should be downloading the GNU file archive 
+  directly and unpacking   it

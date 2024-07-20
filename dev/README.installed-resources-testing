@@ -1,0 +1,16 @@
+The /dev program 'installed-resources-testing.raku' is
+used to test or prove 
+    the META file MUST have resources listed
+    to use them WHEN it is installed by zef.
+
+Note it cannot run at all unless this module repo
+is installed locally.
+
+Procedures:
++ Insure this repo is committed BEFORE testing
++ Delete the data in META6.json 'resources'
++ Install this repo locally: 
+      cd ..; zef install . --debug --force-install
++ Return to this 'dev' dir
++ Execute this program:
+      ./installed-resources-testing.raku
