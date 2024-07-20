@@ -47,12 +47,20 @@ my $b = "FreeSerifBold.otf";
 is $f3.basename, "$b", "basename: '$b'";
 
 my $f4 = $ff.get-font: "t";
+$b = "FreeSerif.otf";
+is $f4.basename, "$b", "basename: '$b'";
 is $f4.size, 12, "is size: 12";
 
-# check some name entriy, :size is required, bu, with the default size
+=begin comment
+# save for a later release
+# check some name entry, :size is not required, so accept the default of 12
 my ($f5, $size = 12);
-$f5 = $ff.get-font: :find("t");
+$f5 = $ff.get-font: :find("t b");
+$b = "FreeSerifBold.otf";
+#$f5 = $ff.get-font: :find<<t b>>;
 is $f5.size, 12, "is size: 12";
+is $f5.basename, "$b", "basename: '$b'";
+=end comment
 
 
 
