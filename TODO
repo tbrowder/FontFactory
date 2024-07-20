@@ -1,6 +1,12 @@
+Test font loading
+
+Finish Config file check: warn but DO NOT MODIFY
+
+Finish docs
+
 DONE: have to show license
 
-Do resources files have to be in META6.json? check installed 
+DONE: YES!!Do resources files have to be in META6.json? check installed  YES!!!
 
 option to print a font sampler PDF doc
 + see FontFactory

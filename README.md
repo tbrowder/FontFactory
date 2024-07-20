@@ -81,7 +81,7 @@ On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freef
 DESCRIPTION
 ===========
 
-**FreeFont** is a package that provides easy handling of the GNU FreeFont set of OpenType fonts which closely match the classic Adobe Type 1 free fonts shown in the following table. Unlike the original Adobe fonts, these fonts also include thousands of Unicode characters. The fonts are also among the few, freely-available fonts that have Type 1 kerning.
+**FreeFont** is a package that provides easy handling of the GNU FreeFont set of OpenType fonts which descended from the classic Adobe Type 1 free fonts shown in Table 2 below. Unlike the original Adobe fonts, these fonts also include thousands of Unicode characters. The fonts are also among the few, freely-available fonts that have Type 1 kerning.
 
 See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the GNU FreeFont collection.
 
