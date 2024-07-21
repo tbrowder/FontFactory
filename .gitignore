@@ -1,6 +1,7 @@
 .precomp/
 /FreeFont-*
 xt/FreeFont/
+ff-example.pdf
 
 dev/cmc7/
 dev/fntsample-fonts.list

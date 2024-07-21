@@ -68,9 +68,18 @@ sub manage-home-freefont(
     unless $dir.IO.d {
         mkdir $dir or return False;
     }
+
+    my $res = False;
     # we have to do a couple of things:
-    #   if it exists, check it
+    my $cnf = "$home/$dotFreeFont/Config.yml";
+    if $cnf.IO.e {
+        # if it exists, check it
+        $res = check-config $cnf, :$debug;
+    }
+
+
     #   if not, create it
+
     #   We check or create two other
     #     subdirectories:
     #       .FreeFont/fonts
@@ -98,10 +107,8 @@ sub manage-home-freefont(
     # don't forget the Config.yml file
     create-config :$home, :$dotFreeFont, :$debug; 
 
-
-
-
-    True;
+    # return final status
+    $res;
 }
 
 sub check-config(
