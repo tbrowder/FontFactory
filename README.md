@@ -13,7 +13,7 @@ SYNOPSIS
 ```raku
 use FreeFont;
 my $ff = FreeFont.new;
-# get a font object for use with PDF documents
+# get a DocFont object for use with PDF documents
 my $f1 = $ff.get-font: "t12d5";
 say $f1.name:    # OUTPUT: «Free Serif␤»
 say $f1.size;    # OUTPUT: «12.5␤»
@@ -62,7 +62,7 @@ The following system packages need to be installed to use all the features of th
         $ choco install wget
         # The 'zef install' process will download and install the FreeFont files.
 
-On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FreeFont/config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
+On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FreeFont/Config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
 
     # Font face name    : /path/to/file.otf
     FreeSerif           : ?
@@ -85,7 +85,7 @@ DESCRIPTION
 
 See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the GNU FreeFont collection.
 
-Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FreeFont face. You can also use the reference number or the complete name (with or without spaces) if desired.
+Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FreeFont face. You can also use the reference number.
 
 Table 1
 -------
@@ -116,7 +116,7 @@ Table 2
 Notes on the three additional fonts
 -----------------------------------
 
-Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FreeFont' directory.
+Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FreeFont/fonts' or '$HOME/.FreeFont/docs' directories.
 
 The MICR fonts (more formally known as E13B) are designed to produce the machine-readable numbers found on bank checks in the US and Canada and other countries around the world, promarily in Asia.
 
@@ -137,7 +137,7 @@ The two files in single quotes were renamed to:
     DigitalGraphicLabs.html
     micrenc-license.txt
 
-and all three files will be installed in your '$HOME/.FreeFont' directory.
+and all three files will be installed in your '$HOME/.FreeFont/fonts' directory.
 
 The license basically says the font is free to use for non-commercial purposes. Consult the license carefully if you do intend to use it commercially.
 
@@ -151,8 +151,20 @@ See many more details and supporting files at the author's site at [](https://sa
 
 This is a free font designed by Harold Lohner, in 1998, and placed into the public domain by him. It was downloaded from [https://www.fonts4free.net/cmc-7-font.html](https://www.fonts4free.net/cmc-7-font.html). See more details and the license in the *CMC7.txt* file in the '/resources' directory.
 
-The Font class
-==============
+The DocFont class
+=================
+
+The object shown above in the *SYNOPSIS* section is actually a `DocFont` object that essentially pairs a `PDF::Font::Loader::FontObj` with a `size` attribute. That pairing, along with suitable naming of the object, can make it easier to manage font faces for complex documents as shown in contructing this simple PDF page:
+
+    my $ff = FreeFont.new;
+    my $t12d5 = $ff.get-font: "t12d5"; # Times (FreeSerif), 12.5 points
+    my PDF::Lite $pdf .= new;
+    $pdf.add-page.text: {
+        .font = $t12d.font, $t12d.size;
+        .text-position = [10, 600];
+        .say: "Hello, World!";
+    }
+    $pdf.save-as: "ff-example.pdf";
 
 AUTHOR
 ======

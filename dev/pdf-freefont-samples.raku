@@ -1,58 +1,16 @@
 #!/usr/bin/env raku
 
-use File::Find;
+use PDF::Lite;
+use PDF::Content::Page :PageSizes, :&to-landscape;
+use PDF::Font::Loader :load-font;
 use QueryOS;
 
 my $os = QueryOS.new;
 
-# Note you don't need these modules
-# unless you need individual
-# string dimensions such as 
-# leading (line-spacing), etc.
-use Font::FreeType;
-use Font::FreeType::Face;
-use Font::FreeType::Raw::Defs;
-use Font::FreeType::Glyph;
-
-my $fft = Font::FreeType.new;
-
-# For each font we can define a DocFont
-# class that has at least the following
-# attributes::
-#   font file path
-#   font object (load-font)
-#   font face
-class DocFont {
-    has $.path is required;
-    has $.fo;
-    has $.basename; # basename of path
-    has $.name;     # basename w/o suffix
-    has $.face;
-    submethod TWEAK {
-        $!basename = $!path.IO.basename;
-        $!name = $!basename.parts("");
-        $!fo = load-font $!path;
-        $!face  = $fft.face: $!path, :load-flags(FT_LOAD_NO_HINTING);
-    }
-}
-   
-# We avoid the issue of possible
-# duplicate names by strictly
-# controlling the font source files.
-#
-# We make a default size attribute
-# for ease of consistent document
-# creation, but we use a factory
-# parent class producer
-# to avoid actual font object
-# duplication.
-
-my %fo; # key: font name (w/o suffix)
-        #   value: font object
-
-use PDF::Lite;
-use PDF::Content::Page :PageSizes, :&to-landscape;
-use PDF::Font::Loader :load-font;
+use lib "../lib";
+use FreeFont;
+use FreeFont::Classes;
+use FreeFont::X::FontHashes;
 
 my $ofil  = "PDF-Lite-Gnu-FreeFont-samples.pdf";
 
@@ -69,11 +27,9 @@ else {
     $gnuffdir = "/usr/share/fonts/opentype/freefont";
 }
 
-my @gff = find :dir($gnuffdir), :name(/\.otf$/);
-
 my $pdf = PDF::Lite.new;
 
-# TOTO: add page numbers upper right of page
+# TODO: add page numbers upper right of page
 my $npages = @gff.elems;
 my $curr-page = 0;
 

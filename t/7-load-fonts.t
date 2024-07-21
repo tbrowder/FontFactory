@@ -2,6 +2,8 @@ use Test;
 
 use QueryOS;
 use File::Temp;
+use PDF::Font::Loader :load-font;
+use PDF::Content::FontObj;
 
 my $debug = 0;
 
@@ -17,6 +19,7 @@ my $ff = FreeFont.new;
 my $n = "FreeSerif";
 my $b = "FreeSerif.otf";
 my $f = $ff.get-font: "t12d5";
+my $t = "PDF::Font::Loader::FontObj";
 
 =begin comment
 say $f.name:    # OUTPUT: «Free Serif␤»
@@ -31,6 +34,9 @@ is $f.size, 12.5, "is size: 12.5";
 is $f.alias, "Times", "alias: Times";
 is $f.license, "GNU GPL V3", "license: 'GNU GPL V3'";
 is $f.basename, "$b", "basename: '$b'";
+is $f.font.^name, "$t", "is type ^name: '$t'";
+
+
 
 
 

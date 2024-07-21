@@ -1,5 +1,8 @@
 unit module FreeFont::Classes;
 
+use PDF::Font::Loader :load-font;
+use PDF::Content::FontObj;
+
 use FreeFont::X::FontHashes;
 
 %number = %FreeFont::X::FontHashes::number;
@@ -29,6 +32,8 @@ class DocFont is export {
     has $.weight; # Normal, Bold
     has $.slant;  # Italic, Oblique
 
+    has $.font;   # the font object from PDF::Font::Loader's :load-font($path)
+
     submethod TWEAK {
 
         my $n = $!number // 1;
@@ -51,6 +56,8 @@ class DocFont is export {
         #   other attrs
         $!weight    = %number{$n}<weight>;
         $!slant     = %number{$n}<slant>;
+
+        $!font      = load-font :file($!path);
     }
 
     method license() {
