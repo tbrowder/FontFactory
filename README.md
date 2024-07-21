@@ -5,7 +5,7 @@ NAME
 
 **FreeFont** - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes.
 
-**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS and it is not working for you.
+**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS. The package requires use of the 'PDF::Font::Loader' which has not yet been ported to those two systems, but efforts to do that are underway.
 
 SYNOPSIS
 ========
