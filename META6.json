@@ -12,7 +12,7 @@
     "Text::Utils:ver<3.4.4>",
     "QueryOS",
     "YAMLish",
-    "PDF::Content::FontObj",
+    "PDF::Lite",
     "PDF::Font::Loader"
   ],
   "description": "Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes",

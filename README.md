@@ -154,10 +154,15 @@ This is a free font designed by Harold Lohner, in 1998, and placed into the publ
 The DocFont class
 =================
 
-The object shown above in the *SYNOPSIS* section is actually a `DocFont` object that essentially pairs a `PDF::Font::Loader::FontObj` with a `size` attribute. That pairing, along with suitable naming of the object, can make it easier to manage font faces for complex documents as shown in contructing this simple PDF page:
+The `$t12d5` object shown above in the *SYNOPSIS* section is actually a `DocFont` object that essentially pairs a `PDF::Font::Loader::FontObj` with a `size` attribute. That pairing, along with suitable naming of the object, can make it easier to manage font faces for complex documents as shown in a program constructing a simple PDF page (a copy is in this repository's 'examples' directory):
 
+    #!/usr/bin/env raku
+    use PDF::Lite;
+    use PDF::Font::Loader :load-font;
+    use FreeFont;
+    use FreeFont::Classes;
     my $ff = FreeFont.new;
-    my $t12d5 = $ff.get-font: "t12d5"; # Times (FreeSerif), 12.5 points
+    my $t12d5 = $ff.get-font: "t12d5"; # FreeSerif (Times), 12.5 points
     my PDF::Lite $pdf .= new;
     $pdf.add-page.text: {
         .font = $t12d.font, $t12d.size;
