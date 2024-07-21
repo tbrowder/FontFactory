@@ -70,37 +70,61 @@ sub manage-home-freefont(
     }
 
     my $res = False;
-    # we have to do a couple of things:
-    my $cnf = "$home/$dotFreeFont/Config.yml";
-    if $cnf.IO.e {
-        # if it exists, check it
-        $res = check-config $cnf, :$debug;
-    }
 
-
-    #   if not, create it
-
-    #   We check or create two other
+    #   We create two other
     #     subdirectories:
     #       .FreeFont/fonts
     #       .FreeFont/docs
     my $fdir = "$home/$dotFreeFont/fonts";
     mkdir $fdir;
+    if not $fdir.IO.d {
+        note "ERROR: unable to create dir '$fdir'";
+        $res = False;
+    }
     my $ddir = "$home/$dotFreeFont/docs";
     mkdir $ddir;
+    if not $ddir.IO.d {
+        note "ERROR: unable to create dir '$ddir'";
+        $res = False;
+    }
 
+    # we have to do a couple of things:
+    my $cnf = "$home/$dotFreeFont/Config.yml";
+    if $cnf.IO.e {
+        # if it exists, check it
+        say "DEBUG: checking existing Config.yml file";
+        $res = check-config $cnf, :$debug;
+    }
+
+    if $res {
+        # all is okay
+        return $res;
+    }
+
+    #   if not, create it
     # extract the files in /resources and place in the /fonts or /docs
     # directory as appropriate
     my %h = get-resources-hash;
     for %h.kv -> $basename, $path { 
+        if $debug {
+            note "DEBUG: basename: '$basename'";
+            note "DEBUG: path    : '$basename'";
+        }
+
         # get the content as a slurped string
         my $s = get-resource-content $path;
         # spurt location depends on type of file
         if $basename ~~ /:i otf | ttf $/ {
-            spurt "$fdir/$basename", $s;
+            if $debug {
+                note "DEBUG: spurting: '{$fdir}/{$basename}'";
+            }
+            "$fdir/$basename".IO.spurt: $s;
         }
         else {
-            spurt "$ddir/$basename", $s;
+            if $debug {
+                note "DEBUG: spurting: '{$ddir}/{$basename}'";
+            }
+            "$ddir/$basename".IO.spurt: $s;
         }
     }
 
@@ -117,39 +141,74 @@ sub check-config(
     :$debug,
     --> Bool
 ) is export {
+
+    say "DEBUG: entering sub check-config..." if $debug;
     unless $path.IO.r {
+        if $debug {
+            note "DEBUG: no Config.yml found";
+        }
+        # then use create-config
         return False;
     }
-    my $status = True;
 
-    my @lines = $path.IO.lines;
-    return False if not @lines;
-    for $path.IO.lines {
-        when /^ \s* '#' / {
-            ; # ok
-        }
-        when /^ \s*
-            (\S+)   # a key
-            \s* ':' # required colon
-            (\S+)   # its value
-            / {
-            ; # ok
-        }
-        default {
-            return False;
-        }
+    my $err = 0;
+    # assumption
+    my $res = True;
+
+    my %conf = load-yaml $path.IO.slurp;
+    # expect 15 elements
+    my $elems = %conf.elems;
+    if $elems != 15 {
+        say "WARNING: Conf.yml has $elems instead of the expected 15 elements.";
+        $res = False;
+        ++$err;
     }
 
     # format is ok, check the hash
-    my %conf = load-yaml $path.IO.slurp;
     # check expected keys
     my %n = %FreeFont::X::FontHashes::number;
-    for %n.keys -> $k {
-        my $name = %(%n{$k})<name>;
-        say "DEBUG: font name = '$name'";
+    for %n.keys -> $k { 
+        my $bnam = %(%n{$k})<basename>;
+        my $expected-path = %(%n{$k})<path>;
+        say "DEBUG: font basename = '$bnam'" if $debug;
+        # check each is in %conf
+        if %conf{$bnam}:exists {
+            my $local-path = %conf{$bnam};
+            if $local-path eq $expected-path {
+                # does $path exist?
+                if $local-path.IO.r {
+                    say "DEBUG: valid local font path: $local-path" if $debug;
+                }
+                else {
+                    say "DEBUG: ERROR non-existing or unreadable local font path: $local-path" if $debug;
+                    $res = False;
+                    ++$err;
+                }
+            }
+            else {
+                say "DEBUG: ERROR unexpected local font path: $local-path" if $debug;
+                say "             expected         font path: $expected-path" if $debug;
+                $res = False;
+                ++$err;
+            }
+        }
+        else {
+            say "DEBUG: ERROR basename $bnam key does not exist" if $debug;
+            $res = False;
+            ++$err;
+        }
+    }
+    if not $res {
+        note "ERROR: Found $err errors in your Config.yml file.";
+        note "  Suggest you do the following:";
+        note "    + save a copy of your existing Config.yml file";
+        note "    + delete your '\$HOME/.FreeFont' directory and attempt a reinstallation";
+        note "    + if still unsucessful, please file an issue";
+        exit;
     }
 
-    say %conf.gist;
+
+    $res;
 }
 
 sub locate-font(

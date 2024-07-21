@@ -9,6 +9,7 @@ use FreeFont::Resources;
 use FreeFont::Config;
 
 my $debug = 0;
+$debug = 1 if @*ARGS.elems;
 
 # run by Build.rakumod upon zef install
 # MICR et alii fonts, licenses, and 
@@ -16,10 +17,12 @@ my $debug = 0;
 
 my $home = %*ENV<HOME>:exists ??
            %*ENV<HOME> !! 0;
+
 if not $home {
     die "FATAL: Unable to determine a \$HOME directory for the user.";
 }
-my $dotFreeFont = ".FreeFont";
+
+my $dotFreeFont = '.FreeFont';
 
 # need some args to allow testing and
 # installation

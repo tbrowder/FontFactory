@@ -91,7 +91,7 @@ constant @fontnames =
 "Free Mono Oblique mo co 10 CourierOblique",
 "Free Mono Bold mb cb 11 CourierBold",
 "Free Mono Bold Oblique mbo cbo 12 CourierBoldOblique",
-"MICR mi mi 13 none",      # not a FreeFont
+"micrenc mi mi 13 none",   # not a FreeFont
 "GnuMICR mi2 mi2 14 none", # not a FreeFont
 "CMC7 c7 c7 15 none",      # not a FreeFont
 ;
@@ -138,8 +138,8 @@ for @fontnames.kv -> $i, $v is copy {
     # reassemble
     say @w.raku if $debug;
     $v = @w.join(" ");
-    my $fullname  = $v;   # complete name, with spaces
-    my $name       = $v;  # complete name, without spaces
+    my $fullname  = $v;  # complete name, with spaces
+    my $name      = $v;  # complete name, without spaces
     # delete spaces
     $name ~~ s:g/\s+//;
 

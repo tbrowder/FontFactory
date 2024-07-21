@@ -81,10 +81,11 @@ sub create-config(
     # the Micre fonts
     for 13...15 -> $n {
         my $b = %number{$n}<basename>;
-        # the path is in the user's '$HOME/$dotFreeFont' directory
-        #my $f = %number{$n}<path>;
-        my $f = "$dir/$b";
-
+        # the path is in the user's '$HOME/$dotFreeFont/fonts' directory
+        my $f = "$dir/fonts/$b";
+        if $debug {
+            note "DEBUG: spec fonts are at path: $f";
+        }
         my $s = sprintf("%-*.*s", $nc, $nc, $b);
         $s ~= ": $f";
         $fh.say: $s;
