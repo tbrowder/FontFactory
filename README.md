@@ -64,19 +64,22 @@ The following system packages need to be installed to use all the features of th
 
 On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FreeFont/Config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
 
-    # Font face name    : /path/to/file.otf
-    FreeSerif           : ?
-    FreeSerifBold       : ?
-    FreeSerifItalic     : ?
-    FreeSerifBoldItalic : ?
-    FreeSans            : ?
-    FreeSansBold        : ?
-    FreeSansOblique     : ?
-    FreeSansBoldOblique : ?
-    FreeMono            : ?
-    FreeMonoBold        : ?
-    FreeMonoOblique     : ?
-    FreeMonoBoldOblique : ?
+    # Basename              : Path
+    FreeSerif.otf           : ?
+    FreeSerifBold.otf       : ?
+    FreeSerifItalic.otf     : ?
+    FreeSerifBoldItalic.otf : ?
+    FreeSans.otf            : ?
+    FreeSansBold.otf        : ?
+    FreeSansOblique.otf     : ?
+    FreeSansBoldOblique.otf : ?
+    FreeMono.otf            : ?
+    FreeMonoBold.otf        : ?
+    FreeMonoOblique.otf     : ?
+    FreeMonoBoldOblique.otf : ?
+    micrenc.ttf             : /home/usr/.FreeFont/fonts/micrenc.ttf
+    GnuMICR.otf             : /home/usr/.FreeFont/fonts/GnuMICR.otf
+    CMC7.ttf                : /home/usr/.FreeFont/fonts/CMC7.ttf
 
 DESCRIPTION
 ===========
@@ -116,7 +119,7 @@ Table 2
 Notes on the three additional fonts
 -----------------------------------
 
-Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FreeFont/fonts' or '$HOME/.FreeFont/docs' directories.
+Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FreeFont/fonts' or '$HOME/.FreeFont/docs' directories, as appropriate.
 
 The MICR fonts (more formally known as E13B) are designed to produce the machine-readable numbers found on bank checks in the US and Canada and other countries around the world, promarily in Asia.
 
@@ -137,7 +140,7 @@ The two files in single quotes were renamed to:
     DigitalGraphicLabs.html
     micrenc-license.txt
 
-and all three files will be installed in your '$HOME/.FreeFont/fonts' directory.
+and all three files will be installed in your '$HOME/.FreeFont' directory.
 
 The license basically says the font is free to use for non-commercial purposes. Consult the license carefully if you do intend to use it commercially.
 
@@ -165,9 +168,9 @@ The `$t12d5` object shown above in the *SYNOPSIS* section is actually a `DocFont
     my $t12d5 = $ff.get-font: "t12d5"; # FreeSerif (Times), 12.5 points
     my PDF::Lite $pdf .= new;
     $pdf.add-page.text: {
-        .font = $t12d.font, $t12d.size;
-        .text-position = [10, 600];
-        .say: "Hello, World!";
+       .font = $t12d.font, $t12d.size; # <== .font, .size (the two required values)
+       .text-position = [10, 600];
+       .say: "Hello, World!";
     }
     $pdf.save-as: "ff-example.pdf";
 

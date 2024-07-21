@@ -92,7 +92,7 @@ sub manage-home-freefont(
     my $cnf = "$home/$dotFreeFont/Config.yml";
     if $cnf.IO.e {
         # if it exists, check it
-        say "DEBUG: checking existing Config.yml file";
+        say "DEBUG: checking existing Config.yml file" if $debug;
         $res = check-config $cnf, :$debug;
     }
 
