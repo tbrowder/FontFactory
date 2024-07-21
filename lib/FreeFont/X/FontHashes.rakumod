@@ -58,7 +58,7 @@ constant %shortname is export = %(
     freeserifbolditalic => 4,
     freeserifitalic     => 2,
     gnumicr             => 14,
-    micr                => 13,
+    micrenc             => 13,
     # close the preceding hash
 );
 
@@ -221,14 +221,14 @@ constant %number is export = %(
     },
     13 => {
         alias     => 'none',
-        basename  => 'MICR.otf',
+        basename  => 'micrenc.ttf',
         code      => 'mi',
         code2     => 'mi',
         fontobj   => 0,
-        fullname  => 'MICR',
-        name      => 'MICR',
-        path      => '/usr/share/fonts/opentype/freefont/MICR.otf',
-        shortname => 'micr',
+        fullname  => 'micrenc',
+        name      => 'micrenc',
+        path      => '/home/tbrowde/.FreeFont/fonts/micrenc.ttf',
+        shortname => 'micrenc',
         slant     => 'None',
         weight    => 'Normal',
     },
