@@ -12,65 +12,18 @@ use FreeFont;
 use FreeFont::Classes;
 use FreeFont::X::FontHashes;
 
-my $ofil  = "PDF-Lite-Gnu-FreeFont-samples.pdf";
+my %n = %FreeFont::X::FontHashes::number;
 
-# it's a diff dir on Mac
-# the default installation dir:
-my $gnuffdir;
-if $os.is-linux {
-    $gnuffdir = "/usr/share/fonts/opentype/freefont";
-}
-elsif $os.is-macos {
-    $gnuffdir = "/usr/share/fonts/opentype/freefont";
-}
-else {
-    $gnuffdir = "/usr/share/fonts/opentype/freefont";
-}
+my $ofil = "Gnu-FreeFont-samples.pdf";
 
 my $pdf = PDF::Lite.new;
 
 # TODO: add page numbers upper right of page
-my $npages = @gff.elems;
-my $curr-page = 0;
 
 my $face2 = 0; #  = "FreeSerifBold";
 my $face3 = 0; #  = "FreeSerif";
 my $f2 = "FreeSerifBold.otf";
 my $f3 = "FreeSerif.otf";
-my @faces;
-
-for @gff -> $path {
-    ++$curr-page;
-    my $df = DocFont.new: :$path;
-
-    my $face  = $ft.face: $path, :load-flags(FT_LOAD_NO_HINTING);
-unless $face2 {
-    my $b = $font-file.IO.basename;
-    $face2 = $face if $b eq $f2;
-}
-unless $face3 {
-    my $b = $font-file.IO.basename;
-    $face3 = $face if $b eq $f3;
-}
-
-#my $face2 = $ft.face: $title-font-file, :load-flags(FT_LOAD_NO_HINTING);
-
-$face.set-font-size: 10;
-$face2.set-font-size: 18;
-my $sm  = $face.scaled-metrics;
-my $sm2 = $face2.scaled-metrics;
-
-say "font name: ", $face.postscript-name;
-say "  font height (leading): ", $sm.height;
-say "  font underline position: ", $sm.underline-position;
-say "  font underline thickness: ", $sm.underline-thickness;
-
-say "title font name: ", $face2.postscript-name;
-say "  title font height (leading): ", $sm2.height;
-say "  title font underline position: ", $sm2.underline-position;
-say "  title font underline thickness: ", $sm2.underline-thickness;
-my $up = $sm2.underline-position;
-my $ut = $sm2.underline-thickness;
 
 my %m = %(PageSizes.enums);
 my @m = %m.keys.sort;
@@ -120,38 +73,9 @@ for @*ARGS {
         $media = $m2;
     }
     # single char options
-    when /^:i f/ {
-        ++$find;
-        $show = $print = 0;
-    }
-    when /^:i s/ {
-        ++$show;
-        $find = $print = 0;
-    }
-    when /^:i p/ {
-        ++$print;
-        $find = $show = 0;
-    }
     default {
         note "FATAL: Unknown argument '$_'";
     }
-}
-
-my %h = %default-samples;
-if $show {
-    say "Showing samples to be printed:";
-    for %h.keys.sort -> $k {
-        my $lang = %h{$k}<lang>;
-        my $text = %h{$k}<text>;
-        print qq:to/HERE/;
-        -------------------------
-          Country code: {$k.uc}
-              Language: $lang
-              Text:     $text
-        HERE
-    }
-    say "-------------------------";
-    exit
 }
 
 my $font       = load-font :file($font-file);
