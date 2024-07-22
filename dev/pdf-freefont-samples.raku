@@ -37,18 +37,13 @@ if not @*ARGS.elems {
     Usage: $p <mode> [options]
 
     Modes
-      show   - Show the default sample text for 13 languages
       print  - Create a PDF of the default text samples
-      find   - Finds a font given \:family, \:slant, and \:weight
 
     Options
       A4     - Use A4 paper instead of the default US Letter
                for the sample output file:
                    $ofil
-      font=F - Where F is a font basename on your system
 
-    File an issue if your desired language is not available in the
-    sample text list ('show' and 'print' modes).
 
     See more information about pangrams and a large list of them
     for many languages at 'https:://clagnut.com'.
