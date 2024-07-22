@@ -1,3 +1,8 @@
+create bin/ff-download to:
+  create and download a font sample PDF
+  download the license files
+  download examples
+
 DONE: Test font loading
 
 DONE: Finish Config file check: warn but DO NOT MODIFY

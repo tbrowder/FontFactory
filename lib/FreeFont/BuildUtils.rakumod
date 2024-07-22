@@ -151,6 +151,10 @@ sub check-config(
         return False;
     }
 
+    # we may be using the local repo dir, detect it here
+    my $xt = False;
+    $xt = True if $path.contains("local");
+
     my $err = 0;
     # assumption
     my $res = True;
@@ -170,6 +174,12 @@ sub check-config(
     for %n.keys -> $k { 
         my $bnam = %(%n{$k})<basename>;
         my $expected-path = %(%n{$k})<path>;
+        if $xt and $expected-path.contains("tbrow") {
+            # modify expected path
+            my $cdir = $*CWD;
+            $expected-path = "$cdir/xt/FreeFont/fonts/$bnam";
+        }
+
         say "DEBUG: font basename = '$bnam'" if $debug;
         # check each is in %conf
         if %conf{$bnam}:exists {

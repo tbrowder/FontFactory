@@ -1,0 +1,11 @@
+#!/usr/bib/env raku
+
+use FreeFont::Utils;
+
+if not @*ARGS {
+    help
+}
+else {
+   with-args @*ARGS
+}
+
