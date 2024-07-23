@@ -44,7 +44,6 @@ if not @*ARGS.elems {
                for the sample output file:
                    $ofil
 
-
     See more information about pangrams and a large list of them
     for many languages at 'https:://clagnut.com'.
     HERE

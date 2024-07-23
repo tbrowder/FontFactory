@@ -29,7 +29,7 @@ my $dotFreeFont = '.FreeFont';
 my $tfil = "dev/Build.rakumod";
 if $tfil.IO.e {
     $home = $*CWD; 
-    $dotFreeFont = "xt/FreeFont";
+    $dotFreeFont = "tdir/FreeFont";
 }
 
 # many files are in /resources:

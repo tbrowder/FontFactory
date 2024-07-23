@@ -30,15 +30,15 @@
     "FreeFont::X::FontHashes": "lib/FreeFont/X/FontHashes.rakumod"
   },
   "resources": [
-    "CMC7.ttf",
-    "CMC7.txt",
-    "COPYING.txt",
-    "DigitalGraphicLabs.html",
-    "GPL-VERSION3.txt",
-    "GnuMICR.otf",
-    "example.raku",
-    "micrenc-license.txt",
-    "micrenc.ttf"
+    "fonts/CMC7.ttf",
+    "docs/CMC7.txt",
+    "docs/COPYING.txt",
+    "docs/DigitalGraphicLabs.html",
+    "docs/GPL-VERSION3.txt",
+    "fonts/GnuMICR.otf",
+    "bin/example.raku",
+    "docs/micrenc-license.txt",
+    "fonts/micrenc.ttf"
   ],
   "source-url": "https://github.com/tbrowder/FreeFont.git",
   "tags": [

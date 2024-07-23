@@ -71,10 +71,11 @@ sub manage-home-freefont(
 
     my $res = False;
 
-    #   We create two other
+    #   We create three other
     #     subdirectories:
     #       .FreeFont/fonts
     #       .FreeFont/docs
+    #       .FreeFont/bin
     my $fdir = "$home/$dotFreeFont/fonts";
     mkdir $fdir;
     if not $fdir.IO.d {
@@ -85,6 +86,11 @@ sub manage-home-freefont(
     mkdir $ddir;
     if not $ddir.IO.d {
         note "ERROR: unable to create dir '$ddir'";
+        $res = False;
+    }
+    my $bdir = "$home/$dotFreeFont/bin";
+    if not $bdir.IO.d {
+        note "ERROR: unable to create dir '$bdir'";
         $res = False;
     }
 
@@ -152,8 +158,8 @@ sub check-config(
     }
 
     # we may be using the local repo dir, detect it here
-    my $xt = False;
-    $xt = True if $path.contains("local");
+    my $tdir = False;
+    $tdir = True if $path.contains("local");
 
     my $err = 0;
     # assumption
@@ -174,10 +180,10 @@ sub check-config(
     for %n.keys -> $k { 
         my $bnam = %(%n{$k})<basename>;
         my $expected-path = %(%n{$k})<path>;
-        if $xt and $expected-path.contains("tbrow") {
+        if $tdir and $expected-path.contains("tbrow") {
             # modify expected path
             my $cdir = $*CWD;
-            $expected-path = "$cdir/xt/FreeFont/fonts/$bnam";
+            $expected-path = "$cdir/tdir/FreeFont/fonts/$bnam";
         }
 
         say "DEBUG: font basename = '$bnam'" if $debug;
