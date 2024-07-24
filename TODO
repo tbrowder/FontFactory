@@ -3,6 +3,9 @@ create bin/ff-download to:
   download the license files
   download examples
 
+Use FF DocFont to add font info
+  underline, strikethrough, etc.
+
 DONE: Test font loading
 
 DONE: Finish Config file check: warn but DO NOT MODIFY
