@@ -5,14 +5,22 @@ if [[ -z "$1" ]]; then
     exit
 fi
 
-FDIR=/usr/share/fonts/opentype/freefont
-FFILE=$FDIR/FreeSerif.otf
-OFILE=FreeSerif.pdf
+FDIR=../resources/fonts
+#FDIR=/usr/share/fonts/opentype/freefont
+FFILE1=$FDIR/CMC7.ttf
+FFILE2=$FDIR/GnuMICR.otf
+FFILE3=$FDIR/micrenc.ttf
+
+#FFILE=$FDIR/FreeSerif.otf
+OFILE=FreeSeri.pdf
+OFILE1=CMC7.ttf.pdf
+OFILE2=GnuMICR.otf.pdf
+OFILE3=micrenc.ttf.pdf
 RANGE=1-300
 
-fntsample -i $RANGE -f $FFILE -o $OFILE
+fntsample -i $RANGE -f $FFILE3 -o $OFILE3
 
-echo "See output file '$OFILE'"
+echo "See output file '$OFILE3'"
 
 exit
 
