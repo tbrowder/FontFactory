@@ -6,6 +6,11 @@ use PDF::Font::Loader :load-font;
 # tmp lib line
 use lib "../lib";
 
+# codepoints to show for the micre and the cmc7 fonts
+# micrenc 20 30 31 32 33 34 35 36 37 39 41 42 43 44 61 62 63 64    E0 
+# gnumicr 20 30 31 32 33 34 35 36 37 39 41 42 43 44             A9 
+# cmc7    20 30 31 32 33 34 35 36 37 39 41 42 43 44 61 62 63 64       
+
 use FreeFont;
 use FreeFont::Classes;
 use FreeFont::X::FontHashes;
@@ -115,6 +120,7 @@ for 1..12 -> $n {
     say $g.ay if $debug;
     say $g.sx if $debug;
     say $g.sy if $debug;
+    
 
     my $name = $font.name;
     write-line $page, :font($tfont), :text("$n - $name"), :$x, :$y, :$debug;
