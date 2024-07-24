@@ -21,38 +21,76 @@ my %h = %FreeFont::X::FontHashes::number;
 
 my PDF::Lite $pdf .= new;
 my $page = $pdf.add-page;
+# landscape format, no transformation
+# Letter
 $page.media-box = [0, 0, 11*72, 8.5*72];
 
 my $text = "$chars1 $chars2 $chars3 $chars4";
-my $x = 1*72;
-my $y = 7.5*72;
+my $debug = 0;
+$debug = 1 if @*ARGS.elems;
+
+my ($x, $y);
 my $leading = 18; # = 18;
+
+# PAGE TITLE ====================
+# center of the page for the title
+$x = 0.5*11*72;
+# in the top margin for the title
+$y = 7.9*72;
+my $Tfont = $ff.get-font: 3, 15;
+my $page-title = "FreeFont GNU and MICRE Font Samples";
+write-line $page, :font($Tfont), :text($page-title), :align<center>, :$x, :$y, :$debug;
+
+# PAGE SUBTITLE =================
+# center of the page for the subtitle
+$x = 0.5*11*72;
+# in the top margin for the subtitle
+$y = 7.75*72-3;
+my $Sfont = $ff.get-font: 1, 13;
+my $page-subtitle = "(set at 12 points)";
+write-line $page, :font($Sfont), :text($page-subtitle), :align<center>, :$x, :$y, :$debug;
+
+# FONT LISTINGS =================
+# page x, y for listings:
+# page left margin
+$x = 1*72;
+$y = 7.5*72-5;
 my $tfont  = $ff.get-font: 1;
 my $indent = 36;
-my $debug;
 
-for 1..12 {
-    $debug = $_ == 1 ?? 1 !! 0;
-    
+for 1..12 -> $n {
+    #$debug = $n == 1 ?? 1 !! 0;
+
     # default font size = 12;
-    my $font = $ff.get-font: $_;
+    my $font = $ff.get-font: $n;
     my $fo   = $font.font;
     my $face = $font.font.face;
 
-    #$leading = $fo.height; # if $_ == 1;
+    #$leading = $fo.height; # if $n == 1;
     say "leading = $leading" if $debug;
+
+    my ($usiz, $ssiz);
+    my $siz = $font.size;
+    my $sfac = $siz/1000.0;
+
 
     # NEW METHODS FROM LATEST LOADER RELEASE 0.8.3
     # Underline Position, from the baseline where an underline should
     #  be drawn. This is usually negative and should be multipled by
     #  the font-size/1000 to get the actual position.
-    say $fo.underline-position;
+    $usiz = $fo.underline-position;
+    $ssiz = $usiz * $sfac;
+    say "Underline position scaled: $ssiz (unscaled: $usiz)" if $debug;
 
     #  underline-thickness Recommended underline thickness for the
     #  font. This should be multipled by font-size/1000.
-    say $fo.underline-thickness;
+    $usiz = $fo.underline-thickness;
+    $ssiz = $usiz * $sfac;
+    say "Underline thickness scaled: $ssiz (unscaled: $usiz)" if $debug;
 
-    say $fo.height; # misnamed, this is the recommended baseline vertical separation
+    $usiz = $fo.height;
+    $ssiz = $usiz * $sfac;
+    say "Height scaled: $ssiz (unscaled: $usiz [misnamed, leading: baseline vert spacing])" if $debug;
 
     #say $fo.stringwidth;
     # method stringwidth(Str $text, Numeric $point-size?, Bool :$kern)
@@ -72,14 +110,14 @@ for 1..12 {
 
     my @glyphs = $fo.get-glyphs: "V";
     my $g = @glyphs.head;
-    say $g.gist;
-    say $g.ax; # .dx deprecated, use .ax;
-    say $g.ay;
-    say $g.sx; 
-    say $g.sy;
+    #say $g.gist if $debug;
+    say $g.ax if $debug; # .dx deprecated, use .ax;
+    say $g.ay if $debug;
+    say $g.sx if $debug;
+    say $g.sy if $debug;
 
     my $name = $font.name;
-    write-line $page, :font($tfont), :text($name), :$x, :$y, :$debug;
+    write-line $page, :font($tfont), :text("$n - $name"), :$x, :$y, :$debug;
     $y -= $leading;
     write-line $page, :$font, :$text, :x($x+$indent), :$y, :$debug;
     $y -= $leading;
@@ -92,7 +130,6 @@ my $doc = "ff-font-samples.pdf";
 $pdf.save-as: $doc;
 say "See file '$doc'";
 
-
 # subs to go in lib/
 sub write-line(
     $page,
@@ -100,6 +137,7 @@ sub write-line(
     :$text!,
     :$x!, :$y!,
     :$align = "left", # left, right, center
+    :$valign = "baseline", # baseline, top, bottom
     :$debug,
 ) is export {
 

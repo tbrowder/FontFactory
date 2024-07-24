@@ -1,0 +1,32 @@
+Revision history for FontFactory::Type1
+
+{{$NEXT}}
+    - Changed 'MyFonts' to 'Fonts'
+    - All DocBox methods have correct adjustments for scale factor
+    - Corrected scale factor calculations
+    - Added more rigorous tests for application of scale factor
+    - Split DocFont and BaseFont classes into their own files
+    - Renamed file 'Utils.rakumod' to 'Subs.rakumod'
+    - Put the font list into new file FontList.rakumod as template
+      for upcoming Build method for module FontFactory::TT
+    - Added new DocFont methods currently not found in Font::AFM:
+      + StrikethroughPosition - at the midpoint height of the'm' character
+      + StrikethroughThickness - same as UnderlineThickness
+      + TopBearing    - topmost stroke of the font's BBox or the optional input string
+      + LeftBearing   - leftmost stroke of the font's BBox or the optional input string
+      + RightBearing  - rightmost stroke of the font's BBox or the optional input string
+      + BottomBearing - bottommost stroke of the font's BBox or the optional input string
+
+        Note bearing distances are in points from the appropiate origin: first character in
+        any input string for the left- and right-bearing, highest character for the
+        top-bearing, lowest character for bottom-bearing, and the FontBBox
+        for no string
+
+    - Added aliases for commonly used methods:
+      + tb (TopBearing)
+      + lb (LeftBearing)
+      + rb (RightBearing)
+      + bb (BottomBearing)
+
+0.0.1  2023-04-30T19:50:06-05:00
+    - Initial version
