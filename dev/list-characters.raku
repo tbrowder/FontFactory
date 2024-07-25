@@ -5,14 +5,16 @@ use Font::FreeType::Glyph;
 use Font::FreeType::Outline;
 use Font::FreeType::Raw::Defs;
 
-my @fts = <
-fonts/CMC7.ttf
+my @fonts = <
 fonts/GnuMICR.otf
 fonts/micrenc.ttf
+fonts/CMC7.ttf
 >;
 
+my $mapped = True;
 my $all   = 0; # if true, show unmapped glyphs
 my $debug = 0;
+my $fnam; # the input font filename
 if not @*ARGS {
     print qq:to/HERE/;
     Usage: {$*PROGRAM.basename} <font filename> | 1 | 2 | 3 [all debug]
@@ -21,7 +23,7 @@ if not @*ARGS {
 
     HERE
     my $n = 1;
-    for @fts {
+    for @fonts {
         say "  $n - $_";
         ++$n;
     }
@@ -34,8 +36,23 @@ if not @*ARGS {
     exit;
 }
 
-#for @*ARGS {
-#}
+for @*ARGS {
+    when /1|2|3/ {
+        $fnam = @fonts[$_-1];
+    }
+    when /^:i d $/ {
+        ++$debug;
+    }
+    when /^:i a $/ {
+        ++$all;
+        $mapped = False;
+    }
+    default {
+        $fnam = $_;
+    }
+}
+
+list-chars $fnam, :$mapped;
 
 # dump all characters that are mapped to a font
 sub list-chars(
@@ -58,9 +75,10 @@ sub list-chars(
         @charmap[.index] = $char;
         if $mapped {
             say join("\t", 'x' ~ .char-code.base(16) ~ '[' ~ .index ~ ']',
-                     '/' ~ (.name//''),
-                     $char.uniname,
-                     $char.raku);
+                '/' ~ (.name//''),
+                $char.uniname,
+                $char.raku
+            );
         }
     }
 
@@ -70,7 +88,9 @@ sub list-chars(
             -> Font::FreeType::Glyph:D $_ {
 
             if .index && !@charmap[.index] {
-                say join("\t", '[' ~ .index ~ ']', '/' ~ (.name//''), );
+                say join("\t", '[' ~ .index ~ ']', '/' ~ (.name//''), 
+                    .raku
+                );
             }
         }
     }
