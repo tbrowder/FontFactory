@@ -22,7 +22,7 @@ my @f2cp = <micrenc 20 30 31 32 33 34 35 36 37 39 41 42 43 44 61 62 63 64    E0>
 my @f3cp = <cmc7    20 30 31 32 33 34 35 36 37 39 41 42 43 44 61 62 63 64>; 
 
 # create a string from codepoints
-to-string @f1cp;
+# to-string @f1cp;
 sub to-string(@cplist) {
     # given a list of hex codepoints, convert them to a string repr
     # the first item in the list may be a string label
@@ -39,8 +39,9 @@ sub to-string(@cplist) {
     }
 }
 
-=finish
+#=finish
 # tmp end
+
 my $mapped = True;
 my $all   = 0; # if true, show unmapped glyphs
 my $debug = 0;
@@ -97,18 +98,22 @@ sub list-chars(
         -> Font::FreeType::Glyph:D $_ {
 
         my $bbox = $_.is-outline ?? $_.outline.bbox !! False;
-        if $bbox {
-            say "    has bbox==== [$bbox]";
-        }
-
         my $char = .char-code.chr;
         @charmap[.index] = $char;
         if $mapped {
-            say join("\t", 'x' ~ .char-code.base(16) ~ '[' ~ .index ~ ']',
+            my $txt = join("\t", 'x' ~ .char-code.base(16) ~ '[' ~ .index ~ ']',
                 '/' ~ (.name//''),
                 $char.uniname,
                 $char.raku
             );
+            say "$txt";
+        }
+        my $ccode = .char-code; # <== decimal
+        my $char  = .char-code.chr;
+        say "    char code: $ccode";
+        say "    char     : '$char'";
+        if $bbox {
+            say "    has bbox==== [$bbox]";
         }
     }
 
