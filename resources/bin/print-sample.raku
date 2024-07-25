@@ -7,18 +7,23 @@ use PDF::Font::Loader :load-font;
 use lib "../lib";
 
 # codepoints to show for the micre and the cmc7 fonts
-# micrenc 20 30 31 32 33 34 35 36 37 39 41 42 43 44 61 62 63 64    E0 
-# gnumicr 20 30 31 32 33 34 35 36 37 39 41 42 43 44             A9 
-# cmc7    20 30 31 32 33 34 35 36 37 39 41 42 43 44 61 62 63 64       
+# micrenc 20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64    E0
+# gnumicr 20 30 31 32 33 34 35 36 37 38 39 41 42 43 44             A9
+# cmc7    20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64
+my @f1cp = <gnumicr 20 30 31 32 33 34 35 36 37 38 39 41 42 43 44             A9>;
+my @f2cp = <micrenc 20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64    E0>;
+my @f3cp = <cmc7    20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64>;
 
 use FreeFont;
 use FreeFont::Classes;
 use FreeFont::X::FontHashes;
+use FreeFont::Utils;
 
 constant $chars1 = <0123456789>;
 constant $chars2 = <@#$&*()'l"%-+=/;:,.,!?;>;
 constant $chars3 = <ABCCEFGHIJKLMNOPQRSTUVWXYZ>;
 constant $chars4 = <abcdefghijklmnopqrstuvwxyz>;
+my $text = "$chars1 $chars2 $chars3 $chars4";
 
 my $ff = FreeFont.new;
 
@@ -28,14 +33,12 @@ my PDF::Lite $pdf .= new;
 my $page = $pdf.add-page;
 # landscape format, no transformation
 # Letter
-$page.media-box = [0, 0, 11*72, 8.5*72];
+$pdf.media-box = [0, 0, 11*72, 8.5*72];
 
-my $text = "$chars1 $chars2 $chars3 $chars4";
 my $debug = 0;
 $debug = 1 if @*ARGS.elems;
 
 my ($x, $y);
-my $leading = 18; # = 18;
 
 # PAGE TITLE ====================
 # center of the page for the title
@@ -58,20 +61,43 @@ write-line $page, :font($Sfont), :text($page-subtitle), :align<center>, :$x, :$y
 # FONT LISTINGS =================
 # page x, y for listings:
 # page left margin
-$x = 1*72;
+$x = 1*72*0.75;
 $y = 7.5*72-5;
 my $tfont  = $ff.get-font: 1;
 my $indent = 36;
 
-for 1..12 -> $n {
+for 1...15 -> $n {
     #$debug = $n == 1 ?? 1 !! 0;
 
+    if $n == 13 {
+        # start a new page
+        # reset y values
+        # title the page
+        $page = $pdf.add-page;
+        $y = 7.5*72-5;
+    }
+
     # default font size = 12;
-    my $font = $ff.get-font: $n;
+    my $font;
+    if $n < 13 {
+        $font = $ff.get-font: $n, 12;
+    }
+    elsif $n == 13 {
+        $font = $ff.get-font: $n, 30;
+    }
+    elsif $n == 14 {
+        $font = $ff.get-font: $n, 12;
+    }
+    elsif $n == 15 {
+        $font = $ff.get-font: $n, 20;
+    }
     my $fo   = $font.font;
     my $face = $font.font.face;
 
-    #$leading = $fo.height; # if $n == 1;
+    my $is-scalable = $face.is-scalable;
+    say $is-scalable if $debug;
+
+    my $leading = $n < 13 ?? ($face.height + 2) !! 18;
     say "leading = $leading" if $debug;
 
     my ($usiz, $ssiz);
@@ -84,8 +110,11 @@ for 1..12 -> $n {
     #  be drawn. This is usually negative and should be multipled by
     #  the font-size/1000 to get the actual position.
     $usiz = $fo.underline-position;
+    say $face.underline-position if $debug;
+
     $ssiz = $usiz * $sfac;
     say "Underline position scaled: $ssiz (unscaled: $usiz)" if $debug;
+    say $face.underline-thickness if $debug;
 
     #  underline-thickness Recommended underline thickness for the
     #  font. This should be multipled by font-size/1000.
@@ -104,7 +133,6 @@ for 1..12 -> $n {
     # unit. Alternatively second `point-size` argument can be used to
     # scale the width according to the font size.
 
-    use PDF::Font::Loader::Glyph;
     =begin comment
     use PDF::Font::Loader::Glyph;
     my PDF::Font::Loader::Glyph @glyphs = $font.get-glyphs: "Hi";
@@ -113,14 +141,36 @@ for 1..12 -> $n {
     #Maps a string to glyphs, of type L<PDF::Font::Loader::Glyph>.
     =end comment
 
-    my @glyphs = $fo.get-glyphs: "V";
-    my $g = @glyphs.head;
-    #say $g.gist if $debug;
-    say $g.ax if $debug; # .dx deprecated, use .ax;
-    say $g.ay if $debug;
-    say $g.sx if $debug;
-    say $g.sy if $debug;
-    
+    if $debug {
+        use PDF::Font::Loader::Glyph;
+        my @glyphs = $fo.get-glyphs: "V";
+        my $g = @glyphs.head;
+        #say $g.gist;
+        say $g.ax; # .dx deprecated, use .ax;
+        say $g.ay;
+        say $g.sx;
+        say $g.sy;
+    }
+
+    if $n > 12 {
+        # special fonts to handle
+        # redefine $text
+        my @cp;
+        if $n == 13 {
+            @cp = @f1cp;
+        }
+        elsif $n == 14 {
+            @cp = @f2cp;
+        }
+        elsif $n == 15 {
+            @cp = @f3cp;
+        }
+        for @cp -> $pair {
+            # convert the pair to a char
+            my $
+        }
+        $text = to-string @cp;
+    }
 
     my $name = $font.name;
     write-line $page, :font($tfont), :text("$n - $name"), :$x, :$y, :$debug;
@@ -152,7 +202,7 @@ sub write-line(
         $txt.text-position = [$x, $y];
         # collect bounding box info:
         my ($x0, $y0, $x1, $y1) = $txt.say: $text, :$align, :kern;
-        # bearings from baseline:
+        # bearings from baseline origin:
         my $tb = $y1 - $y;
         my $bb = $y0 - $y;
         my $lb = $x0 - $x;
@@ -166,4 +216,22 @@ sub write-line(
         }
 
     }
+}
+
+sub to-string(@cplist, :$debug --> Str) is export {
+    # given a list of hex codepoints, convert them to a string repr
+    # the first item in the list may be a string label
+    my @list = @cplist;
+    if @list.head ~~ Str { @list.shift };
+    my $s = "";
+    for @list -> $cpair {
+        say "char pair '$cpair'" if $debug;
+        # convert from hex to decimal
+        my $x = parse-base $cpair, 16;
+        # get its char
+        my $c = $x.chr;
+        say "   its character: '$c'" if $debug;
+        $s ~= $c
+    }
+    $s
 }
