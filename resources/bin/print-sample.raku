@@ -152,21 +152,22 @@ for 1...15 -> $n {
     if $n > 12 {
         # special fonts to handle
         # redefine $text
-        my @cp;
+        #my @cp;
+        my $cp;
         if $n == 13 {
-            @cp = @f1cp;
+            # @cp = @f1cp;
+            $cp = @f1cp;
         }
         elsif $n == 14 {
-            @cp = @f2cp;
+            # @cp = @f2cp;
+            $cp = @f2cp;
         }
         elsif $n == 15 {
-            @cp = @f3cp;
+            # @cp = @f3cp;
+            $cp = @f3cp;
         }
-        for @cp -> $pair {
-            # convert the pair to a char
-            my $
-        }
-        $text = to-string @cp;
+        # $text = to-string @cp;
+        $text = to-string $cp;
     }
 
     my $name = $font.name;
@@ -192,6 +193,7 @@ my $doc = "ff-font-samples.pdf";
 $pdf.save-as: $doc;
 say "See file '$doc'";
 
+=begin comment
 # subs to go in lib/
 sub write-line(
     $page,
@@ -222,24 +224,5 @@ sub write-line(
         }
 
     }
-}
-
-=begn comment
-sub to-string(@cplist, :$debug --> Str) is export {
-    # given a list of hex codepoints, convert them to a string repr
-    # the first item in the list may be a string label
-    my @list = @cplist;
-    if @list.head ~~ Str { @list.shift };
-    my $s = "";
-    for @list -> $cpair {
-        say "char pair '$cpair'" if $debug;
-        # convert from hex to decimal
-        my $x = parse-base $cpair, 16;
-        # get its char
-        my $c = $x.chr;
-        say "   its character: '$c'" if $debug;
-        $s ~= $c
-    }
-    $s
 }
 =end comment

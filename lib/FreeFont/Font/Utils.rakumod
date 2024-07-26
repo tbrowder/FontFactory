@@ -13,6 +13,37 @@ sub rescale(
     # size to achieve that top bearing.
 }
 
+sub write-line(
+    $page,
+    :$font!,  # DocFont object
+    :$text!,
+    :$x!, :$y!,
+    :$align = "left", # left, right, center
+    :$valign = "baseline", # baseline, top, bottom
+    :$debug,
+) is export {
+
+    $page.text: -> $txt {
+        $txt.font = $font.font, $font.size;
+        $txt.text-position = [$x, $y];
+        # collect bounding box info:
+        my ($x0, $y0, $x1, $y1) = $txt.say: $text, :$align, :kern;
+        # bearings from baseline origin:
+        my $tb = $y1 - $y;
+        my $bb = $y0 - $y;
+        my $lb = $x0 - $x;
+	my $rb = $x1 - $x;
+        my $width  = $rb - $lb;
+        my $height = $tb - $bb;
+        if $debug {
+            say "bbox: llx, lly, urx, ury = $x0, $y0, $x1, $y1";
+            say " width, height = $width, $height";
+            say " lb, rb, tb, bb = $lb, $rb, $tb, $bb";
+        }
+
+    }
+}
+
 sub to-string($cplist, :$debug --> Str) is export {
     # Given a list of hex codepoints, convert them to a string repr
     # the first item in the list may be a string label
@@ -21,7 +52,7 @@ sub to-string($cplist, :$debug --> Str) is export {
         @list = $cplist.words;
     }
     else {
-        @list = $cplist;
+        @list = @($cplist);
     }
     if @list.head ~~ Str { @list.shift };
     my $s = "";
