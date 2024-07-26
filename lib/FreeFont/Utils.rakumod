@@ -134,12 +134,6 @@ sub with-args(@args) is export {
     }
 }
 
-sub hex2dec($hex, :$debug) is export {
-    # converts an input hex sring to a decimal number
-    my $dec = parse-base $hex, 16;
-    $dec;
-}
-
 # local subs, non-exported
 sub exec-d() {
     say "Downloading example programs...";
@@ -158,5 +152,4 @@ sub exec-s() {
     for @arr.sort -> $k {
         say "  $k";
     }
-
 }
