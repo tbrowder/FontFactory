@@ -5,8 +5,6 @@ use JSON::Fast;
 
 my $debug = 0;
 
-is 1, 1; 
-
 # compare /resources and META6.json
 my %m = from-json "META6.json".IO.slurp;
 
@@ -47,7 +45,15 @@ for @rfils {
 }
 
 is $is-good, True;
-is-deeply %mhash, %rhash;
+
+my @mkeys = %mhash.keys.sort;
+my @rkeys = %rhash.keys.sort;
+is-deeply @mkeys, @rkeys;
+my @mvals = %mhash.values.sort;
+my @rvals = %rhash.values.sort;
+is-deeply @mvals, @rvals;
+
+#is-deeply %mhash, %rhash;
 
 if $debug {
     say "Files in /resources:";

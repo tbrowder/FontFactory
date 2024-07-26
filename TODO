@@ -1,3 +1,5 @@
+in xt-bad test, remove .precomp before testing
+
 create my pfa fonts to ttf (or otf if possible)
   'printafm' converts .pfa to .afm
   checking on commercial Mac program Trans4
