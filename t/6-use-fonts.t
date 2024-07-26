@@ -11,6 +11,7 @@ use FreeFont;
 use FreeFont::Utils;
 use FreeFont::X::FontHashes;
 use FreeFont::Classes;
+use FreeFont::Font::Utils;
 
 my $ff = FreeFont.new;
 

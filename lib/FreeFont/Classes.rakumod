@@ -85,7 +85,7 @@ class DocFont is export {
         $lic
     } # end of method def
 
-    !method get-face($path) {
+    method get-face($path) {
     }
 
 } # end of class DocFont definition

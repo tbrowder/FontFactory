@@ -1,8 +1,41 @@
-
-unit module FreeFont::Font::Utils;
+unit module FreeFont::Font::Utils; # <== to become a separate module repo
 
 use QueryOS;
 use YAMLish;
+
+sub rescale(
+    $font,
+    :$debug,
+    --> Numeric
+    ) is export {
+    # Given a font object with its size setting (.size) and a string of text you
+    # want to be an actual height X, returns the calculated setting
+    # size to achieve that top bearing.
+}
+
+sub to-string($cplist, :$debug --> Str) is export {
+    # Given a list of hex codepoints, convert them to a string repr
+    # the first item in the list may be a string label
+    my @list;
+    if $cplist ~~ Str {
+        @list = $cplist.words;
+    }
+    else {
+        @list = $cplist;
+    }
+    if @list.head ~~ Str { @list.shift };
+    my $s = "";
+    for @list -> $cpair {
+        say "char pair '$cpair'" if $debug;
+        # convert from hex to decimal
+        my $x = parse-base $cpair, 16;
+        # get its char
+        my $c = $x.chr;
+        say "   its character: '$c'" if $debug;
+        $s ~= $c
+    }
+    $s
+}
 
 sub hex2dec($hex, :$debug) is export {
     # converts an input hex sring to a decimal number
@@ -71,5 +104,4 @@ sub exec-s() {
     for @arr.sort -> $k {
         say "  $k";
     }
-
 }

@@ -25,6 +25,7 @@
     "FreeFont::BuildUtils": "lib/FreeFont/BuildUtils.rakumod",
     "FreeFont::Classes": "lib/FreeFont/Classes.rakumod",
     "FreeFont::Config": "lib/FreeFont/Config.rakumod",
+    "FreeFont::Font::Utils": "lib/FreeFont/Font/Utils.rakumod",
     "FreeFont::PageProcs": "lib/FreeFont/PageProcs.rakumod",
     "FreeFont::Resources": "lib/FreeFont/Resources.rakumod",
     "FreeFont::Utils": "lib/FreeFont/Utils.rakumod",

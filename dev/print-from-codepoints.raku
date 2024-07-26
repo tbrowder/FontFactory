@@ -109,7 +109,6 @@ sub list-chars(
             say "$txt";
         }
         my $ccode = .char-code; # <== decimal
-        my $char  = .char-code.chr;
         say "    char code: $ccode";
         say "    char     : '$char'";
         if $bbox {

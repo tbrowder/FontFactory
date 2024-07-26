@@ -18,6 +18,7 @@ use FreeFont;
 use FreeFont::Classes;
 use FreeFont::X::FontHashes;
 use FreeFont::Utils;
+use FreeFont::Font::Utils; # <== to become its own module repo
 
 constant $chars1 = <0123456789>;
 constant $chars2 = <@#$&*()'l"%-+=/;:,.,!?;>;
@@ -69,15 +70,9 @@ my $indent = 36;
 for 1...15 -> $n {
     #$debug = $n == 1 ?? 1 !! 0;
 
-    if $n == 13 {
-        # start a new page
-        # reset y values
-        # title the page
-        $page = $pdf.add-page;
-        $y = 7.5*72-5;
-    }
-
     # default font size = 12;
+    my $font = $ff.get-font: $n, 12;
+    =begin comment
     my $font;
     if $n < 13 {
         $font = $ff.get-font: $n, 12;
@@ -91,8 +86,11 @@ for 1...15 -> $n {
     elsif $n == 15 {
         $font = $ff.get-font: $n, 20;
     }
+    =end comment
+
     my $fo   = $font.font;
     my $face = $font.font.face;
+    $face.set-font-size: 12;
 
     my $is-scalable = $face.is-scalable;
     say $is-scalable if $debug;
@@ -103,7 +101,6 @@ for 1...15 -> $n {
     my ($usiz, $ssiz);
     my $siz = $font.size;
     my $sfac = $siz/1000.0;
-
 
     # NEW METHODS FROM LATEST LOADER RELEASE 0.8.3
     # Underline Position, from the baseline where an underline should
@@ -180,6 +177,15 @@ for 1...15 -> $n {
 
     last if $debug;
 
+    =begin comment
+    if $n == 12 {
+        # start a new page
+        # reset y values
+        # title the page
+        $page = $pdf.add-page;
+        $y = 7.5*72-5;
+    }
+    =end comment
 }
 
 my $doc = "ff-font-samples.pdf";
@@ -218,6 +224,7 @@ sub write-line(
     }
 }
 
+=begn comment
 sub to-string(@cplist, :$debug --> Str) is export {
     # given a list of hex codepoints, convert them to a string repr
     # the first item in the list may be a string label
@@ -235,3 +242,4 @@ sub to-string(@cplist, :$debug --> Str) is export {
     }
     $s
 }
+=end comment
