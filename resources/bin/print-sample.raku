@@ -13,6 +13,14 @@ use lib "../lib";
 my @f1cp = <gnumicr 20 30 31 32 33 34 35 36 37 38 39 41 42 43 44             A9>;
 my @f2cp = <micrenc 20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64    E0>;
 my @f3cp = <cmc7    20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64>;
+# the official unicode numbers for the special symbols for OCR:
+# 41 42 43 44 # numbers in the micre fonts
+# 2446 2447 2448 2449 # official unicode slots
+# names in order
+# ocr branch bank identification
+# ocr amount of check
+# ocr dash
+# ocr customer account number
 
 use FreeFont;
 use FreeFont::Classes;

@@ -1,5 +1,9 @@
+later make OCR page a vertical grid with appropriate info
+  for now just rows with appropiate data
+
 add ability to define unicode codepoint ranges for testing and
   interrogating string geometric attributes
+  + record some ranges
 
 add capability to set vertical languages
   as well as right-to-left
