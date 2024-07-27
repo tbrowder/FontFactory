@@ -57,6 +57,8 @@ class DocFont is export {
         $!weight    = %number{$n}<weight>;
         $!slant     = %number{$n}<slant>;
 
+        # need to avoid getting multiple copies of the heavy font object
+        # may try having an $ff reference method to get the font object somehow
         $!font      = load-font :file($!path);
     }
 
