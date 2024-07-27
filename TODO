@@ -1,3 +1,9 @@
+add ability to define unicode codepoint ranges for testing and
+  interrogating string geometric attributes
+
+add capability to set vertical languages
+  as well as right-to-left
+
 in xt-bad test, remove .precomp before testing
 
 create my pfa fonts to ttf (or otf if possible)

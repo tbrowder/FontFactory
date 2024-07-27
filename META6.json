@@ -14,6 +14,7 @@
     "QueryOS",
     "YAMLish",
     "PDF::Lite",
+    "PDF::API6",
     "PDF::Font::Loader:ver<0.8.3>"
   ],
   "description": "Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes",
