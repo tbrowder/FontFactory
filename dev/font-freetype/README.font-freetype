@@ -1,0 +1,17 @@
+See Font::FreeType pod for:
+
+
+Font::FreeType
+Font::FreeType::Face
+Font::FreeType::Glyph
+Font::FreeType::GlyphImage
+Font::FreeType::Outline
+Font::FreeType::Bitmap
+Font::FreeType::CharMap
+Font::FreeType::SizeMetrics
+Font::FreeType::Outline
+
+Try to get a single document with a better description
+of a practical application.
+
+
