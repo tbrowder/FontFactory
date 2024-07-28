@@ -14,6 +14,7 @@ use FreeFont::Utils;
 use FreeFont::X::FontHashes;
 use FreeFont::Classes;
 
+#die "Tom, fix this";
 my $ff = FreeFont.new;
 
 my $n = "FreeSerif";

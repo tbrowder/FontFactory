@@ -1,6 +1,8 @@
 unit class FreeFont;
 
 use PDF::Font::Loader :load-font;
+use PDF::Content;
+
 use QueryOS;
 
 use FreeFont::Classes;
@@ -43,7 +45,7 @@ has %.number; # 1-13 -> subkeys:
 #   fullname
 #   path
 #   font object
-has PDF::Font::Loader %.fonts; # keep the loaded FontObj by number key
+has PDF::Content::FontObj %.fonts; # keep the loaded FontObj by number key
 
 submethod TWEAK {
     %!code      = %FreeFont::X::FontHashes::code;      # code -> number
@@ -61,13 +63,14 @@ multi method get-font(
     --> DocFont
 ) {
     # load the font
+    my PDF::Font::Loader $fl .= new;
     my $font;
     if self.fonts{$number}:exists {
         $font = self.fonts{$number};
     }
     else {
         my $path = %number{$number}<path>;
-        $font = load-font :file($path):
+        $font = $fl.load-font: :file($path);
         %!fonts{$number} = $font;
     }
 
@@ -109,13 +112,14 @@ multi method get-font(
     =end comment
 
     # load the font
+    my PDF::Font::Loader $fl .= new;
     my $font;
     if self.fonts{$number}:exists {
         $font = self.fonts{$number};
     }
     else {
         my $path = %number{$number}<path>;
-        $font = load-font :file($path):
+        $font = $fl.load-font: :file($path);
         self.fonts{$number} = $font;
     }
 
@@ -172,13 +176,14 @@ multi method get-font(
     }
 
     # load the font
-    my PDF::Font::Loader $font .= new;
+    my PDF::Font::Loader $fl .= new;
+    my $font;
     if self.fonts{$number}:exists {
         $font = self.fonts{$number};
     }
     else {
         my $path = %number{$number}<path>;
-        $font = load-font :file($path):
+        $font = $fl.load-font: :file($path);
         self.fonts{$number} = $font;
     }
 
