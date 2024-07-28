@@ -8,6 +8,8 @@ use FreeFont::Resources;
 use FreeFont::Utils;
 use FreeFont::X::FontHashes;
 
+%number = %FreeFont::X::FontHashes::number;
+
 # Several ways to lookup font faces:
 # User enters one of:
 #   code or code2 (+ size, default: 12)
@@ -41,7 +43,7 @@ has %.number; # 1-13 -> subkeys:
 #   fullname
 #   path
 #   font object
-has %.fonts; # keep fontinfo by number key
+has PDF::Font::Loader %.fonts; # keep the loaded FontObj by number key
 
 submethod TWEAK {
     %!code      = %FreeFont::X::FontHashes::code;      # code -> number
@@ -56,9 +58,20 @@ multi method get-font(
     UInt $number where { 0 < $_ < 16 },
     Numeric $size = 12,
     :$debug,
-     --> DocFont
+    --> DocFont
 ) {
-    my $o = DocFont.new: :$number, :$size;
+    # load the font
+    my $font;
+    if self.fonts{$number}:exists {
+        $font = self.fonts{$number};
+    }
+    else {
+        my $path = %number{$number}<path>;
+        $font = load-font :file($path):
+        %!fonts{$number} = $font;
+    }
+
+    my $o = DocFont.new: :$number, :$size, :$font;
     $o
 }
 
@@ -95,7 +108,18 @@ multi method get-font(
     }
     =end comment
 
-    my $o = DocFont.new: :$number, :$size;
+    # load the font
+    my $font;
+    if self.fonts{$number}:exists {
+        $font = self.fonts{$number};
+    }
+    else {
+        my $path = %number{$number}<path>;
+        $font = load-font :file($path):
+        self.fonts{$number} = $font;
+    }
+
+    my $o = DocFont.new: :$number, :$size, :$font;
     $o
 }
 
@@ -147,6 +171,17 @@ multi method get-font(
         $number = %!code2{$code2};
     }
 
-    my $o = DocFont.new: :$number, :$size;
+    # load the font
+    my PDF::Font::Loader $font .= new;
+    if self.fonts{$number}:exists {
+        $font = self.fonts{$number};
+    }
+    else {
+        my $path = %number{$number}<path>;
+        $font = load-font :file($path):
+        self.fonts{$number} = $font;
+    }
+
+    my $o = DocFont.new: :$number, :$size, :$font;
     $o
 }

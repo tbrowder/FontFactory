@@ -12,6 +12,7 @@ class DocFont is export {
     # sub 'get-font'
     has $.number is required;
     has $.size   is required;
+    has $.font   is required;
 
     # remainder are generated in TWEAK
     #   without extension
@@ -32,7 +33,8 @@ class DocFont is export {
     has $.weight; # Normal, Bold
     has $.slant;  # Italic, Oblique
 
-    has $.font;   # the font object from PDF::Font::Loader's :load-font($path)
+    # now provided by the single FreeFont class instance
+    #has $.font;   # the font object from PDF::Font::Loader's :load-font($path)
 
     submethod TWEAK {
 
@@ -51,15 +53,14 @@ class DocFont is export {
         $!code2     = %number{$n}<code2>;
         #   with file extension
         $!basename  = %number{$n}<basename>;   # name.otf
-        $!path      = %number{$n}<path>;       # provided by 
-                                               # find-font
+        $!path      = %number{$n}<path>;       
         #   other attrs
         $!weight    = %number{$n}<weight>;
         $!slant     = %number{$n}<slant>;
 
         # need to avoid getting multiple copies of the heavy font object
         # may try having an $ff reference method to get the font object somehow
-        $!font      = load-font :file($!path);
+        #$!font      = load-font :file($!path);
     }
 
     method license() {

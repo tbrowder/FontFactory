@@ -1,6 +1,7 @@
 use Test;
 
 use FreeFont;
+
 use FreeFont::BuildUtils;
 use FreeFont::Classes;
 use FreeFont::Config;
