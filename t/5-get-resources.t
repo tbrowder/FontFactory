@@ -6,21 +6,22 @@ use File::Temp;
 use FreeFont::BuildUtils;
 use FreeFont::Resources;
 
-my $debug = 0;
+my $debug = 1;
 
+my ($cmd, $n, $s, $exit, $proc, @lines);
+
+# TODO fix all tests
 # access the /resources/* content
-my %h = get-resources-hash;
-#my @res = (get-resources-hash).values;
+my %h = get-resources-hash :$debug;
 my @res = %h.values; #(get-resources-hash).values;
 
 for @res -> $f {
     say "DEBUG: path '$f'" if $debug;
-    next;
+    next if $debug;
 
     my $b = $f.IO.basename;
     say "DEBUG: basename '$b'" if $debug;
 
-    say "DEBUG: basename '$b'" if $debug;
     my $s;
     my $bin = False;
     if $b ~~ /:i otf|ttf $/ {
@@ -31,9 +32,35 @@ for @res -> $f {
     }, "get content of '$b'";
 
     with $bin {
-        when $_.so { is $f.^name, 'Buf[uint8]' }
-        when not $_.so { is $f.^name, 'Str' }
+        when $_.so { 
+            is $f.^name, 'Buf[uint8]', "binary file: $b";
+        }
+        when not $_.so { 
+            is $f.^name, 'Str', "text file: $b";
+        }
     }
+}
+
+$cmd = "bin/ff-download";
+for "", <a p d L s> -> $opt {
+    # skip 'all' for now
+    next if $opt ~~ /^ :i a/;
+    lives-ok {
+        next unless {
+            $opt ~~ /^ :i s/;
+        }
+        # expect normal output and no error
+        $proc = run "ff-download $opt".words, :out, :err;
+        @lines = $proc.out.slurp(:close).lines;
+        $exit  = $proc.exitcode;
+        $n = @lines.elems;
+        $s = @lines.head // "";
+        is $exit, 0, "$cmd '$opt' works";
+        if $opt ne "" {
+            cmp-ok $_, '~~', Str, "1st found: '$s'";
+            say "DEBUG first found = '$s'" if $debug;
+        }
+    }, "check the bin file '$cmd' for option '$opt'";
 }
 
 done-testing;

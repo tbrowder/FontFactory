@@ -1,5 +1,6 @@
 unit module FreeFont::Classes;
 
+use Font::FreeType;
 use PDF::Font::Loader :load-font;
 use PDF::Content::FontObj;
 
@@ -12,7 +13,8 @@ class DocFont is export {
     # sub 'get-font'
     has $.number is required;
     has $.size   is required;
-    has $.font   is required;
+    # the font object from PDF::Font::Loader's load-font :file($path)
+    has $.font   is required; #= this is a loaded font, i.e., a FontObj
 
     # remainder are generated in TWEAK
     #   without extension
@@ -33,8 +35,8 @@ class DocFont is export {
     has $.weight; # Normal, Bold
     has $.slant;  # Italic, Oblique
 
-    # now provided by the single FreeFont class instance
-    #has $.font;   # the font object from PDF::Font::Loader's :load-font($path)
+    # attributes from FreeType
+    has $.face;
 
     submethod TWEAK {
 
@@ -58,9 +60,8 @@ class DocFont is export {
         $!weight    = %number{$n}<weight>;
         $!slant     = %number{$n}<slant>;
 
-        # need to avoid getting multiple copies of the heavy font object
-        # may try having an $ff reference method to get the font object somehow
-        #$!font      = load-font :file($!path);
+        $!face = Font::FreeType.new.face: $!path;
+        $!face.set-font-size: $!size;
     }
 
     method license() {

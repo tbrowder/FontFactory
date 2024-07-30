@@ -1,6 +1,10 @@
-Check on singletons
+Check on Text box
+- align: left, right, center, justify
 
-Check freefont vs loaded font for reuse
+DONE: Check freefont vs loaded font for reuse
++ per David:
+    reuse of FontObj is okay
+    reuse of Face is not!
 
 later make OCR page a vertical grid with appropriate info
   for now just rows with appropiate data
