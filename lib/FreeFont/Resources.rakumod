@@ -13,7 +13,7 @@ sub show-resources(:$debug --> List) is export {
         say "  $k => $d";
     }
 
-#    say "  $_" for %h.keys.sort;
+    # say "  $_" for %h.keys.sort;
 }
 
 sub download-resources(:$debug --> List) is export {
@@ -34,12 +34,17 @@ sub get-resources-hash(:$debug --> Hash) is export {
     for @list -> $path {
         my $f = $path.IO.basename;
         %h{$f} = $path;
+        if $debug {
+            note "DEBUG: basename: '$f' path: '$path'";
+        }
     }
     %h
 }
 
 sub get-resource-content(
-    $path
+    $path,
+    :$bin,
+    :$debug,
 ) is export {
     my $p = $path;
 
@@ -47,13 +52,16 @@ sub get-resource-content(
     unless $p.IO.e and $p.IO.r {
         return 0; 
     }
-    my $bin = False;
+
+    =begin comment
+    $bin = False;
     if $p ~~ /:i otf|ttf / {
         $bin = True;
     }
     elsif $p !~~ Str {
         $bin = True;
     }
+    =end comment
 
     my $s = $?DISTRIBUTION.content($path).open.slurp(:$bin, :close);
     $s

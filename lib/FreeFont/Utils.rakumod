@@ -147,7 +147,13 @@ sub exec-L() {
 sub exec-s() {
     say "List of /resources:";
     my %h = get-resources-hash;
+
+    =begin comment
     my %m = get-meta-hash;
+    # NOTE: get-meta-hash doesn't work unless the module is installed!!!
+    =end comment
+
+    my %m = load-yaml "META6.json".IO.slurp;
     my @arr = @(%m<resources>);
     for @arr.sort -> $k {
         say "  $k";
