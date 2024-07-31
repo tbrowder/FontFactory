@@ -1,3 +1,5 @@
+Use QueryOS to fix MacOS test error
+
 Put sub bin-cmp in ::Font::Utils.rakumod
 
 Check on Text box
