@@ -1,4 +1,5 @@
 Use QueryOS to fix MacOS test error
+  from attempted font load tests 6 and 7
 
 Put sub bin-cmp in ::Font::Utils.rakumod
 
