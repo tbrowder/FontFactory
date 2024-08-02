@@ -37,12 +37,10 @@
     "bin/ff-font-samples.pdf",
     "bin/print-sample.raku",
     "bin/strikethrough.info",
-    "docs/CMC7.txt",
     "docs/COPYING.txt",
     "docs/DigitalGraphicLabs.html",
     "docs/GPL-VERSION3.txt",
     "docs/micrenc-license.txt",
-    "fonts/CMC7.ttf",
     "fonts/GnuMICR.otf",
     "fonts/micrenc.ttf"
   ],

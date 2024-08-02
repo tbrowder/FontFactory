@@ -1,13 +1,10 @@
 #!/bin/env raku
 
 use File::Temp;
+use File::Find;
 
 use lib "../lib";
-
-use FreeFont::Resources;
-use FreeFont::Font::Utils; # sub bin-cmp
-
-my @fils; # defined in BEGIN block
+use FreeFont::Font::Utils;
 
 my $debug = 0;
 
@@ -19,54 +16,88 @@ spurt $o, $s, :enc<utf8-c8>;
 say "See dup file '$o'";
 =end comment
 
-#my $tdir = tempdir;
-my $tdir = "/tmp/spurt";
+my $bdir = $debug ?? "/tmp" !! tempdir;
+my $tdir = "$bdir/spurt";
 mkdir $tdir;
 
+my @dirs;
+
+# make a hash of font files
+@dirs = <
+/usr/share/fonts/opentype
+/usr/share/fonts/truetype
+/usr/share/fonts/type1
+>;
+# make a hash of PDF files
+@dirs = <
+/home/tbrowde
+>;
+
+my %h;
+for @dirs -> $dir {
+    my @f = find :$dir, :type<file>;
+    for @f -> $path {
+        my $b = $path.IO.basename;
+        next if not $b ~~ /:i '.' pdf $/;
+        if %h{$b}:exists {
+            next;
+        }
+        else {
+            %h{$b} = $path;
+        }
+    }
+}
+my $nf = %h.elems;
+#say "Found $nf unique font files.";
+say "Found $nf unique PDF files.";
+#exit;
+
+my @fils = %h.values;
+
+my $bad = 0;
 for @fils -> $path {
     # slurp and spurt and compare with Gnu 'cmp'
     my $basename = $path.IO.basename;
 
-    # skip all but two;
-    if $basename.contains("cmc7", :i) {
-        ; # ok
-    }
-    =begin comment
-    elsif $basename.contains("pdf") {
-        ; # ok
-    }
-    =end comment
-    else {
-        next;
-    }
+    my $s;
 
-    my $s = $path.IO.slurp(:enc<utf8-c8>);
+    #$s = $path.IO.slurp(:enc<utf8-c8>);
+    $s = $path.IO.slurp(:bin);
+
     my $o = IO::Path.new: :$basename, :dir($tdir);
-    my $copy = "$tdir/$o";
+    my $ofil = "$tdir/$o";
 
     if 0 or $debug {
-        say "DEBUG file to be spurted is '$copy'";
+        say "DEBUG file to be spurted is '$ofil'";
         next;
     }
 
-    $copy.IO.spurt: $s, :enc<utf8-c8>;
+    #$ofil.IO.spurt: $s, :enc<utf8-c8>;
+    $ofil.IO.spurt: $s, :bin;
+
     #last if 1;
 
-    my $res = bin-cmp $path, $copy, :debug(1);
-    unless $res {
-        say "Files '$ofil' and '$path' are different.";
-        my $s1 = $copy.IO.s; # ~ :s; # .size;
+    my @res = bin-cmp :orig($path), :copy($ofil); #, :debug(1);
+    if 0 {
+        say "DEBUG: \@res = {@res.gist}"; 
+    }
+    my $exit = @res.shift;
+
+    unless $exit == 0 {
+        say "Files '$ofil' (copy) and '$path' (orig) are different.";
+        ++$bad;
+        my $s1 = $ofil.IO.s; # ~ :s; # .size;
         my $s2 = $path.IO.s; # ~ :s; # .size;
         say "  Sizes: '$s1' and '$s2'.";
     }
     #last if 1;
 }
 
-=begin comment
-sub bin-cmp(
-    $f1, # orig
-    $f2, # copy (after roundtrip)
-    :$debug --> Bool) is export {
+say "Found $bad bad files out of $nf";
+
+=finish
+
+sub bin-cmp($f1, $f2, :$debug --> Bool) is export {
     # Runs Gnu 'cmp' and compares the two inputs byte by byte
     # Returns True if same, False otherwise.
     # exit codes: 0 - same, 1 - diff, 2 - trouble
@@ -99,7 +130,6 @@ sub bin-cmp(
     }
     $err == 0 ?? True !! False
 }
-=end comment
 
 BEGIN {
 @fils = <

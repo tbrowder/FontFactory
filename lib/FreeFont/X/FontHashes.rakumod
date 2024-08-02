@@ -6,7 +6,6 @@
 unit module FreeFont::X::FontHashes;
 
 constant %code is export = %(
-    c7   => 15,
     m    => 9,
     mb   => 11,
     mbo  => 12,
@@ -26,7 +25,6 @@ constant %code is export = %(
 
 constant %code2 is export = %(
     c   => 9,
-    c7  => 15,
     cb  => 11,
     cbo => 12,
     co  => 10,
@@ -44,7 +42,6 @@ constant %code2 is export = %(
 );
 
 constant %shortname is export = %(
-    cmc7                => 15,
     freemono            => 9,
     freemonobold        => 11,
     freemonoboldoblique => 12,
@@ -242,19 +239,6 @@ constant %number is export = %(
         name      => 'GnuMICR',
         path      => '/home/tbrowde/.FreeFont/fonts/GnuMICR.otf',
         shortname => 'gnumicr',
-        slant     => 'None',
-        weight    => 'Normal',
-    },
-    15 => {
-        alias     => 'none',
-        basename  => 'CMC7.ttf',
-        code      => 'c7',
-        code2     => 'c7',
-        fontobj   => 0,
-        fullname  => 'CMC7',
-        name      => 'CMC7',
-        path      => '/home/tbrowde/.FreeFont/fonts/CMC7.ttf',
-        shortname => 'cmc7',
         slant     => 'None',
         weight    => 'Normal',
     },

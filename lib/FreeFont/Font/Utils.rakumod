@@ -74,6 +74,61 @@ sub hex2dec($hex, :$debug) is export {
     $dec;
 }
 
+sub bin-cmp(
+    :$orig, 
+    :$copy, 
+    # cmp options
+    :$s = True,  # silent
+    :$l = False, # list bytes differing and their values
+    :$b = False, # list bytes differing
+    :$n = 0,     # list first n bytes (default: 0 - list all)
+    :$debug, 
+    --> List
+    ) is export {
+    # Runs Gnu 'cmp' and compares the two inputs byte by byte
+    # Returns a List whose first value is the error code
+    #   and the rest are any data from :out and :err
+
+    # build the command
+    my $cmd = "cmp";
+     
+    if $s {
+        $cmd ~= " -s";
+    }
+    elsif $l {
+        $cmd ~= " -l";
+    }
+    elsif $b {
+        $cmd ~= " -b";
+    }
+
+    # modifiers
+    if $n {
+        $cmd ~= " -n$n";
+    }
+    $cmd ~= " $copy $orig";
+    my $proc = run($cmd.words, :out, :err);
+    my $err = $proc.exitcode; 
+
+    my @lines  = $proc.out.slurp(:close).lines;
+    my @lines2 = $proc.err.slurp(:close).lines;
+    if $debug {
+        if $err == 0 {
+            say "DEBUG: no diffs found";
+        }
+        else {
+            say "  DEBUG: byte differences:";
+            for @lines {
+                say "    $_";
+            }
+            for @lines2 {
+                say "    $_";
+            }
+        }
+    }
+    $err, |@lines, |@lines2
+}
+
 =finish
 
 # to be exported when the new repo is created
