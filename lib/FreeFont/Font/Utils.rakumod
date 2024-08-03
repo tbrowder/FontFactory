@@ -75,8 +75,8 @@ sub hex2dec($hex, :$debug) is export {
 }
 
 sub bin-cmp(
-    :$orig, 
-    :$copy, 
+    $file1, 
+    $file2, 
     # cmp options
     :$s = True,  # silent
     :$l = False, # list bytes differing and their values
@@ -92,27 +92,27 @@ sub bin-cmp(
     # build the command
     my $cmd = "cmp";
      
-    if $s {
-        $cmd ~= " -s";
-    }
-    elsif $l {
+    if $l {
         $cmd ~= " -l";
     }
     elsif $b {
         $cmd ~= " -b";
+    }
+    else{
+        $cmd ~= " -s";
     }
 
     # modifiers
     if $n {
         $cmd ~= " -n$n";
     }
-    $cmd ~= " $copy $orig";
+    $cmd ~= " $file1 $file2";
     my $proc = run($cmd.words, :out, :err);
     my $err = $proc.exitcode; 
 
     my @lines  = $proc.out.slurp(:close).lines;
     my @lines2 = $proc.err.slurp(:close).lines;
-    if $debug {
+    if 0 and $debug {
         if $err == 0 {
             say "DEBUG: no diffs found";
         }

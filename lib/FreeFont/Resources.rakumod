@@ -12,8 +12,57 @@ sub show-resources(:$debug --> List) is export {
         my $d = %h{$k}.IO.parent;
         say "  $k => $d";
     }
+}
 
-    # say "  $_" for %h.keys.sort;
+sub slurp-file(
+    $path,
+    :$bin    = False,
+    :$utf8c8 = False,
+    :$debug,
+    ) is export {
+    my $content;
+    if $bin {
+        $content = $path.IO.slurp(:bin);
+    }
+    elsif $utf8c8 {
+        $content = $path.IO.slurp(:enc<utf8-c8>);
+    }
+    else {
+        $content = $path.IO.slurp;
+    }
+    $content;
+}
+
+sub spurt-file(
+    $content,
+    :$basename!,
+    :$dir is copy,        # = '.',  #= the desired output path
+    :$bin    = False,
+    :$utf8c8 = False,
+    :$debug,
+    --> IO::Path
+    ) is export {
+
+    unless $dir.defined and $dir.IO.d {
+        $dir = "/tmp/spurt";
+        mkdir $dir;
+    }
+    my $o    = IO::Path.new: :$basename, :$dir;
+    my $ofil = "$dir/$o";
+    if $debug {
+        say "DEBUG file to be spurted is '$ofil'";
+    }
+    
+    if $bin {
+        $ofil.IO.spurt: $content, :bin;
+    }
+    elsif $utf8c8 {
+        $ofil.IO.spurt: $content, :enc<utf8-c8>;
+    }
+    else {
+        $ofil.IO.spurt: $content;
+    }
+    $ofil.IO;
 }
 
 sub download-resources(:$debug --> List) is export {

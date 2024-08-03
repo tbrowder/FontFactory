@@ -57,21 +57,18 @@ my @fils = %h.values;
 my $bad = 0;
 for @fils -> $path {
     # slurp and spurt and compare with Gnu 'cmp'
-    my $basename = $path.IO.basename;
 
     my $s;
-
     #$s = $path.IO.slurp(:enc<utf8-c8>);
     $s = $path.IO.slurp(:bin);
 
+    my $basename = $path.IO.basename;
     my $o = IO::Path.new: :$basename, :dir($tdir);
     my $ofil = "$tdir/$o";
-
     if 0 or $debug {
         say "DEBUG file to be spurted is '$ofil'";
         next;
     }
-
     #$ofil.IO.spurt: $s, :enc<utf8-c8>;
     $ofil.IO.spurt: $s, :bin;
 

@@ -89,6 +89,7 @@ sub manage-home-freefont(
         $res = False;
     }
     my $bdir = "$home/$dotFreeFont/bin";
+    mkdir $bdir;
     if not $bdir.IO.d {
         note "ERROR: unable to create dir '$bdir'";
         $res = False;
