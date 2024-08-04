@@ -69,6 +69,7 @@ FreeMonoBoldOblique.otf
 # into dir: $HOME/.FreeFont/fonts
 micrenc.ttf
 GnuMICR.otf
+CMC7.ttf
 =end comment
 
 constant @fontnames =
@@ -92,6 +93,7 @@ constant @fontnames =
 "Free Mono Bold Oblique mbo cbo 12 CourierBoldOblique",
 "micrenc mi mi 13 none",   # not a FreeFont
 "GnuMICR mi2 mi2 14 none", # not a FreeFont
+"CMC7 cm cm 15 none"       # not a FreeFont
 ;
 
 my $debug = 0;
