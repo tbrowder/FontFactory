@@ -149,8 +149,15 @@ sub exec-d() {
             @bin.push: $file;
         }
     }
+
     for @bin -> $orig {
-        say "  $orig";
+        my $basename = $orig.IO.basename;
+        my $bin = True;
+        # slurp the contents
+        my $content = slurp-file $orig, :$bin;
+        # spurt to the local file
+        my $copy = spurt-file $content, :dir<.>, :$basename;
+        say "  See file: $copy";
     }
 }
 sub exec-p() {
@@ -163,8 +170,15 @@ sub exec-p() {
             @pdf.push: $file;
         }
     }
+
     for @pdf -> $orig {
-        say "  $orig";
+        my $basename = $orig.IO.basename;
+        my $bin = True;
+        # slurp the contents
+        my $content = slurp-file $orig, :$bin;
+        # spurt to the local file
+        my $copy = spurt-file $content, :dir<.>, :$basename;
+        say "  See file: $copy";
     }
 }
 sub exec-L() {
@@ -177,8 +191,15 @@ sub exec-L() {
             @lic.push: $file;
         }
     }
+
     for @lic -> $orig {
-        say "  $orig";
+        my $basename = $orig.IO.basename;
+        my $bin = True;
+        # slurp the contents
+        my $content = slurp-file $orig, :$bin;
+        # spurt to the local file
+        my $copy = spurt-file $content, :dir<.>, :$basename;
+        say "  See file: $copy";
     }
 }
 

@@ -1,6 +1,7 @@
 unit module FreeFont::Resources;
 
 #===== exported routines
+# NOTE: get-meta-hash doesn't work unless the module is installed!!!
 sub get-meta-hash(:$debug --> Hash) is export {
    $?DISTRIBUTION.meta 
 }
