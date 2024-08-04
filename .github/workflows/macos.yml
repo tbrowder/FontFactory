@@ -25,6 +25,7 @@ jobs:
       - name: Install Dependencies
         run: |
           brew install freetype
+          brew unlink fontconfig
           brew install fontconfig --HEAD
           brew install harfbuzz
           brew install font-freefont
