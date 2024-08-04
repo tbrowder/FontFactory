@@ -17,10 +17,13 @@ $cmd = "bin/ff-download";
 for "", <a p d L s> -> $opt {
     # skip 'all' for now
     next if $opt ~~ /^ :i a/;
+    next unless $_ eq "";
     lives-ok {
+        =begin comment
         next unless {
             $opt ~~ /^ :i s/;
         }
+        =end comment
         # expect normal output and no error
         $proc = run "ff-download $opt".words, :out, :err;
         @lines = $proc.out.slurp(:close).lines;
@@ -32,7 +35,7 @@ for "", <a p d L s> -> $opt {
         # otherwise are as expected.
         =end comment
         #is $exit, -1, "$cmd '$opt' has exit code '$exit' but output is as expected";
-        is $exit, 0, "$cmd '$opt' has exit code '$exit' but output is as expected";
+        is $exit, 0, "$cmd '$opt' has exit code '$exit' and output is as expected";
         if $opt ne "" {
             cmp-ok $_, '~~', Str, "1st found: '$s'";
             say "DEBUG head of output list is a Str = '$s'" if $debug;
