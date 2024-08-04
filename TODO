@@ -1,7 +1,10 @@
+Use FF DocFont to add font info
+  underline, strikethrough, etc.
+
 Use QueryOS to fix MacOS test error
   from attempted font load tests 6 and 7
 
-Put sub bin-cmp in ::Font::Utils.rakumod
+DONE: Put sub bin-cmp in ::Font::Utils.rakumod
 
 Check on Text box
 - align: left, right, center, justify
@@ -32,9 +35,6 @@ create bin/ff-download to:
   create and download a font sample PDF
   download the license files
   download examples
-
-Use FF DocFont to add font info
-  underline, strikethrough, etc.
 
 DONE: Test font loading
 
