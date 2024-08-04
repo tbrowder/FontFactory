@@ -1,3 +1,10 @@
+create bin/ff-download to:
+  create and download a font sample PDF
+  download the license files
+  download examples
+  DONE: list resources
+
+
 Use FF DocFont to add font info
   underline, strikethrough, etc.
 
@@ -30,11 +37,6 @@ create my pfa fonts to ttf (or otf if possible)
   'printafm' converts .pfa to .afm
   checking on commercial Mac program Trans4
   also check on fontconfig
-
-create bin/ff-download to:
-  create and download a font sample PDF
-  download the license files
-  download examples
 
 DONE: Test font loading
 

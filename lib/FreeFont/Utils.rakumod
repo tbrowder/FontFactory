@@ -117,15 +117,19 @@ sub with-args(@args) is export {
             exec-s;
         }
         when /:i d / {
+            # download example programs
             exec-d
         }
         when /:i p / {
+            # print PDF of font samples
             exec-p
         }
         when /:i L / {
+            # download licenses
             exec-L
         }
         when /:i s / {
+            # show /resources contents
             exec-s
         }
         default {
@@ -137,25 +141,65 @@ sub with-args(@args) is export {
 # local subs, non-exported
 sub exec-d() {
     say "Downloading example programs...";
+    my %h = get-resources-hash;
+    my @arr = %h.values.sort;
+    my @bin;
+    for @arr -> $file {
+        if $file ~~ /:i '.' raku $/ {
+            @bin.push: $file;
+        }
+    }
+    for @bin -> $orig {
+        say "  $orig";
+    }
 }
 sub exec-p() {
     say "Downloading a PDF with font samples...";
+    my %h = get-resources-hash;
+    my @arr = %h.values.sort;
+    my @pdf;
+    for @arr -> $file {
+        if $file ~~ /:i '.' pdf $/ {
+            @pdf.push: $file;
+        }
+    }
+    for @pdf -> $orig {
+        say "  $orig";
+    }
 }
 sub exec-L() {
     say "Downloading font licenses...";
+    my %h = get-resources-hash;
+    my @arr = %h.values.sort;
+    my @lic;
+    for @arr -> $file {
+        if $file.contains("docs") {
+            @lic.push: $file;
+        }
+    }
+    for @lic -> $orig {
+        say "  $orig";
+    }
 }
+
 sub exec-s() {
     say "List of /resources:";
     my %h = get-resources-hash;
+    my @arr = %h.keys;
+    for @arr.sort -> $k {
+        say "  $k";
+    }
 
     =begin comment
     my %m = get-meta-hash;
     # NOTE: get-meta-hash doesn't work unless the module is installed!!!
     =end comment
-
+    
+    =begin comment
     my %m = load-yaml "META6.json".IO.slurp;
     my @arr = @(%m<resources>);
     for @arr.sort -> $k {
         say "  $k";
     }
+    =end comment
 }
