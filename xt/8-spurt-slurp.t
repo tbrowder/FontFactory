@@ -6,36 +6,23 @@ use File::Find;
 use FreeFont::Resources;
 use FreeFont::Font::Utils;
 
+my $debug = 0;
 my @fils = find :dir("resources"), :type<file>;
 
 my %bad;
 my %good;
 for @fils.kv -> $i, $path {
-    my ($content, $copy, @res, $err, $basename, $debug);
+    my ($content, $copy, @res, $err, $basename);
     my ($bin, $utf8c8) = True, False;
-    $debug = 0;
-
     $basename = $path.IO.basename;
-    say "Processing file '$basename' at index $i";
+    say "Processing file '$basename' at index $i" if $debug;
     next if %good{$i}:exists;
-
-    =begin comment
-    given $path {
-        when /:i '.' pdf $/ {
-            $bin = True;
-        }
-        when /:i '.' raku $/ {
-            $bin = True;
-        }
-    }
-    =end comment
-
 
     $content = slurp-file $path, :$bin, :$utf8c8, :$debug;
     $copy = spurt-file $content, :$basename, :$bin, :$utf8c8, :$debug;
     @res = bin-cmp $path, $copy, :l(True), :$debug;
     $err = @res.shift;
-    
+
     if $err == 0 {
         say "DEBUG: file $path roundtrips ok" if $debug;
         %good{$i} = $path;
