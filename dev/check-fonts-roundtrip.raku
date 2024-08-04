@@ -5,6 +5,7 @@ use File::Find;
 
 use lib "../lib";
 use FreeFont::Font::Utils;
+use FreeFont::Resources;
 
 my $debug = 0;
 
@@ -15,10 +16,6 @@ my $o = "dup.otf";
 spurt $o, $s, :enc<utf8-c8>;
 say "See dup file '$o'";
 =end comment
-
-my $bdir = $debug ?? "/tmp" !! tempdir;
-my $tdir = "$bdir/spurt";
-mkdir $tdir;
 
 my @dirs;
 
@@ -37,6 +34,11 @@ my %h;
 for @dirs -> $dir {
     my @f = find :$dir, :type<file>;
     for @f -> $path {
+        next if $path.contains('Link'); 
+        next if $path.contains(' '); # how to handle spaces?
+
+        next if not $path.IO.r;
+
         my $b = $path.IO.basename;
         next if not $b ~~ /:i '.' pdf $/;
         if %h{$b}:exists {
@@ -55,39 +57,27 @@ say "Found $nf unique PDF files.";
 my @fils = %h.values;
 
 my $bad = 0;
-for @fils -> $path {
+for @fils.kv -> $i, $path {
     # slurp and spurt and compare with Gnu 'cmp'
+    my ($content, $copy, @res, $err, $basename);
+    my ($bin, $utf8c8) = True, False;
+    $basename = $path.IO.basename;
+    say "Processing file '$basename' at index $i" if $debug;
 
-    my $s;
-    #$s = $path.IO.slurp(:enc<utf8-c8>);
-    $s = $path.IO.slurp(:bin);
+    $content = slurp-file $path, :$bin, :$utf8c8, :$debug;
+    $copy = spurt-file $content, :$basename, :$bin, :$utf8c8, :$debug;
+    #@res = bin-cmp $path, $copy, :l(True), :$debug;
+    @res = bin-cmp $path, $copy, :$debug;
+    $err = @res.shift;
 
-    my $basename = $path.IO.basename;
-    my $o = IO::Path.new: :$basename, :dir($tdir);
-    my $ofil = "$tdir/$o";
-    if 0 or $debug {
-        say "DEBUG file to be spurted is '$ofil'";
-        next;
+    if $err == 0 {
+        say "DEBUG: file $path roundtrips ok" if $debug;
     }
-    #$ofil.IO.spurt: $s, :enc<utf8-c8>;
-    $ofil.IO.spurt: $s, :bin;
-
-    #last if 1;
-
-    my @res = bin-cmp :orig($path), :copy($ofil); #, :debug(1);
-    if 0 {
-        say "DEBUG: \@res = {@res.gist}"; 
-    }
-    my $exit = @res.shift;
-
-    unless $exit == 0 {
-        say "Files '$ofil' (copy) and '$path' (orig) are different.";
+    else {
+        say "File '$path' does not roundtrip";
+        say "  $_" for @res;
         ++$bad;
-        my $s1 = $ofil.IO.s; # ~ :s; # .size;
-        my $s2 = $path.IO.s; # ~ :s; # .size;
-        say "  Sizes: '$s1' and '$s2'.";
     }
-    #last if 1;
 }
 
 say "Found $bad bad files out of $nf";
@@ -107,7 +97,7 @@ sub bin-cmp($f1, $f2, :$debug --> Bool) is export {
     #my $proc = run("cmp -s $f1 $f2".words, :out, :err);
     #my $proc = run("cmp -l $f1 $f2".words, :out, :err);
     my $proc = run($cmd.words, :out, :err);
-    my $err = $proc.exitcode; 
+    my $err = $proc.exitcode;
 
     my @lines  = $proc.out.slurp(:close).lines;
     my @lines2 = $proc.err.slurp(:close).lines;
