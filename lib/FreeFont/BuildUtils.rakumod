@@ -118,20 +118,27 @@ sub manage-home-freefont(
             note "DEBUG: path    : '$basename'";
         }
 
-        # get the content as a slurped string
-        my $s = get-resource-content $path;
+        # get the content as a slurped string :bin
+        my $bin = True;
+        my $s = get-resource-content $path, :$bin;
         # spurt location depends on type of file
-        if $basename ~~ /:i otf | ttf $/ {
+        if $basename ~~ /:i '.' [otf | ttf] $/ {
             if $debug {
                 note "DEBUG: spurting: '{$fdir}/{$basename}'";
             }
-            "$fdir/$basename".IO.spurt: $s;
+            "$fdir/$basename".IO.spurt: $s, :$bin;
+        }
+        elsif $basename ~~ /:i '.' raku $/ {
+            if $debug {
+                note "DEBUG: spurting: '{$bdir}/{$basename}'";
+            }
+            "$fdir/$basename".IO.spurt: $s, :$bin;
         }
         else {
             if $debug {
                 note "DEBUG: spurting: '{$ddir}/{$basename}'";
             }
-            "$ddir/$basename".IO.spurt: $s;
+            "$ddir/$basename".IO.spurt: $s, :$bin;
         }
     }
 

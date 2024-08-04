@@ -112,7 +112,7 @@ sub get-resource-content(
     }
     =end comment
 
-    my $s = $?DISTRIBUTION.content($path).open.slurp(:$bin, :close);
+    my $s = $?DISTRIBUTION.content($path).open.slurp(:bin, :close);
     $s
 } # sub get-resource-content($path){
 
