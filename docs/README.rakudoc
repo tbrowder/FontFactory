@@ -249,6 +249,40 @@ $pdf.add-page.text: {
 $pdf.save-as: "ff-example.pdf";
 =end code
 
+=head1 Binary executable file B<ff-download>
+
+The program is installed along with the module and can be used
+to get access to the module's '/resources' directory.
+Executing the file without arguments shows its options:
+
+=begin code
+Usage: ff-download <mode>
+
+Modes:
+  s - show /resources contents
+  f - download font files
+  p - print PDF of font samples
+  d - download example programs
+  L - download licenses
+  a - do all the above
+=end code
+
+=head1 The B<DocFont> class
+
+The class' attributes are scaled to the chosen size and the class
+provides several methods to enable the user to
+place text precisely on a PDF page:
+
+Listing a font's general attributes:
+
+=item CapHeight
+=item ?Descender
+=item number of glyphs (characters)
+
+Listing a string's attributes:
+
+=item stringwidth (with or without :kern, :ligatures)
+=item 
 =head1 AUTHOR
 
 Tom Browder <tbrowder@acm.org>

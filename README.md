@@ -174,6 +174,40 @@ The `$t12d5` object shown above in the *SYNOPSIS* section is actually a `DocFont
     }
     $pdf.save-as: "ff-example.pdf";
 
+Binary executable file **ff-download**
+======================================
+
+The program is installed along with the module and can be used to get access to the module's '/resources' directory. Executing the file without arguments shows its options:
+
+    Usage: ff-download <mode>
+
+    Modes:
+      s - show /resources contents
+      f - download font files
+      p - print PDF of font samples
+      d - download example programs
+      L - download licenses
+      a - do all the above
+
+The **DocFont** class
+=====================
+
+The class' attributes are scaled to the chosen size and the class provides several methods to enable the user to place text precisely on a PDF page:
+
+Listing a font's general attributes:
+
+  * CapHeight
+
+  * ?Descender
+
+  * number of glyphs (characters)
+
+Listing a string's attributes:
+
+  * stringwidth (with or without :kern, :ligatures)
+
+  * 
+
 AUTHOR
 ======
 

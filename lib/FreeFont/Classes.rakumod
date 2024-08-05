@@ -8,6 +8,17 @@ use FreeFont::X::FontHashes;
 
 %number = %FreeFont::X::FontHashes::number;
 
+=begin pod
+
+=head1 Class DocFont
+
+Class B<DocFont> melds a font file and its scaled size and provides
+methods to access most of its attributes.
+
+=head2 Methods
+
+=end pod
+
 class DocFont is export {
     # these are provided by FreeFont's
     # sub 'get-font'
@@ -64,6 +75,9 @@ class DocFont is export {
         $!face.set-font-size: $!size;
     }
 
+=begin pod
+=head3 method license
+=end pod
     method license() {
         # DocFont attribute
         # based on number
@@ -89,7 +103,36 @@ class DocFont is export {
         $lic
     } # end of method def
 
-    method get-face($path) {
+    # various font and string methods provided by $!face (self.face)
+
+    #= general font attrs
+    method ascender() { 
+        self.face.ascender 
     }
+    method descender() { 
+    }
+    method family-name() { 
+    }
+    method height() { 
+    }
+    method leading() {
+        self.face.height
+    }
+    method num-glyphs() { 
+    }
+    method style-name() {}
+    method underline-position() {}
+    method underline-thickness() {}
+
+    method overline-position() {}
+    method overline-thickness() {}
+
+    method strikethrough-position() {}
+    method strikethrough-thickness() {}
+    method forall-glyphs() {}
+
+    #= string attrs
+    method forall-chars() {}
 
 } # end of class DocFont definition
+
