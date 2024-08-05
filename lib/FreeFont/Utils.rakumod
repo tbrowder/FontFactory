@@ -99,11 +99,12 @@ sub help is export {
     Usage: {$*PROGRAM.basename} <mode>
 
     Modes:
-      a - all
+      s - show /resources contents
+      f - download font files
       p - print PDF of font samples
       d - download example programs
       L - download licenses
-      s - show /resources contents
+      a - do all the above
     HERE
     exit
 }
@@ -115,6 +116,7 @@ sub with-args(@args) is export {
             exec-p;
             exec-L;
             exec-s;
+            exec-f;
         }
         when /:i d / {
             # download example programs
@@ -131,6 +133,10 @@ sub with-args(@args) is export {
         when /:i s / {
             # show /resources contents
             exec-s
+        }
+        when /:i f / {
+            # download fonts
+            exec-f
         }
         default {
             say "ERROR: Unknown arg '$_'";
@@ -210,17 +216,26 @@ sub exec-s() {
     for @arr.sort -> $k {
         say "  $k";
     }
+}
 
-    =begin comment
-    my %m = get-meta-hash;
-    # NOTE: get-meta-hash doesn't work unless the module is installed!!!
-    =end comment
-    
-    =begin comment
-    my %m = load-yaml "META6.json".IO.slurp;
-    my @arr = @(%m<resources>);
-    for @arr.sort -> $k {
-        say "  $k";
+sub exec-f() {
+    say "Downloading fonts...";
+    my %h = get-resources-hash;
+    my @arr = %h.values.sort;
+    my @fonts;
+    for @arr -> $file {
+        if $file ~~ /:i '.' [ttf | otf] $/ {
+            @fonts.push: $file;
+        }
     }
-    =end comment
+
+    for @fonts -> $orig {
+        my $basename = $orig.IO.basename;
+        my $bin = True;
+        # slurp the contents
+        my $content = slurp-file $orig, :$bin;
+        # spurt to the local file
+        my $copy = spurt-file $content, :dir<.>, :$basename;
+        say "  See file: $copy";
+    }
 }
