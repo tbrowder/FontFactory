@@ -10,6 +10,45 @@ use FreeFont::X::FontHashes;
 
 =begin pod
 
+=head1 Class String
+
+Class B<String> provides all the scaled size
+metrics for a string set with a given font
+at a given size:
+
+=begin code
+=end code
+
+=end pod
+
+class String is export {
+    #== required
+    has $.text           is required;
+    has $.font           is required;
+    has $.size           is required;
+    #== defaults
+    has $.kern           = True;
+    has $.ligatures      = True;
+    has $.underline      = False;
+    has $.strike-through = False;
+    has $.overline       = False;
+    #== calculated
+    has $.stringwidth    is rw;
+    has $.top-bearing    is rw;
+    has $.left-bearing   is rw;
+    has $.bottom-bearing is rw;
+    has $.right-bearing  is rw;
+    has $.right-advance  is rw;
+    has @.bbox           is rw;
+  
+    method check {
+        my $err = 0;
+        ++$err if not defined $!stringwidth;
+    }
+}
+
+=begin pod
+
 =head1 Class DocFont
 
 Class B<DocFont> melds a font file and its scaled size and provides
@@ -144,6 +183,7 @@ The family this font claims to be from
 Scaled recommended distance between baselines
 =end pod
     method height() { 
+        self.face.height
     }
 
 =begin pod
@@ -163,6 +203,7 @@ True if individual glyphs have names. If so, the
 name is shown with the 'name' method on 'Glyph' objects
 =end pod
     method has-glyph-names {
+        self.face.has-glyph-names
     }
 
 =begin pod
@@ -171,6 +212,15 @@ name is shown with the 'name' method on 'Glyph' objects
 True if the font contains reliable PostSript glyph names
 =end pod
     method has-reliable-glyph-names {
+        self.face.has-reliable-glyph-names
+    }
+
+=begin pod
+=head3 postscript-name()
+
+=end pod
+    method postscript-name() {
+        self.face.postscript-name
     }
 
 =begin pod
@@ -178,6 +228,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method is-bold {
+        self.face.is-bold
     }
 
 =begin pod
@@ -185,6 +236,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method is-italic {
+        self.face.is-italic
     }
 
 =begin pod
@@ -192,6 +244,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method is-scalable {
+        self.face.is-scalable
     }
 
 =begin pod
@@ -199,6 +252,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method num-glyphs() { 
+        self.face.num-glyphs
     }
 
 =begin pod
@@ -206,6 +260,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method style-name() {
+        self.face.style-name
     }
 
 =begin pod
@@ -213,6 +268,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method underline-position() {
+        self.face.underline-position
     }
 
 =begin pod
@@ -220,6 +276,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method underline-thickness() {
+        self.face.underline-thickness
     }
 
 =begin pod
@@ -227,6 +284,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method overline-position() {
+        self.face.overline-position()
     }
 
 =begin pod
@@ -234,6 +292,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method overline-thickness() {
+        self.face.overlin-thickness
     }
 
 =begin pod
@@ -241,6 +300,7 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method strikethrough-position() {
+        self.face.strikethrough-position
     }
 
 =begin pod
@@ -248,23 +308,111 @@ True if the font contains reliable PostSript glyph names
 
 =end pod
     method strikethrough-thickness() {
+        self.face.strikethrough-thickness
     }
 
-### glyph or string methods
+    method units-per-EM() {
+    }
 
 =begin pod
 =head3 forall-glyphs()
 
+Iterates through all the glyphs in the font
+and passes Font::FreeType::Glyph objects.
 =end pod
     method forall-glyphs() {
+        self.face.forall-glyphs: -> {
+        }
     }
 
-    #= string attrs
 =begin pod
+=head3 method max-advance-width() 
+
+=end pod
+    method max-advance-width() {
+    }
+
+=begin pod
+=head3 method max-advance-height() 
+
+=end pod
+    method max-advance-height() {
+        # for vertical languages
+    }
+
+=begin pod
+=head3 method bbox() 
+
+=end pod
+    method bbox() {
+    }
+
+
+### char or string methods
+
+=begin pod
+=head2 Methods on strings
+
 =head3 forall-chars()
 
 =end pod
     method forall-chars() {
+    }
+
+=begin pod
+=head3 glyph-name($char)
+
+=end pod
+    method glyph-name($char) {
+    }
+
+=begin pod
+=head3 glyph-index($char)
+
+=end pod
+    method glyph-index($char) {
+    }
+
+=begin pod
+=head3 glyph-name-from-index($index)
+
+=end pod
+    method glyph-name-from-index($index) {
+    }
+
+=begin pod
+=head3 index-from-glyph-name($name)
+
+=end pod
+    method index-from-glyph-name($name) {
+    }
+
+=begin pod
+=head3 set-font-size($width, $height, $x-res, $y-res)
+
+=end pod
+    method set-font-size($width, $height, $x-res, $y-res) {
+    }
+
+    # derived methods by iteration over glyphs in a string
+    # This should be a class instance of a String with all
+    # its attributes calculated. But threading may be a 
+    # problem.
+    method string(
+        Str:D $text, 
+        :$kern, 
+        :$ligatures, 
+        :$debug,
+        --> String 
+        ) {
+        my $s = String.new: 
+        self.face.for-glyphs: $text, -> Font::FreeType::Glyph $g {
+            # based on code from the example in David's Glyph doc
+            my $name = $g.name;
+            # ... collect all the attrs for the string
+            
+        }
+        $s
     }
 
 } # end of class DocFont definition
