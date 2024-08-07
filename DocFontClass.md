@@ -1,3 +1,8 @@
+Class String
+============
+
+Class **String** provides all the scaled size metrics for a string set with a given font at a given size:
+
 Class DocFont
 =============
 
@@ -41,6 +46,8 @@ True if individual glyphs have names. If so, the name is shown with the 'name' m
 
 True if the font contains reliable PostSript glyph names
 
+### postscript-name()
+
 ### is-bold()
 
 ### is-italic()
@@ -65,5 +72,26 @@ True if the font contains reliable PostSript glyph names
 
 ### forall-glyphs()
 
+Iterates through all the glyphs in the font and passes Font::FreeType::Glyph objects.
+
+### method max-advance-width() 
+
+### method max-advance-height() 
+
+### method bbox() 
+
+Methods on strings
+------------------
+
 ### forall-chars()
+
+### glyph-name($char)
+
+### glyph-index($char)
+
+### glyph-name-from-index($index)
+
+### index-from-glyph-name($name)
+
+### set-font-size($width, $height, $x-res, $y-res)
 

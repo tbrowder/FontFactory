@@ -1,5 +1,4 @@
 use Test;
-
 use FreeFont;
 use FreeFont::BuildUtils;
 use FreeFont::X::FontHashes;

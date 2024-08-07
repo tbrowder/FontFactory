@@ -9,7 +9,7 @@ my $df = $ff.get-font: 1, 12;
 
 is $df.size, 12;
 
-my $text = "Some text";
+my $text = "To Wit, You See";
 my $o = $df.string: $text;
 is $o.text, $text;
 

@@ -1,4 +1,6 @@
-Revision history for FreeFont
+Revision history for FontFactory
 
 {{$NEXT}}
+    - module rename from 'FreeFont' to 'FontFactory'
+      on 2024-08-07
     - Initial version

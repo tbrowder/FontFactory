@@ -1,4 +1,4 @@
-unit class FreeFont;
+unit class FontFactory;
 
 use PDF::Font::Loader :load-font;
 use PDF::Content;

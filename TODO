@@ -1,3 +1,27 @@
+Finish the String class in FreeFont::Classes
+  check proper terminology per Font::FreeType for bearings
+    and widths and advances, etc.
+
+Use PDF::Content::Text::Box to calculate string metrics
+  see file t/9-string-class.t
+
+  Methods
+    text
+    leading # baseline vertical spacing, default derived from the font
+            # kern, ligatures
+    align  # horizontal alignment: left, center, right, justify
+                                   start
+                                   end
+    valign # vertical alignment: center, top, bottom
+
+    width  # box width constraint
+    height # box height constraint
+    indent # indention of first line, default: 0
+    baseline # offset for first baseline
+    Str      # returns text box as @lines
+    content-height # actual height of content in the text box
+
+  
 Create sub or method to print bank account numbers
   on a check
 
