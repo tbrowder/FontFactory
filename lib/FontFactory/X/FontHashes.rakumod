@@ -3,7 +3,7 @@
 # CREATED BY /sbin/createhashes
 #==============================
 
-unit module FreeFont::X::FontHashes;
+unit module FontFactory::X::FontHashes;
 
 constant %code is export = %(
     cm   => 15,
@@ -227,7 +227,7 @@ constant %number is export = %(
         fontobj   => 0,
         fullname  => 'micrenc',
         name      => 'micrenc',
-        path      => '/home/tbrowde/.FreeFont/fonts/micrenc.ttf',
+        path      => '/home/tbrowde/.FontFactory/fonts/micrenc.ttf',
         shortname => 'micrenc',
         slant     => 'None',
         weight    => 'Normal',
@@ -240,7 +240,7 @@ constant %number is export = %(
         fontobj   => 0,
         fullname  => 'GnuMICR',
         name      => 'GnuMICR',
-        path      => '/home/tbrowde/.FreeFont/fonts/GnuMICR.otf',
+        path      => '/home/tbrowde/.FontFactory/fonts/GnuMICR.otf',
         shortname => 'gnumicr',
         slant     => 'None',
         weight    => 'Normal',
@@ -253,7 +253,7 @@ constant %number is export = %(
         fontobj   => 0,
         fullname  => 'CMC7',
         name      => 'CMC7',
-        path      => '/home/tbrowde/.FreeFont/fonts/CMC7.ttf',
+        path      => '/home/tbrowde/.FontFactory/fonts/CMC7.ttf',
         shortname => 'cmc7',
         slant     => 'None',
         weight    => 'Normal',

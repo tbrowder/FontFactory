@@ -1,4 +1,4 @@
-unit module FreeFont::Resources;
+unit module FontFactory::Resources;
 
 #===== exported routines
 # NOTE: get-meta-hash doesn't work unless the module is installed!!!

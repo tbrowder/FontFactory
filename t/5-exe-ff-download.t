@@ -3,8 +3,8 @@ use Test;
 use QueryOS;
 use File::Temp;
 
-use FreeFont::BuildUtils;
-use FreeFont::Resources;
+use FontFactory::BuildUtils;
+use FontFactory::Resources;
 
 my $debug = 0;
 

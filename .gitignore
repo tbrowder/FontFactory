@@ -1,6 +1,6 @@
 .precomp/
-/FreeFont-*
-xt/FreeFont/
+/FontFactory-*
+xt/FontFactory/
 tdir/
 
 ff-example.pdf

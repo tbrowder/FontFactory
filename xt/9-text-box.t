@@ -45,7 +45,7 @@ done-testing;
 
 my $b = PDF::Content::Text::Box.new(;
 
-my $ff = FreeFont.new;
+my $ff = FontFactory.new;
 my $df = $ff.get-font: 1, 12;
 
 is $df.size, 12;
@@ -54,7 +54,7 @@ my $text = "Some text";
 my $o = $df.string: $text;
 is $o.text, $text;
 
-# TODO use a text box to check output from FreeFont
+# TODO use a text box to check output from FontFactory
 #      a simple bbox should work
 
 done-testing;

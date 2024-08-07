@@ -1,24 +1,24 @@
 use Test;
 
-use FreeFont;
+use FontFactory;
 
-use FreeFont::BuildUtils;
-use FreeFont::Classes;
-use FreeFont::Config;
-use FreeFont::Resources;
-use FreeFont::Utils;
-use FreeFont::X::FontHashes;
-use FreeFont::PageProcs;
-use FreeFont::Font::Utils; # to become its own repo later
+use FontFactory::BuildUtils;
+use FontFactory::Classes;
+use FontFactory::Config;
+use FontFactory::Resources;
+use FontFactory::Utils;
+use FontFactory::X::FontHashes;
+use FontFactory::PageProcs;
+use FontFactory::Font::Utils; # to become its own repo later
 
-use-ok "FreeFont";
-use-ok "FreeFont::BuildUtils";
-use-ok "FreeFont::Classes";
-use-ok "FreeFont::Config";
-use-ok "FreeFont::Resources";
-use-ok "FreeFont::Utils";
-use-ok "FreeFont::X::FontHashes";
-use-ok "FreeFont::PageProcs";
-use-ok "FreeFont::Font::Utils"; # to become its own repo later
+use-ok "FontFactory";
+use-ok "FontFactory::BuildUtils";
+use-ok "FontFactory::Classes";
+use-ok "FontFactory::Config";
+use-ok "FontFactory::Resources";
+use-ok "FontFactory::Utils";
+use-ok "FontFactory::X::FontHashes";
+use-ok "FontFactory::PageProcs";
+use-ok "FontFactory::Font::Utils"; # to become its own repo later
 
 done-testing;

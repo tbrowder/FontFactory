@@ -1,15 +1,15 @@
-unit module FreeFont::Config;
+unit module FontFactory::Config;
 
 use QueryOS;
-use FreeFont::X::FontHashes;
+use FontFactory::X::FontHashes;
 
-%number = %FreeFont::X::FontHashes::number;
+%number = %FontFactory::X::FontHashes::number;
 
 my $os = OS.new;
 
 # The subs and data in this file are
 # used to construct all the required
-# data in the $HOME/.FreeFont/ 
+# data in the $HOME/.FontFactory/ 
 # directory.
 
 # The installed GNU Free Fonts fonts are
@@ -43,11 +43,11 @@ elsif $os.is-windows {
 # create-config :$home, :$debug;
 sub create-config(
     :$home!,
-    :$dotFreeFont!,
+    :$dotFontFactory!,
     :$debug,
 ) is export {
     # the config file is at :
-    my $dir  = "$home/$dotFreeFont";
+    my $dir  = "$home/$dotFontFactory";
     unless $dir.IO.d {
         mkdir $dir;
     }
@@ -81,7 +81,7 @@ sub create-config(
     # the Micre fonts
     for 13...15 -> $n {
         my $b = %number{$n}<basename>;
-        # the path is in the user's '$HOME/$dotFreeFont/fonts' directory
+        # the path is in the user's '$HOME/$dotFontFactory/fonts' directory
         my $f = "$dir/fonts/$b";
         if $debug {
             note "DEBUG: spec fonts are at path: $f";

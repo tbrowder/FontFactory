@@ -7,13 +7,13 @@ my $debug = 0;
 
 my $os = OS.new;
 
-use FreeFont;
-use FreeFont::Utils;
-use FreeFont::X::FontHashes;
-use FreeFont::Classes;
-use FreeFont::Font::Utils;
+use FontFactory;
+use FontFactory::Utils;
+use FontFactory::X::FontHashes;
+use FontFactory::Classes;
+use FontFactory::Font::Utils;
 
-my $ff = FreeFont.new;
+my $ff = FontFactory.new;
 
 my $f1 = $ff.get-font: "t12d5";
 

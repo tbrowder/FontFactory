@@ -1,16 +1,16 @@
-unit module FreeFont::Utils;
+unit module FontFactory::Utils;
 
 use File::Temp;
 use File::Find;
 use QueryOS;
 use YAMLish;
 
-use FreeFont::X::FontHashes;
-use FreeFont::Resources;
+use FontFactory::X::FontHashes;
+use FontFactory::Resources;
 
-%number = %FreeFont::X::FontHashes::number;
+%number = %FontFactory::X::FontHashes::number;
 
-# Primarily for Windows use to get GNU FreeFont
+# Primarily for Windows use to get GNU FontFactory
 # files. Does the whole
 # process from download to unpacking
 # to installing in the desired
@@ -25,9 +25,9 @@ sub install-gnu-freefont(
     # download and unpack the fonts
     # into the desired directory $dir 
     # (default is the user's
-    # '$HOME/.FreeFont/fonts/'.
+    # '$HOME/.FontFactory/fonts/'.
     unless $dir.defined {
-        $dir = "{%*ENV<HOME>}/.FreeFont/fonts";
+        $dir = "{%*ENV<HOME>}/.FontFactory/fonts";
         mkdir $dir;
     }
     $dir = $*CWD if not $dir.defined;

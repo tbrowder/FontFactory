@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-B<FreeFont> - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes.
+B<FontFactory> - Provides convenience classes to ease GNU FontFactory font handling in different faces and sizes.
 
 B<NOTE>: The intent is for this module 
 to work on Linux, MacOS, and Windows.
@@ -15,8 +15,8 @@ systems, but efforts to do that are underway.
 =head1 SYNOPSIS
 
 =begin code :lang<raku>
-use FreeFont;
-my $ff = FreeFont.new;
+use FontFactory;
+my $ff = FontFactory.new;
 # get a DocFont object for use with PDF documents
 my $f1 = $ff.get-font: "t12d5";
 say $f1.name:    # OUTPUT: «Free Serif␤»
@@ -51,7 +51,7 @@ $ choco install fontconfig # if available
 =end item
 
 =begin item
-The FreeFont font files
+The FontFactory font files
 
 On Debian:
 =begin code
@@ -73,7 +73,7 @@ $ choco install font-freefont
 Alternatively:
 =begin code
 $ choco install wget
-# The 'zef install' process will download and install the FreeFont files.
+# The 'zef install' process will download and install the FontFactory files.
 =end code
 
 =end item
@@ -81,7 +81,7 @@ $ choco install wget
 On other systems the files may be downloaded from
 L<https://ftp.gnu.org/gnu/freefont> and installed in any desired
 place. The paths to the installed files should then be entered
-manually in the C<$HOME/.FreeFont/Config.yml> file which is created
+manually in the C<$HOME/.FontFactory/Config.yml> file which is created
 upon installation.  That file should look like this (replace the '?'
 with the full path to the '.otf' file):
 
@@ -99,32 +99,32 @@ FreeMono.otf            : ?
 FreeMonoBold.otf        : ?
 FreeMonoOblique.otf     : ?
 FreeMonoBoldOblique.otf : ?
-micrenc.ttf             : /home/usr/.FreeFont/fonts/micrenc.ttf
-GnuMICR.otf             : /home/usr/.FreeFont/fonts/GnuMICR.otf
-CMC7.ttf                : /home/usr/.FreeFont/fonts/CMC7.ttf
+micrenc.ttf             : /home/usr/.FontFactory/fonts/micrenc.ttf
+GnuMICR.otf             : /home/usr/.FontFactory/fonts/GnuMICR.otf
+CMC7.ttf                : /home/usr/.FontFactory/fonts/CMC7.ttf
 =end code
 
 =head1 DESCRIPTION
 
-B<FreeFont> is a package that provides easy handling of the GNU
-FreeFont set of OpenType fonts which descended from the classic Adobe
+B<FontFactory> is a package that provides easy handling of the GNU
+FontFactory set of OpenType fonts which descended from the classic Adobe
 Type 1 free fonts shown in Table 2 below. Unlike the original
 Adobe fonts, these fonts also include thousands of Unicode
 characters. The fonts are also among the few, freely-available fonts
 that have Type 1 kerning.
 
 See L<https://www.gnu.org/software/freefont/sources/> for much more
-information on the sources and Unicode coverage of the GNU FreeFont
+information on the sources and Unicode coverage of the GNU FontFactory
 collection.
 
 Note the I<Code> and I<Code2> columns. Each row contains equivalent
-code you may use to select the FreeFont face. You can also use the
+code you may use to select the FontFactory face. You can also use the
 reference number.
 
 =head2 Table 1
 
-=begin table :caption<The GNU FreeFont Collection>
-FreeFont Name          | Code | Code2 | Reference No.
+=begin table :caption<The GNU FontFactory Collection>
+FontFactory Name          | Code | Code2 | Reference No.
 -----------------------+------+--------------------------
 Free Serif             | se   | t     | 1
 Free Serif Bold        | seb  | tb    | 2
@@ -138,9 +138,9 @@ Free Mono              | m    | c     | 9
 Free Mono Bold         | mb   | cb    | 10
 Free Mono Oblique      | mo   | co    | 11
 Free Mono Bold Oblique | mbo  | cbo   | 12
-MICRE                  | mi   | mi    | 13 (not a FreeFont)
-GnuMICR                | mi2  | mi2   | 14 (not a FreeFont)
-CMC7                   | c7   | c7    | 15 (not a FreeFont)
+MICRE                  | mi   | mi    | 13 (not a FontFactory)
+GnuMICR                | mi2  | mi2   | 14 (not a FontFactory)
+CMC7                   | c7   | c7    | 15 (not a FontFactory)
 =end table
 
 =head2 Table 2
@@ -160,17 +160,17 @@ Courier                | m    | c     | 9
 Courier Bold           | mb   | cb    | 10
 Courier Oblique        | mo   | co    | 11
 Courier Bold Oblique   | mbo  | cbo   | 12
-MICRE                  | mi   | mi    | 13 (not a FreeFont)
-GnuMICR                | mi2  | mi2   | 14 (not a FreeFont)
-CMC7                   | c7   | c7    | 15 (not a FreeFont)
+MICRE                  | mi   | mi    | 13 (not a FontFactory)
+GnuMICR                | mi2  | mi2   | 14 (not a FontFactory)
+CMC7                   | c7   | c7    | 15 (not a FontFactory)
 =end table
 
 =head2 Notes on the three additional fonts
 
 Each table above shows three more fonts that are included in the
 '/resources' directory, along with several other files, that will be
-installed into your '$HOME/.FreeFont/fonts' or
-'$HOME/.FreeFont/docs' directories, as appropriate.
+installed into your '$HOME/.FontFactory/fonts' or
+'$HOME/.FontFactory/docs' directories, as appropriate.
 
 The MICR fonts (more formally known as E13B) are designed to produce
 the machine-readable numbers found on bank checks in the US and Canada
@@ -202,7 +202,7 @@ DigitalGraphicLabs.html
 micrenc-license.txt
 =end code
 
-and all three files will be installed in your '$HOME/.FreeFont' directory.
+and all three files will be installed in your '$HOME/.FontFactory' directory.
 
 The license basically says the font is free to use for non-commercial
 purposes. Consult the license carefully if you do intend to use it commercially.
@@ -236,9 +236,9 @@ is in this repository's 'examples' directory):
 #!/usr/bin/env raku
 use PDF::Lite;
 use PDF::Font::Loader :load-font;
-use FreeFont;
-use FreeFont::Classes;
-my $ff = FreeFont.new;
+use FontFactory;
+use FontFactory::Classes;
+my $ff = FontFactory.new;
 my $t12d5 = $ff.get-font: "t12d5"; # FreeSerif (Times), 12.5 points
 my PDF::Lite $pdf .= new;
 $pdf.add-page.text: {

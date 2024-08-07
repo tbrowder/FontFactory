@@ -1,9 +1,7 @@
-[![Actions Status](https://github.com/tbrowder/FreeFont/actions/workflows/linux.yml/badge.svg)](https://github.com/tbrowder/FreeFont/actions) [![Actions Status](https://github.com/tbrowder/FreeFont/actions/workflows/macos.yml/badge.svg)](https://github.com/tbrowder/FreeFont/actions) [![Actions Status](https://github.com/tbrowder/FreeFont/actions/workflows/windows.yml/badge.svg)](https://github.com/tbrowder/FreeFont/actions)
-
 NAME
 ====
 
-**FreeFont** - Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes.
+**FontFactory** - Provides convenience classes to ease GNU FontFactory font handling in different faces and sizes.
 
 **NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS. The package requires use of the 'PDF::Font::Loader' module which has not yet been ported to those two systems, but efforts to do that are underway.
 
@@ -11,8 +9,8 @@ SYNOPSIS
 ========
 
 ```raku
-use FreeFont;
-my $ff = FreeFont.new;
+use FontFactory;
+my $ff = FontFactory.new;
 # get a DocFont object for use with PDF documents
 my $f1 = $ff.get-font: "t12d5";
 say $f1.name:    # OUTPUT: «Free Serif␤»
@@ -41,7 +39,7 @@ The following system packages need to be installed to use all the features of th
 
         $ choco install fontconfig # if available
 
-  * The FreeFont font files
+  * The FontFactory font files
 
     On Debian:
 
@@ -60,9 +58,9 @@ The following system packages need to be installed to use all the features of th
     Alternatively:
 
         $ choco install wget
-        # The 'zef install' process will download and install the FreeFont files.
+        # The 'zef install' process will download and install the FontFactory files.
 
-On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FreeFont/Config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
+On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FontFactory/Config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
 
     # Basename              : Path
     FreeSerif.otf           : ?
@@ -77,29 +75,29 @@ On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freef
     FreeMonoBold.otf        : ?
     FreeMonoOblique.otf     : ?
     FreeMonoBoldOblique.otf : ?
-    micrenc.ttf             : /home/usr/.FreeFont/fonts/micrenc.ttf
-    GnuMICR.otf             : /home/usr/.FreeFont/fonts/GnuMICR.otf
-    CMC7.ttf                : /home/usr/.FreeFont/fonts/CMC7.ttf
+    micrenc.ttf             : /home/usr/.FontFactory/fonts/micrenc.ttf
+    GnuMICR.otf             : /home/usr/.FontFactory/fonts/GnuMICR.otf
+    CMC7.ttf                : /home/usr/.FontFactory/fonts/CMC7.ttf
 
 DESCRIPTION
 ===========
 
-**FreeFont** is a package that provides easy handling of the GNU FreeFont set of OpenType fonts which descended from the classic Adobe Type 1 free fonts shown in Table 2 below. Unlike the original Adobe fonts, these fonts also include thousands of Unicode characters. The fonts are also among the few, freely-available fonts that have Type 1 kerning.
+**FontFactory** is a package that provides easy handling of the GNU FontFactory set of OpenType fonts which descended from the classic Adobe Type 1 free fonts shown in Table 2 below. Unlike the original Adobe fonts, these fonts also include thousands of Unicode characters. The fonts are also among the few, freely-available fonts that have Type 1 kerning.
 
-See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the GNU FreeFont collection.
+See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the GNU FontFactory collection.
 
-Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FreeFont face. You can also use the reference number.
+Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FontFactory face. You can also use the reference number.
 
 Table 1
 -------
 
 <table class="pod-table">
-<caption>The GNU FreeFont Collection</caption>
+<caption>The GNU FontFactory Collection</caption>
 <thead><tr>
-<th>FreeFont Name</th> <th>Code</th> <th>Code2</th> <th>Reference No.</th>
+<th>FontFactory Name</th> <th>Code</th> <th>Code2</th> <th>Reference No.</th>
 </tr></thead>
 <tbody>
-<tr> <td>Free Serif</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Free Serif Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Free Serif Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Free Serif Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Free Sans</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Free Sans Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Free Sans Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Free Sans Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Free Mono</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Free Mono Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Free Mono Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Free Mono Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FreeFont)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FreeFont)</td> </tr> <tr> <td>CMC7</td> <td>c7</td> <td>c7</td> <td>15 (not a FreeFont)</td> </tr>
+<tr> <td>Free Serif</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Free Serif Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Free Serif Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Free Serif Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Free Sans</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Free Sans Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Free Sans Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Free Sans Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Free Mono</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Free Mono Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Free Mono Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Free Mono Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FontFactory)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FontFactory)</td> </tr> <tr> <td>CMC7</td> <td>c7</td> <td>c7</td> <td>15 (not a FontFactory)</td> </tr>
 </tbody>
 </table>
 
@@ -112,14 +110,14 @@ Table 2
 <th>Adobe Type 1 Name</th> <th>Code</th> <th>Code2</th> <th>Reference No.</th>
 </tr></thead>
 <tbody>
-<tr> <td>Times</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Times Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Times Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Times Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Helvetica</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Helvetica Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Helvetica Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Helvetica Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Courier</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Courier Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Courier Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Courier Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FreeFont)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FreeFont)</td> </tr> <tr> <td>CMC7</td> <td>c7</td> <td>c7</td> <td>15 (not a FreeFont)</td> </tr>
+<tr> <td>Times</td> <td>se</td> <td>t</td> <td>1</td> </tr> <tr> <td>Times Bold</td> <td>seb</td> <td>tb</td> <td>2</td> </tr> <tr> <td>Times Italic</td> <td>sei</td> <td>ti</td> <td>3</td> </tr> <tr> <td>Times Bold Italic</td> <td>sebi</td> <td>tbi</td> <td>4</td> </tr> <tr> <td>Helvetica</td> <td>sa</td> <td>h</td> <td>5</td> </tr> <tr> <td>Helvetica Bold</td> <td>sab</td> <td>hb</td> <td>6</td> </tr> <tr> <td>Helvetica Oblique</td> <td>sao</td> <td>ho</td> <td>7</td> </tr> <tr> <td>Helvetica Bold Oblique</td> <td>sabo</td> <td>hbo</td> <td>8</td> </tr> <tr> <td>Courier</td> <td>m</td> <td>c</td> <td>9</td> </tr> <tr> <td>Courier Bold</td> <td>mb</td> <td>cb</td> <td>10</td> </tr> <tr> <td>Courier Oblique</td> <td>mo</td> <td>co</td> <td>11</td> </tr> <tr> <td>Courier Bold Oblique</td> <td>mbo</td> <td>cbo</td> <td>12</td> </tr> <tr> <td>MICRE</td> <td>mi</td> <td>mi</td> <td>13 (not a FontFactory)</td> </tr> <tr> <td>GnuMICR</td> <td>mi2</td> <td>mi2</td> <td>14 (not a FontFactory)</td> </tr> <tr> <td>CMC7</td> <td>c7</td> <td>c7</td> <td>15 (not a FontFactory)</td> </tr>
 </tbody>
 </table>
 
 Notes on the three additional fonts
 -----------------------------------
 
-Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FreeFont/fonts' or '$HOME/.FreeFont/docs' directories, as appropriate.
+Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FontFactory/fonts' or '$HOME/.FontFactory/docs' directories, as appropriate.
 
 The MICR fonts (more formally known as E13B) are designed to produce the machine-readable numbers found on bank checks in the US and Canada and other countries around the world, promarily in Asia.
 
@@ -140,7 +138,7 @@ The two files in single quotes were renamed to:
     DigitalGraphicLabs.html
     micrenc-license.txt
 
-and all three files will be installed in your '$HOME/.FreeFont' directory.
+and all three files will be installed in your '$HOME/.FontFactory' directory.
 
 The license basically says the font is free to use for non-commercial purposes. Consult the license carefully if you do intend to use it commercially.
 
@@ -162,9 +160,9 @@ The `$t12d5` object shown above in the *SYNOPSIS* section is actually a `DocFont
     #!/usr/bin/env raku
     use PDF::Lite;
     use PDF::Font::Loader :load-font;
-    use FreeFont;
-    use FreeFont::Classes;
-    my $ff = FreeFont.new;
+    use FontFactory;
+    use FontFactory::Classes;
+    my $ff = FontFactory.new;
     my $t12d5 = $ff.get-font: "t12d5"; # FreeSerif (Times), 12.5 points
     my PDF::Lite $pdf .= new;
     $pdf.add-page.text: {

@@ -1,15 +1,15 @@
 use Test;
-use FreeFont;
-use FreeFont::BuildUtils;
-use FreeFont::X::FontHashes;
+use FontFactory;
+use FontFactory::BuildUtils;
+use FontFactory::X::FontHashes;
 
-my $ff = FreeFont.new;
+my $ff = FontFactory.new;
 
 my $name = "Free Sans";
 my $f = $ff.get-font: $name, :size(12.0);
 is $f.size, 12.0;
 
-my %n = %FreeFont::X::FontHashes::number;
+my %n = %FontFactory::X::FontHashes::number;
 # TODO add tests
 
 for %n.keys -> $n {

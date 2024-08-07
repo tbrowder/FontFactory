@@ -1,6 +1,6 @@
 #!/usr/bib/env raku
 
-use FreeFont::Utils;
+use FontFactory::Utils;
 
 if not @*ARGS {
     help

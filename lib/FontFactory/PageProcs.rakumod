@@ -1,4 +1,4 @@
-unit module FreeFont::PageProcs;
+unit module FontFactory::PageProcs;
 
 # copied from FontFactory/lib/PageProcs.rakumod; 2024-07-23
 use PDF::API6;

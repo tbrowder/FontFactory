@@ -9,13 +9,13 @@ my $debug = 0;
 
 my $os = OS.new;
 
-use FreeFont;
-use FreeFont::Utils;
-use FreeFont::X::FontHashes;
-use FreeFont::Classes;
+use FontFactory;
+use FontFactory::Utils;
+use FontFactory::X::FontHashes;
+use FontFactory::Classes;
 
 #die "Tom, fix this";
-my $ff = FreeFont.new;
+my $ff = FontFactory.new;
 
 my $n = "FreeSerif";
 my $b = "FreeSerif.otf";

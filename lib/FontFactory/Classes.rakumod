@@ -1,12 +1,12 @@
-unit module FreeFont::Classes;
+unit module FontFactory::Classes;
 
 use Font::FreeType;
 use PDF::Font::Loader :load-font;
 use PDF::Content::FontObj;
 
-use FreeFont::X::FontHashes;
+use FontFactory::X::FontHashes;
 
-%number = %FreeFont::X::FontHashes::number;
+%number = %FontFactory::X::FontHashes::number;
 
 =begin pod
 
@@ -59,7 +59,7 @@ methods to access most of its attributes.
 =end pod
 
 class DocFont is export {
-    # these are provided by FreeFont's
+    # these are provided by FontFactory's
     # sub 'get-font'
     has $.number is required;
     has $.size   is required;
@@ -127,7 +127,7 @@ Short name of the font's license
         my $n = $.number;
         my $lic;
         if 0 < $n < 13 {
-            # Gnu FreeFont fonts
+            # Gnu FontFactory fonts
             $lic = "GNU GPL V3";
         }
         elsif $n == 13 {

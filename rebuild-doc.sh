@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
 
-raku --doc=Markdown lib/FreeFont/Classes.rakumod > DocFontClass.md
+raku --doc=Markdown lib/FontFactory/Classes.rakumod > DocFontClass.md
 

@@ -17,20 +17,20 @@
     "PDF::API6",
     "PDF::Font::Loader:ver<0.8.3>"
   ],
-  "description": "Provides convenience classes to ease GNU FreeFont font handling in different faces and sizes",
+  "description": "Provides convenience classes to ease GNU FontFactory font handling in different faces and sizes",
   "license": "Artistic-2.0",
-  "name": "FreeFont",
+  "name": "FontFactory",
   "perl": "6.d",
   "provides": {
-    "FreeFont": "lib/FreeFont.rakumod",
-    "FreeFont::BuildUtils": "lib/FreeFont/BuildUtils.rakumod",
-    "FreeFont::Classes": "lib/FreeFont/Classes.rakumod",
-    "FreeFont::Config": "lib/FreeFont/Config.rakumod",
-    "FreeFont::Font::Utils": "lib/FreeFont/Font/Utils.rakumod",
-    "FreeFont::PageProcs": "lib/FreeFont/PageProcs.rakumod",
-    "FreeFont::Resources": "lib/FreeFont/Resources.rakumod",
-    "FreeFont::Utils": "lib/FreeFont/Utils.rakumod",
-    "FreeFont::X::FontHashes": "lib/FreeFont/X/FontHashes.rakumod"
+    "FontFactory": "lib/FontFactory.rakumod",
+    "FontFactory::BuildUtils": "lib/FontFactory/BuildUtils.rakumod",
+    "FontFactory::Classes": "lib/FontFactory/Classes.rakumod",
+    "FontFactory::Config": "lib/FontFactory/Config.rakumod",
+    "FontFactory::Font::Utils": "lib/FontFactory/Font/Utils.rakumod",
+    "FontFactory::PageProcs": "lib/FontFactory/PageProcs.rakumod",
+    "FontFactory::Resources": "lib/FontFactory/Resources.rakumod",
+    "FontFactory::Utils": "lib/FontFactory/Utils.rakumod",
+    "FontFactory::X::FontHashes": "lib/FontFactory/X/FontHashes.rakumod"
   },
   "resources": [
     "bin/example.raku",
@@ -46,9 +46,9 @@
     "fonts/GnuMICR.otf",
     "fonts/micrenc.ttf"
   ],
-  "source-url": "https://github.com/tbrowder/FreeFont.git",
+  "source-url": "",
   "tags": [
-    "FreeFont FreeSerif FreeSans FreeMono GNU Font OpenType otf ttf MICRE"
+    "FontFactory FreeSerif FreeSans FreeMono GNU Font OpenType otf ttf MICRE"
   ],
   "test-depends": [
   ],

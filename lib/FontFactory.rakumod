@@ -5,12 +5,12 @@ use PDF::Content;
 
 use QueryOS;
 
-use FreeFont::Classes;
-use FreeFont::Resources;
-use FreeFont::Utils;
-use FreeFont::X::FontHashes;
+use FontFactory::Classes;
+use FontFactory::Resources;
+use FontFactory::Utils;
+use FontFactory::X::FontHashes;
 
-%number = %FreeFont::X::FontHashes::number;
+%number = %FontFactory::X::FontHashes::number;
 
 # Several ways to lookup font faces:
 # User enters one of:
@@ -48,11 +48,11 @@ has %.number; # 1-13 -> subkeys:
 has PDF::Content::FontObj %.fonts; # keep the loaded FontObj by number key
 
 submethod TWEAK {
-    %!code      = %FreeFont::X::FontHashes::code;      # code -> number
-    %!code2     = %FreeFont::X::FontHashes::code2;     # code2 -> number
+    %!code      = %FontFactory::X::FontHashes::code;      # code -> number
+    %!code2     = %FontFactory::X::FontHashes::code2;     # code2 -> number
     # font names, LC, no spaces -> number:
-    %!shortname = %FreeFont::X::FontHashes::shortname;
-    %!number    = %FreeFont::X::FontHashes::number;    # 1-15 -> subkeys:
+    %!shortname = %FontFactory::X::FontHashes::shortname;
+    %!number    = %FontFactory::X::FontHashes::number;    # 1-15 -> subkeys:
     #note "DEBUG: successful TWEAK and exit"; exit;
 }
 

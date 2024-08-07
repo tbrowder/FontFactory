@@ -11,7 +11,7 @@ my $os = OS.new;
 # windows # assumed same as windows
 #   /usr/share/fonts/opentype/freefont/
 
-# Creates file FreeFont::X::FontHashes
+# Creates file FontFactory::X::FontHashes
 # ensure expected files exist
 my $fdir;
 if $os.is-linux {
@@ -35,7 +35,7 @@ if not $fdir.IO.r {
  
 # The output filename:
 my $bnam = "FontHashes";
-my $f = "$*CWD/lib/FreeFont/X/{$bnam}.rakumod";
+my $f = "$*CWD/lib/FontFactory/X/{$bnam}.rakumod";
 my $fh = open $f, :w;
 $fh.print: qq:to/HERE/;
 #==============================
@@ -43,7 +43,7 @@ $fh.print: qq:to/HERE/;
 # CREATED BY /sbin/createhashes
 #==============================
 
-unit module FreeFont::X::{$bnam};
+unit module FontFactory::X::{$bnam};
 
 constant %code is export = %\(
 HERE
@@ -66,7 +66,7 @@ FreeMonoBold.otf
 FreeMonoOblique.otf
 FreeMonoBoldOblique.otf
 # in /resources and will be downloaded
-# into dir: $HOME/.FreeFont/fonts
+# into dir: $HOME/.FontFactory/fonts
 micrenc.ttf
 GnuMICR.otf
 CMC7.ttf
@@ -91,9 +91,9 @@ constant @fontnames =
 "Free Mono Oblique mo co 10 CourierOblique",
 "Free Mono Bold mb cb 11 CourierBold",
 "Free Mono Bold Oblique mbo cbo 12 CourierBoldOblique",
-"micrenc mi mi 13 none",   # not a FreeFont
-"GnuMICR mi2 mi2 14 none", # not a FreeFont
-"CMC7 cm cm 15 none"       # not a FreeFont
+"micrenc mi mi 13 none",   # not a FontFactory
+"GnuMICR mi2 mi2 14 none", # not a FontFactory
+"CMC7 cm cm 15 none"       # not a FontFactory
 ;
 
 my $debug = 0;
@@ -191,9 +191,9 @@ for @fontnames.kv -> $i, $v is copy {
     # We need specicial handling
     # for the paths in the /resources
     # directory. We use their final
-    # path in '$HOME/.FreeFont/fonts'.
-    my $hdir = "{%*ENV<HOME>}/.FreeFont/fonts";
-    # The FreeFont fonts stay in place
+    # path in '$HOME/.FontFactory/fonts'.
+    my $hdir = "{%*ENV<HOME>}/.FontFactory/fonts";
+    # The FontFactory fonts stay in place
     my $path = "$fdir/$basename";
 
     # /resources fonts are placed in $HOME
@@ -210,7 +210,7 @@ for @fontnames.kv -> $i, $v is copy {
     %number{$n}<path>      = $path;
 
     # The PDF font object will be
-    # defined in the FreeFont class
+    # defined in the FontFactory class
     %number{$n}<fontobj>   = 0;
 
 }

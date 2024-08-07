@@ -1,27 +1,27 @@
-unit module FreeFont::BuildUtils;
+unit module FontFactory::BuildUtils;
 
 use PDF::Font::Loader :load-font;
 use Text::Utils :split-line;
 use YAMLish;
 use QueryOS;
 
-use FreeFont::X::FontHashes;
-use FreeFont::Utils;
-use FreeFont::Config;
-use FreeFont::Resources;
+use FontFactory::X::FontHashes;
+use FontFactory::Utils;
+use FontFactory::Config;
+use FontFactory::Resources;
 
 my $os = OS.new;
 
 sub find-freefont(
     $number,
     :$home!,
-    :$dotFreeFont!,
+    :$dotFontFactory!,
     :$debug,
 ) is export {
     # return path to the file
     # use the font basename
     my ($path, $nam);
-    $nam = %FreeFont::X::FontHashes::number{$number}<name>;
+    $nam = %FontFactory::X::FontHashes::number{$number}<name>;
     # we need to add '.otf' or '.ttf'
     # to get the basename
     if $nam.starts-with("M") {
@@ -39,7 +39,7 @@ sub find-freefont(
     # should already have the 15 paths
     # without using sub locate-font.
 
-    my $config = "%*ENV<HOME>/$dotFreeFont/Config.yml";
+    my $config = "%*ENV<HOME>/$dotFontFactory/Config.yml";
     if $config.IO.r {
         # read yml
         my $str  = $config.IO.slurp;
@@ -49,7 +49,7 @@ sub find-freefont(
     else {
         # Make the query to sub
         # locate-font
-        # in module FreeFont::Utils
+        # in module FontFactory::Utils
         $path = locate-font $nam;
     }
 
@@ -58,13 +58,13 @@ sub find-freefont(
 
 sub manage-home-freefont(
     :$home!, 
-    :$dotFreeFont!,
+    :$dotFontFactory!,
     :$debug,
     --> Bool
 ) is export {
     # path to the directory
     # for the config.yml file
-    my $dir = "$home/$dotFreeFont";
+    my $dir = "$home/$dotFontFactory";
     unless $dir.IO.d {
         mkdir $dir or return False;
     }
@@ -73,22 +73,22 @@ sub manage-home-freefont(
 
     #   We create three other
     #     subdirectories:
-    #       .FreeFont/fonts
-    #       .FreeFont/docs
-    #       .FreeFont/bin
-    my $fdir = "$home/$dotFreeFont/fonts";
+    #       .FontFactory/fonts
+    #       .FontFactory/docs
+    #       .FontFactory/bin
+    my $fdir = "$home/$dotFontFactory/fonts";
     mkdir $fdir;
     if not $fdir.IO.d {
         note "ERROR: unable to create dir '$fdir'";
         $res = False;
     }
-    my $ddir = "$home/$dotFreeFont/docs";
+    my $ddir = "$home/$dotFontFactory/docs";
     mkdir $ddir;
     if not $ddir.IO.d {
         note "ERROR: unable to create dir '$ddir'";
         $res = False;
     }
-    my $bdir = "$home/$dotFreeFont/bin";
+    my $bdir = "$home/$dotFontFactory/bin";
     mkdir $bdir;
     if not $bdir.IO.d {
         note "ERROR: unable to create dir '$bdir'";
@@ -96,7 +96,7 @@ sub manage-home-freefont(
     }
 
     # we have to do a couple of things:
-    my $cnf = "$home/$dotFreeFont/Config.yml";
+    my $cnf = "$home/$dotFontFactory/Config.yml";
     if $cnf.IO.e {
         # if it exists, check it
         say "DEBUG: checking existing Config.yml file" if $debug;
@@ -143,7 +143,7 @@ sub manage-home-freefont(
     }
 
     # don't forget the Config.yml file
-    create-config :$home, :$dotFreeFont, :$debug; 
+    create-config :$home, :$dotFontFactory, :$debug; 
 
     # return final status
     $res;
@@ -184,14 +184,14 @@ sub check-config(
 
     # format is ok, check the hash
     # check expected keys
-    my %n = %FreeFont::X::FontHashes::number;
+    my %n = %FontFactory::X::FontHashes::number;
     for %n.keys -> $k { 
         my $bnam = %(%n{$k})<basename>;
         my $expected-path = %(%n{$k})<path>;
         if $tdir and $expected-path.contains("tbrow") {
             # modify expected path
             my $cdir = $*CWD;
-            $expected-path = "$cdir/tdir/FreeFont/fonts/$bnam";
+            $expected-path = "$cdir/tdir/FontFactory/fonts/$bnam";
         }
 
         say "DEBUG: font basename = '$bnam'" if $debug;
@@ -226,7 +226,7 @@ sub check-config(
         note "ERROR: Found $err errors in your Config.yml file.";
         note "  Suggest you do the following:";
         note "    + save a copy of your existing Config.yml file";
-        note "    + delete your '\$HOME/.FreeFont' directory and attempt a reinstallation";
+        note "    + delete your '\$HOME/.FontFactory' directory and attempt a reinstallation";
         note "    + if still unsucessful, please file an issue";
         exit;
     }
@@ -241,9 +241,9 @@ sub locate-font(
     ) is export {
     # this sub is called by
     # sub find-freefont in module
-    # FreeFont::BuildUtils,
+    # FontFactory::BuildUtils,
     # but only if it's not already
-    # in $HOME/.FreeFont/config.yml
+    # in $HOME/.FontFactory/config.yml
 
     # we rely on the systems find
     # comand,

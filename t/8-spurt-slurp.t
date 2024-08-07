@@ -2,7 +2,7 @@ use Test;
 
 use File::Temp;
 
-use FreeFont::Resources;
+use FontFactory::Resources;
 
 my $orig-text = "some text";
 my $tfil = "text.txt";

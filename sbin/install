@@ -2,11 +2,11 @@
 
 use QueryOS;
 
-use FreeFont;
-use FreeFont::BuildUtils;
-use FreeFont::Utils;
-use FreeFont::Resources;
-use FreeFont::Config;
+use FontFactory;
+use FontFactory::BuildUtils;
+use FontFactory::Utils;
+use FontFactory::Resources;
+use FontFactory::Config;
 
 my $debug = 0;
 $debug = 1 if @*ARGS.elems;
@@ -22,14 +22,14 @@ if not $home {
     die "FATAL: Unable to determine a \$HOME directory for the user.";
 }
 
-my $dotFreeFont = '.FreeFont';
+my $dotFontFactory = '.FontFactory';
 
 # need some args to allow testing and
 # installation
 my $tfil = "dev/Build.rakumod";
 if $tfil.IO.e {
     $home = $*CWD; 
-    $dotFreeFont = "tdir/FreeFont";
+    $dotFontFactory = "tdir/FontFactory";
 }
 
 # many files are in /resources:
@@ -45,12 +45,12 @@ if $debug {
 
 # extract the files from /resources and put them
 # in /fonts or /docs
-manage-home-freefont :$home, :$dotFreeFont, :$debug;
+manage-home-freefont :$home, :$dotFontFactory, :$debug;
 
 =begin comment
-my $fdir = "$home/$dotFreeFont";
+my $fdir = "$home/$dotFontFactory";
 
-my $f = "$home/$dotFreeFont/Config.yml";
+my $f = "$home/$dotFontFactory/Config.yml";
 say "DEBUG: config file: '$f'" if $debug;
 
 my $res = False;
@@ -76,7 +76,7 @@ if $debug {
 
 if not $res {
     say "Creating file '$f'...";
-    create-config :$home, :$dotFreeFont, :$debug;
+    create-config :$home, :$dotFontFactory, :$debug;
     # and check again?
     $res = check-config $f, :$debug;
     if $res {
