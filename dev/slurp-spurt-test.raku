@@ -4,8 +4,8 @@ use File::Temp;
 
 use lib "../lib";
 
-use FreeFont::Resources;
-use FreeFont::Font::Utils; # sub bin-cmp
+use FontFactory::Resources;
+use FontFactory::Font::Utils; # sub bin-cmp
 
 my @fils; # defined in BEGIN block
 

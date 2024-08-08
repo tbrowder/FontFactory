@@ -1,4 +1,4 @@
-Finish the String class in FreeFont::Classes
+Finish the String class in FontFactory::Classes
   check proper terminology per Font::FreeType for bearings
     and widths and advances, etc.
 
@@ -95,7 +95,7 @@ Subs to build:
 DONE: Add the MICR font to be installed
 + put in /resources
   - Build.rakumod
-  - install in $HOME/.FreeFont/*
+  - install in $HOME/.FontFactory/*
     (unless it's already there
 + add doc stuff from FFT1
 

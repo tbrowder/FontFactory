@@ -1,7 +1,7 @@
 #!/usr/bin/env raku
 
-use FreeFont;
-use FreeFont::Resources;
+use FontFactory;
+use FontFactory::Resources;
 
 if not @*ARGS {
     print qq:to/HERE/;

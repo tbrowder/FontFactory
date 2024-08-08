@@ -3,7 +3,7 @@ use Test;
 use QueryOS;
 use PDF::Font::Loader;
 
-use FreeFont;
+use FontFactory;
 
 my $debug = 0;
 
@@ -23,7 +23,7 @@ if $os.is-linux {
     is 1, 1, "is Linux";
 }
 
-my $ff = FreeFont.new;
+my $ff = FontFactory.new;
 
 done-testing;
 

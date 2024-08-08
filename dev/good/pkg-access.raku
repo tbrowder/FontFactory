@@ -1,8 +1,8 @@
 #!/usr/bin/env raku
 
 use lib "../lib";
-use FreeFont::X::FontHashes;
+use FontFactory::X::FontHashes;
 
-%code = %FreeFont::X::FontHashes::code;
+%code = %FontFactory::X::FontHashes::code;
 
 say %code.gist;

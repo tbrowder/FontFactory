@@ -8,13 +8,13 @@ use QueryOS;
 my $os = QueryOS.new;
 
 use lib "../lib";
-use FreeFont;
-use FreeFont::Classes;
-use FreeFont::X::FontHashes;
+use FontFactory;
+use FontFactory::Classes;
+use FontFactory::X::FontHashes;
 
-my %n = %FreeFont::X::FontHashes::number;
+my %n = %FontFactory::X::FontHashes::number;
 
-my $ofil = "Gnu-FreeFont-samples.pdf";
+my $ofil = "Gnu-FontFactory-samples.pdf";
 
 my $pdf = PDF::Lite.new;
 
@@ -132,7 +132,7 @@ sub make-page(
         my $h = $page.media-box[2] - $page.media-box[0];
         $cx = $w * 0.5;
 
-        # get the font's values from FreeFont
+        # get the font's values from FontFactory
         my ($leading, $height, $dh);
         $leading = $height = $dh = $sm.height; #1.3 * $font-size;
 

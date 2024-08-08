@@ -1,9 +1,9 @@
 #!/usr/bin/env raku
 use PDF::Lite;
 use PDF::Font::Loader :load-font;
-use FreeFont;
-use FreeFont::Classes;
-my $ff = FreeFont.new;
+use FontFactory;
+use FontFactory::Classes;
+my $ff = FontFactory.new;
 my $t12d5 = $ff.get-font: "t12d5"; # FreeSerif (Times), 12.5 points
 my PDF::Lite $pdf .= new;
 $pdf.add-page.text: {

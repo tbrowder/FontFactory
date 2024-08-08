@@ -91,9 +91,9 @@ constant @fontnames =
 "Free Mono Oblique mo co 10 CourierOblique",
 "Free Mono Bold mb cb 11 CourierBold",
 "Free Mono Bold Oblique mbo cbo 12 CourierBoldOblique",
-"micrenc mi mi 13 none",   # not a FontFactory
-"GnuMICR mi2 mi2 14 none", # not a FontFactory
-"CMC7 cm cm 15 none"       # not a FontFactory
+"micrenc mi mi 13 none",   # not available in a package
+"GnuMICR mi2 mi2 14 none", # not available in a package
+"CMC7 cm cm 15 none"       # not available in a package
 ;
 
 my $debug = 0;

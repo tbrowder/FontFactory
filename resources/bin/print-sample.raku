@@ -22,11 +22,11 @@ my @f3cp = <cmc7    20 30 31 32 33 34 35 36 37 38 39 41 42 43 44 61 62 63 64>;
 # ocr dash
 # ocr customer account number
 
-use FreeFont;
-use FreeFont::Classes;
-use FreeFont::X::FontHashes;
-use FreeFont::Utils;
-use FreeFont::Font::Utils; # <== to become its own module repo
+use FontFactory;
+use FontFactory::Classes;
+use FontFactory::X::FontHashes;
+use FontFactory::Utils;
+use FontFactory::Font::Utils; # <== to become its own module repo
 
 constant $chars1 = <0123456789>;
 constant $chars2 = <@#$&*()'l"%-+=/;:,.,!?;>;
@@ -34,9 +34,9 @@ constant $chars3 = <ABCCEFGHIJKLMNOPQRSTUVWXYZ>;
 constant $chars4 = <abcdefghijklmnopqrstuvwxyz>;
 my $text = "$chars1 $chars2 $chars3 $chars4";
 
-my $ff = FreeFont.new;
+my $ff = FontFactory.new;
 
-my %h = %FreeFont::X::FontHashes::number;
+my %h = %FontFactory::X::FontHashes::number;
 
 my PDF::Lite $pdf .= new;
 my $page = $pdf.add-page;
@@ -55,7 +55,7 @@ $x = 0.5*11*72;
 # in the top margin for the title
 $y = 7.9*72;
 my $Tfont = $ff.get-font: 3, 15;
-my $page-title = "FreeFont GNU and MICRE Font Samples";
+my $page-title = "FontFactory GNU and MICRE Font Samples";
 write-line $page, :font($Tfont), :text($page-title), :align<center>, :$x, :$y, :$debug;
 
 # PAGE SUBTITLE =================

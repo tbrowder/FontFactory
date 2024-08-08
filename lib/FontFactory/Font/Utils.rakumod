@@ -1,4 +1,4 @@
-unit module FreeFont::Font::Utils; # <== to become a separate module repo
+unit module FontFactory::Font::Utils; # <== to become a separate module repo
 
 use QueryOS;
 use YAMLish;

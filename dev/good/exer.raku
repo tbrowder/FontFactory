@@ -1,6 +1,6 @@
 #!/usr/bin/env raku
 
 use lib "../lib";
-use FreeFont::Utils;
+use FontFactory::Utils;
 
 install-gnu-freefont :dir('.')
