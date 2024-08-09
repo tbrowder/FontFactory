@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/tbrowder/FontFactory/workflows/linux/badge.svg)](https://github.com/tbrowder/FontFactory/actions) [![Actions Status](https://github.com/tbrowder/FontFactory/workflows/macos/badge.svg)](https://github.com/tbrowder/FontFactory/actions) [![Actions Status](https://github.com/tbrowder/FontFactory/workflows/windows/badge.svg)](https://github.com/tbrowder/FontFactory/actions)
+
 NAME
 ====
 

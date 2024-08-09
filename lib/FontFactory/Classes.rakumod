@@ -17,6 +17,7 @@ metrics for a string set with a given font
 at a given size:
 
 =begin code
+class String is export {
 =end code
 
 =end pod

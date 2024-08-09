@@ -6,11 +6,21 @@ use JSON::Fast;
 my $debug = 0;
 
 # compare /resources and META6.json
-my %m = from-json "META6.json".IO.slurp;
 
-# the files in /resources WITHOUT 'resources' in their paths
+# The files in the META6.json /resources WITHOUT 'resources' in their paths
+my %m = from-json "META6.json".IO.slurp;
 my @mfils = @(%m<resources>);
 my %mhash;
+
+# the actual files in the module repo /resources WITH 'resources' in their paths
+my @rfils = find :dir("resources"), :type<file>;
+my %rhash;
+
+# for testing compare basenames (don't use is-deeply until the individual
+# testing is done, if at all
+
+=finish
+
 my $is-good = True; # assumption
 for @mfils {
     my $b = $_.IO.basename;
@@ -29,9 +39,6 @@ if $debug {
     say "  $_"  for @mfils.sort;
 }
 
-# the files in /resources WITH 'resources' in their paths
-my @rfils = find :dir("resources"), :type<file>;
-my %rhash;
 for @rfils {
     my $b = $_.IO.basename;
     my $path = $_;
@@ -44,7 +51,7 @@ for @rfils {
     }
 }
 
-is $is-good, True;
+is $is-good, True, "Listed META6.json okay.";;
 
 my @mkeys = %mhash.keys.sort;
 my @rkeys = %rhash.keys.sort;

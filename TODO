@@ -1,3 +1,9 @@
+Add new FontFactory repo on GitHub
+
+Use some code from FontFactory-old
+
+Fix creation of ~/.FontFactory: contents of /bin and /doc are wrong
+
 Finish the String class in FontFactory::Classes
   check proper terminology per Font::FreeType for bearings
     and widths and advances, etc.

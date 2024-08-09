@@ -46,7 +46,7 @@
     "fonts/GnuMICR.otf",
     "fonts/micrenc.ttf"
   ],
-  "source-url": "",
+  "source-url": "https://github.com/tbrowder/FontFactory.git",
   "tags": [
     "FontFactory FreeSerif FreeSans FreeMono GNU Font OpenType otf ttf MICRE"
   ],
