@@ -1,4 +1,8 @@
-Add new FontFactory repo on GitHub
+Test SYNOPSIS for accuracy before release
+ + also test install on mac and win
+
+
+DONE: Add new FontFactory repo on GitHub
 
 Use some code from FontFactory-old
 

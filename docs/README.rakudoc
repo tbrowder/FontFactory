@@ -2,15 +2,14 @@
 
 =head1 NAME
 
-B<FontFactory> - Provides convenience classes to ease GNU FontFactory font handling in different faces and sizes.
+B<FontFactory> - Provides convenience classes to ease OpenType and TrueType
+font handling in different faces and sizes.
 
 B<NOTE>: The intent is for this module 
 to work on Linux, MacOS, and Windows.
 Please file an issue if you need it on
-your OS.
-The package requires use of the 'PDF::Font::Loader' 
-module which has not yet been ported to those two
-systems, but efforts to do that are underway.
+your OS.  The package requires use of the 'PDF::Font::Loader:ver<0.8.7>' 
+which has recently been ported to those two systems.
 
 =head1 SYNOPSIS
 
@@ -64,16 +63,8 @@ $ brew install --cask font-freefont
 =end code
 
 On Windows:
-
-If available:
 =begin code
 $ choco install font-freefont 
-=end code
-
-Alternatively:
-=begin code
-$ choco install wget
-# The 'zef install' process will download and install the FontFactory files.
 =end code
 
 =end item
@@ -81,44 +72,55 @@ $ choco install wget
 On other systems the files may be downloaded from
 L<https://ftp.gnu.org/gnu/freefont> and installed in any desired
 place. The paths to the installed files should then be entered
-manually in the C<$HOME/.FontFactory/Config.yml> file which is created
-upon installation.  That file should look like this (replace the '?'
-with the full path to the '.otf' file):
+manually in the C<$HOME/.FontFactory/Config> file which is created
+upon installation.  That file should look like the following. Note
+the only critical parts are the first and last entries on a line. The
+first is a number that must be unique in the list, and any
+entry you make must be greater than 15. The last item on a line is 
+the path to the font file on your system.
+
+The I<code> entries are optional but can be convenient for you. If
+used, the entry B<must> be unique in that column. If you use only
+one code, it is used as a 'Code' entry. Note the file is checked
+each time you use this module, and any invalid entry will cause an error.
+
+The file will alse be checked upon any module update, and existng valid
+entries will not be modified.
 
 =begin code
-# Basename              : Path
-FreeSerif.otf           : ?
-FreeSerifBold.otf       : ?
-FreeSerifItalic.otf     : ?
-FreeSerifBoldItalic.otf : ?
-FreeSans.otf            : ?
-FreeSansBold.otf        : ?
-FreeSansOblique.otf     : ?
-FreeSansBoldOblique.otf : ?
-FreeMono.otf            : ?
-FreeMonoBold.otf        : ?
-FreeMonoOblique.otf     : ?
-FreeMonoBoldOblique.otf : ?
-micrenc.ttf             : /home/usr/.FontFactory/fonts/micrenc.ttf
-GnuMICR.otf             : /home/usr/.FontFactory/fonts/GnuMICR.otf
-CMC7.ttf                : /home/usr/.FontFactory/fonts/CMC7.ttf
+# No. Code Code2 Path 
+1     ?    ?     <dir>/FreeSerif.otf
+2                <dir>/FreeSerifBold.otf       
+3                <dir>/FreeSerifItalic.otf    
+4                <dir>/FreeSerifBoldItalic.otf
+5                <dir>/FreeSans.otf          
+6                <dir>/FreeSansBold.otf        
+7                <dir>/FreeSansOblique.otf    
+8                <dir>/FreeSansBoldOblique.otf
+9                <dir>/FreeMono.otf          
+10               <dir>/FreeMonoBold.otf     
+11               <dir>/FreeMonoOblique.otf 
+12               <dir>/FreeMonoBoldOblique.otf 
+13               $HOME/.FontFactory/fonts/micrenc.ttf
+14               $HOME/.FontFactory/fonts/GnuMICR.otf
+15               $HOME/.FontFactory/fonts/CMC7.ttf
 =end code
 
 =head1 DESCRIPTION
 
-B<FontFactory> is a package that provides easy handling of the GNU
-FontFactory set of OpenType fonts which descended from the classic Adobe
+B<FontFactory> is a package that provides easy handling of the
+set of GNU FreeFont OpenType fonts which descended from the classic Adobe
 Type 1 free fonts shown in Table 2 below. Unlike the original
 Adobe fonts, these fonts also include thousands of Unicode
 characters. The fonts are also among the few, freely-available fonts
 that have Type 1 kerning.
 
 See L<https://www.gnu.org/software/freefont/sources/> for much more
-information on the sources and Unicode coverage of the GNU FontFactory
-collection.
+information on the sources and Unicode coverage of the FontFactory
+GNU FreeFonts collection.
 
 Note the I<Code> and I<Code2> columns. Each row contains equivalent
-code you may use to select the FontFactory face. You can also use the
+code you may use to select the FreeFont face. You can also use the
 reference number.
 
 =head2 Table 1
@@ -209,7 +211,7 @@ purposes. Consult the license carefully if you do intend to use it commercially.
 
 =head3 GnuMICR
 
-This is a Gnu version of the MICRE font face, in OpenType format
+This is a GNU version of the MICRE font face, in OpenType format
 ('.otf'), which I<can> be used commercially. See the GNU license in
 the I<COPYING.txt> file in the '/resources' directory.
 
@@ -290,7 +292,7 @@ Tom Browder <tbrowder@acm.org>
 =head1 Summary of FONTS COPYRIGHT and LICENSE
 
 =begin item
-Gnu Free Fonts - GNU GENERAL PUBLIC LICENSE Version 3
+GNU FreeFonts - GNU GENERAL PUBLIC LICENSE Version 3
 
 See I</resources/GPL-VERSION3.txt> and more information at
 L<https://www.gnu.org/software/freefont/>.

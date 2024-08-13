@@ -3,9 +3,9 @@
 NAME
 ====
 
-**FontFactory** - Provides convenience classes to ease GNU FontFactory font handling in different faces and sizes.
+**FontFactory** - Provides convenience classes to ease OpenType and TrueType font handling in different faces and sizes.
 
-**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS. The package requires use of the 'PDF::Font::Loader' module which has not yet been ported to those two systems, but efforts to do that are underway.
+**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS. The package requires use of the 'PDF::Font::Loader:ver<0.8.7>' which has recently been ported to those two systems.
 
 SYNOPSIS
 ========
@@ -53,24 +53,17 @@ The following system packages need to be installed to use all the features of th
 
     On Windows:
 
-    If available:
-
         $ choco install font-freefont
 
-    Alternatively:
+On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FontFactory/Config` file which is created upon installation. That file should look like this:
 
-        $ choco install wget
-        # The 'zef install' process will download and install the FontFactory files.
-
-On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FontFactory/Config.yml` file which is created upon installation. That file should look like this (replace the '?' with the full path to the '.otf' file):
-
-    # Basename              : Path
-    FreeSerif.otf           : ?
-    FreeSerifBold.otf       : ?
-    FreeSerifItalic.otf     : ?
-    FreeSerifBoldItalic.otf : ?
-    FreeSans.otf            : ?
-    FreeSansBold.otf        : ?
+    # No. Code Code2 Path 
+    1     z    z     <dir>//FreeSerif.otf           : ?
+    2 FreeSerifBold.otf       : ?
+    3 FreeSerifItalic.otf     : ?
+    4 FreeSerifBoldItalic.otf : ?
+    5 FreeSans.otf            : ?
+    6 FreeSansBold.otf        : ?
     FreeSansOblique.otf     : ?
     FreeSansBoldOblique.otf : ?
     FreeMono.otf            : ?
@@ -84,11 +77,11 @@ On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freef
 DESCRIPTION
 ===========
 
-**FontFactory** is a package that provides easy handling of the GNU FontFactory set of OpenType fonts which descended from the classic Adobe Type 1 free fonts shown in Table 2 below. Unlike the original Adobe fonts, these fonts also include thousands of Unicode characters. The fonts are also among the few, freely-available fonts that have Type 1 kerning.
+**FontFactory** is a package that provides easy handling of the set of GNU FreeFont OpenType fonts which descended from the classic Adobe Type 1 free fonts shown in Table 2 below. Unlike the original Adobe fonts, these fonts also include thousands of Unicode characters. The fonts are also among the few, freely-available fonts that have Type 1 kerning.
 
-See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the GNU FontFactory collection.
+See [https://www.gnu.org/software/freefont/sources/](https://www.gnu.org/software/freefont/sources/) for much more information on the sources and Unicode coverage of the FontFactory GNU FreeFonts collection.
 
-Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FontFactory face. You can also use the reference number.
+Note the *Code* and *Code2* columns. Each row contains equivalent code you may use to select the FreeFont face. You can also use the reference number.
 
 Table 1
 -------
@@ -146,7 +139,7 @@ The license basically says the font is free to use for non-commercial purposes. 
 
 ### GnuMICR
 
-This is a Gnu version of the MICRE font face, in OpenType format ('.otf'), which *can* be used commercially. See the GNU license in the *COPYING.txt* file in the '/resources' directory.
+This is a GNU version of the MICRE font face, in OpenType format ('.otf'), which *can* be used commercially. See the GNU license in the *COPYING.txt* file in the '/resources' directory.
 
 See many more details and supporting files at the author's site at [](https://sandeen.net/GnuMICR).
 
@@ -216,7 +209,7 @@ Tom Browder <tbrowder@acm.org>
 Summary of FONTS COPYRIGHT and LICENSE
 ======================================
 
-  * Gnu Free Fonts - GNU GENERAL PUBLIC LICENSE Version 3
+  * GNU FreeFonts - GNU GENERAL PUBLIC LICENSE Version 3
 
     See */resources/GPL-VERSION3.txt* and more information at [https://www.gnu.org/software/freefont/](https://www.gnu.org/software/freefont/).
 

@@ -8,7 +8,7 @@ my $os = OS.new;
 #   /usr/share/fonts/opentype/freefont/
 # macos
 #   /opt/homebrew/Caskroom/font-freefont/20120503/freefont-20120503/
-# windows # assumed same as windows
+# windows 
 #   /usr/share/fonts/opentype/freefont/
 
 # Creates file FontFactory::X::FontHashes
