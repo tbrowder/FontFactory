@@ -23,14 +23,16 @@
   "perl": "6.d",
   "provides": {
     "FontFactory": "lib/FontFactory.rakumod",
+    "FontFactory::Args": "lib/FontFactory/Args.rakumod",
     "FontFactory::BuildUtils": "lib/FontFactory/BuildUtils.rakumod",
-    "FontFactory::Classes": "lib/FontFactory/Classes.rakumod",
     "FontFactory::Config": "lib/FontFactory/Config.rakumod",
-    "FontFactory::Font::Utils": "lib/FontFactory/Font/Utils.rakumod",
+    "FontFactory::FontClasses": "lib/FontFactory/FontClasses.rakumod",
+    "FontFactory::FontUtils": "lib/FontFactory/FontUtils.rakumod",
+    "FontFactory::OtherClasses": "lib/FontFactory/OtherClasses.rakumod",
     "FontFactory::PageProcs": "lib/FontFactory/PageProcs.rakumod",
+    "FontFactory::PodUtils": "lib/FontFactory/PodUtils.rakumod",
     "FontFactory::Resources": "lib/FontFactory/Resources.rakumod",
-    "FontFactory::Utils": "lib/FontFactory/Utils.rakumod",
-    "FontFactory::X::FontHashes": "lib/FontFactory/X/FontHashes.rakumod"
+    "FontFactory::Utils": "lib/FontFactory/Utils.rakumod"
   },
   "resources": [
     "bin/example.raku",

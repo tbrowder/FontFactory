@@ -55,24 +55,28 @@ The following system packages need to be installed to use all the features of th
 
         $ choco install font-freefont
 
-On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FontFactory/Config` file which is created upon installation. That file should look like this:
+On other systems the files may be downloaded from [https://ftp.gnu.org/gnu/freefont](https://ftp.gnu.org/gnu/freefont) and installed in any desired place. The paths to the installed files should then be entered manually in the `$HOME/.FontFactory/Config` file which is created upon installation. That file should look like the following. Note the only critical parts are the first and last entries on a line. The first is a number that must be unique in the list, and any entry you make must be greater than 15. The last item on a line is the path to the font file on your system.
 
-    # No. Code Code2 Path 
-    1     z    z     <dir>//FreeSerif.otf           : ?
-    2 FreeSerifBold.otf       : ?
-    3 FreeSerifItalic.otf     : ?
-    4 FreeSerifBoldItalic.otf : ?
-    5 FreeSans.otf            : ?
-    6 FreeSansBold.otf        : ?
-    FreeSansOblique.otf     : ?
-    FreeSansBoldOblique.otf : ?
-    FreeMono.otf            : ?
-    FreeMonoBold.otf        : ?
-    FreeMonoOblique.otf     : ?
-    FreeMonoBoldOblique.otf : ?
-    micrenc.ttf             : /home/usr/.FontFactory/fonts/micrenc.ttf
-    GnuMICR.otf             : /home/usr/.FontFactory/fonts/GnuMICR.otf
-    CMC7.ttf                : /home/usr/.FontFactory/fonts/CMC7.ttf
+The *Code* and *Code2* entries are optional but can be convenient for you. If used, the entry **must** be unique in that column. If you use only one code, it is used as a 'Code' entry. Note the file is checked each time you use this module, and any invalid entry will cause an error. In addition, you may use commas instead of spaces to separate entries on a line.
+
+The file will alse be checked upon any module update, and existng valid entries will not be modified.
+
+    # No. Code Code2 Path
+    1     ?    ?     <dir>/FreeSerif.otf
+    2                <dir>/FreeSerifBold.otf
+    3                <dir>/FreeSerifItalic.otf
+    4                <dir>/FreeSerifBoldItalic.otf
+    5                <dir>/FreeSans.otf
+    6                <dir>/FreeSansBold.otf
+    7                <dir>/FreeSansOblique.otf
+    8                <dir>/FreeSansBoldOblique.otf
+    9                <dir>/FreeMono.otf
+    10               <dir>/FreeMonoBold.otf
+    11               <dir>/FreeMonoOblique.otf
+    12               <dir>/FreeMonoBoldOblique.otf
+    13               $HOME/.FontFactory/fonts/micrenc.ttf
+    14               $HOME/.FontFactory/fonts/GnuMICR.otf
+    15               $HOME/.FontFactory/fonts/CMC7.ttf
 
 DESCRIPTION
 ===========

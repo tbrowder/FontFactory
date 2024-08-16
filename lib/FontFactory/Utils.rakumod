@@ -5,9 +5,10 @@ use File::Find;
 use QueryOS;
 use YAMLish;
 
-use FontFactory::X::FontHashes;
+#use FontFactory::X::FontHashes;
 use FontFactory::Resources;
 
+=begin comment
 %number = %FontFactory::X::FontHashes::number;
 
 # Primarily for Windows use to get GNU FontFactory
@@ -93,6 +94,7 @@ sub install-gnu-freefont(
         copy $bname, $dir;
     }
 }
+=end comment
 
 sub help is export {
     print qq:to/HERE/;

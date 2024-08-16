@@ -1,52 +1,72 @@
-unit module FontFactory::Classes;
+unit module FontFactory::FontClasses;
 
 use Font::FreeType;
 use PDF::Font::Loader :load-font;
 use PDF::Content::FontObj;
 
-use FontFactory::X::FontHashes;
+use FontFactory::Config;
 
-%number = %FontFactory::X::FontHashes::number;
+#  # move to FontClasses:
+# Translate the default list to the Config format:
+# 1 to 6 fields:  all are used for the default fonts
+# 1 to 6 fields:  1, 2, and 6 are mandatory for any user-added fonts
+#   and fields 3, 4, and 5 are optional
+#   if there are less than 6 fields, then the last must be a valid font path
+#   if there are more than 3 fields, the last is the path, and the remainder
+#   are taken to be in order Code, Code2, some alternate name
+# all values in the first field must be unique integers > 1
+#   and greater than 15 for user-added fonts
+# all values in the last field must be a valid OpenType or TrueType font path
+# all values in fields 2, 3, and 4 must be unique Raku strings (case-sensitive)
+#   Number is in order listed in
+#   The Red Book, Appendix E.1
+# integer Full-name  Code  Code2  alias path (path depends on OS)
+class FontClass is export {
+    has UInt $.number is required;     # field 1
+    # fullname may have spaces; the
+    # default fonts' fullname has
+    # hyphens which are removed in TWEAK
+    has Str  $.fullname is required;   # field 2
+    has Str  $.code = "";              # field 3
+    has Str  $.code2 = "";             # field 4
+    has Str  $.alias = "";             # field 5
+    has IO::Path:D $.path is required; # field 6
 
-=begin pod
+    # Derived attributes
+    has $.shortname; # lower-case, no spaces, no suffix
+    has $.type;      # Open or TrueType
+    has $.basename;
 
-=head1 Class String
-
-Class B<String> provides all the scaled size
-metrics for a string set with a given font
-at a given size:
-
-=begin code
-class String is export {
-=end code
-
-=end pod
-
-class String is export {
-    #== required
-    has $.text           is required;
-    has $.font           is required;
-    has $.size           is required;
-    #== defaults
-    has $.kern           = True;
-    has $.ligatures      = True;
-    has $.underline      = False;
-    has $.strike-through = False;
-    has $.overline       = False;
-    #== calculated
-    has $.stringwidth    is rw;
-    has $.top-bearing    is rw;
-    has $.left-bearing   is rw;
-    has $.bottom-bearing is rw;
-    has $.right-bearing  is rw;
-    has $.right-advance  is rw;
-    has @.bbox           is rw;
-  
-    method check {
-        my $err = 0;
-        ++$err if not defined $!stringwidth;
+    submethod TWEAK {
+        if $!number < 16 {
+            $!fullname ~~ s:g/'-'/ /;
+        }
+        $!shortname = $!fullname.lc;
+        $!shortname ~~ s:g/'-'/ /;
+        $!basename = $!path.IO.basename;
+        if $!path ~~ /:i '.' otf $/ {
+            $!type = 'OpenType';
+        }
+        elsif $!path ~~ /:i '.' ttf $/ {
+            $!type = 'TrueType';
+        }
+        else {
+            die "FATAL: Unknown font type with basename '$!basename'";
+        }
     }
 }
+
+role DocRole {
+    has UInt $.number;
+    has Numeric $.size is required;
+}
+
+
+=begin comment
+class DocFont is FontClass is DocRole {
+    has $.face;
+}
+=end comment
 
 =begin pod
 
@@ -59,6 +79,11 @@ methods to access most of its attributes.
 
 =end pod
 
+class DocFont is FontClass is DocRole is export {
+
+}
+
+=begin comment
 class DocFont is export {
     # these are provided by FontFactory's
     # sub 'get-font'
@@ -67,37 +92,33 @@ class DocFont is export {
     # the font object from PDF::Font::Loader's load-font :file($path)
     has $.font   is required; #= this is a loaded font, i.e., a FontObj
 
-    # remainder are generated in TWEAK
-    #   without extension
-    has $.fullname;  # full name with 
-                     # spaces
-    has $.name;      # full with no 
-                     # spaces
-    has $.shortname; # name.lc
-
-    has $.alias; # full Type 1 name
-    has $.code;
-    has $.code2;
+    # also required now and provided by FontFactory
+    has $.fullname is required;  # full name with spaces
+    has $.name is required;      # full with no spaces
+    has $.shortname is required; # name.lc
+    has $.alias is required;     # full Type 1 name
+    has $.code is required;
+    has $.code2 is required;
     #   with file extension
-    has $.basename;  # name.suffix
-    has $.path;  
+    has $.basename is required;  # name.suffix
+    has $.path is required;
 
     #   other attrs
-    has $.weight; # Normal, Bold
-    has $.slant;  # Italic, Oblique
+    has $.weight is required; # Normal, Bold
+    has $.slant is required;  # Italic, Oblique
 
     # attributes from FreeType
     has $.face;
 
     submethod TWEAK {
 
+        =begin comment
         my $n = $!number // 1;
-
         # generated in TWEAK using %number
         #   without extension
-        $!fullname  = %number{$n}<fullname>;  # full name with 
+        $!fullname  = %number{$n}<fullname>;  # full name with
                                               # spaces
-        $!name      = %number{$n}<name>;      # full with no 
+        $!name      = %number{$n}<name>;      # full with no
                                               # spaces
         $!shortname = %number{$n}<shortname>; # name.lc
 
@@ -106,17 +127,22 @@ class DocFont is export {
         $!code2     = %number{$n}<code2>;
         #   with file extension
         $!basename  = %number{$n}<basename>;   # name.otf
-        $!path      = %number{$n}<path>;       
+        $!path      = %number{$n}<path>;
         #   other attrs
         $!weight    = %number{$n}<weight>;
         $!slant     = %number{$n}<slant>;
+        =end comment
 
         $!face = Font::FreeType.new.face: $!path;
         $!face.set-font-size: $!size;
     }
+} # temp end, rest is at bottom
+=end comment
+
+=finish
 
 =begin pod
-=head2 Overall font attributes 
+=head2 Overall font attributes
 
 =head3 license
 
@@ -143,7 +169,7 @@ Short name of the font's license
         else {
             die "FATAL: Unexpected font number $n";
         }
-   
+
         $lic
     } # end of method def
 
@@ -155,8 +181,8 @@ Short name of the font's license
 
 Scaled maximum height above the baseline of all the font's glyphs
 =end pod
-    method ascender() { 
-        self.face.ascender 
+    method ascender() {
+        self.face.ascender
     }
 
 =begin pod
@@ -165,8 +191,8 @@ Scaled maximum height above the baseline of all the font's glyphs
 Scaled depth below the baseline of all the font's glyphs
 (usually negative)
 =end pod
-    method descender() { 
-        self.face.descender 
+    method descender() {
+        self.face.descender
     }
 
 =begin pod
@@ -174,8 +200,8 @@ Scaled depth below the baseline of all the font's glyphs
 
 The family this font claims to be from
 =end pod
-    method family-name() { 
-        self.face.family-name 
+    method family-name() {
+        self.face.family-name
     }
 
 =begin pod
@@ -183,7 +209,7 @@ The family this font claims to be from
 
 Scaled recommended distance between baselines
 =end pod
-    method height() { 
+    method height() {
         self.face.height
     }
 
@@ -249,10 +275,10 @@ True if the font contains reliable PostSript glyph names
     }
 
 =begin pod
-=head3 num-glyphs() 
+=head3 num-glyphs()
 
 =end pod
-    method num-glyphs() { 
+    method num-glyphs() {
         self.face.num-glyphs
     }
 
@@ -327,14 +353,14 @@ and passes Font::FreeType::Glyph objects.
     }
 
 =begin pod
-=head3 method max-advance-width() 
+=head3 method max-advance-width()
 
 =end pod
     method max-advance-width() {
     }
 
 =begin pod
-=head3 method max-advance-height() 
+=head3 method max-advance-height()
 
 =end pod
     method max-advance-height() {
@@ -342,7 +368,7 @@ and passes Font::FreeType::Glyph objects.
     }
 
 =begin pod
-=head3 method bbox() 
+=head3 method bbox()
 
 =end pod
     method bbox() {
@@ -397,24 +423,23 @@ and passes Font::FreeType::Glyph objects.
 
     # derived methods by iteration over glyphs in a string
     # This should be a class instance of a String with all
-    # its attributes calculated. But threading may be a 
+    # its attributes calculated. But threading may be a
     # problem.
     method string(
-        Str:D $text, 
-        :$kern, 
-        :$ligatures, 
+        Str:D $text,
+        :$kern,
+        :$ligatures,
         :$debug,
-        --> String 
+        --> String
         ) {
-        my $s = String.new: 
+        my $s = String.new:
         self.face.for-glyphs: $text, -> Font::FreeType::Glyph $g {
             # based on code from the example in David's Glyph doc
             my $name = $g.name;
             # ... collect all the attrs for the string
-            
+
         }
         $s
     }
 
 } # end of class DocFont definition
-

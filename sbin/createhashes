@@ -33,6 +33,8 @@ if not $fdir.IO.r {
     die "FATAL: Expected font file directory is not readable."
 }
  
+=begin comment
+
 # The output filename:
 my $bnam = "FontHashes";
 my $f = "$*CWD/lib/FontFactory/X/{$bnam}.rakumod";
@@ -47,6 +49,7 @@ unit module FontFactory::X::{$bnam};
 
 constant %code is export = %\(
 HERE
+=end comment
 
 =begin comment
 # on Debian
@@ -243,6 +246,7 @@ for %number.keys.sort({$^a <=> $^b}) {
 # the hashes are assembled, write all
 # to the new module
 
+=begin comment
 my $n;
 
 for %code.sort(*.keys) {
@@ -316,3 +320,5 @@ $fh.print: q:to/HERE/;
 HERE
 
 $fh.close;
+=end comment
+

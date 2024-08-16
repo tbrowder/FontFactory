@@ -5,7 +5,7 @@ use Text::Utils :split-line;
 use YAMLish;
 use QueryOS;
 
-use FontFactory::X::FontHashes;
+#use FontFactory::X::FontHashes;
 use FontFactory::Utils;
 use FontFactory::Config;
 use FontFactory::Resources;
@@ -21,7 +21,10 @@ sub find-freefont(
     # return path to the file
     # use the font basename
     my ($path, $nam);
-    $nam = %FontFactory::X::FontHashes::number{$number}<name>;
+    =begin comment
+    my %number = get-fonts-hash;
+    #$nam = %FontFactory::X::FontHashes::number{$number}<name>;
+    $nam = %number{$number}<name>;
     # we need to add '.otf' or '.ttf'
     # to get the basename
     if $nam.starts-with("M") {
@@ -39,7 +42,7 @@ sub find-freefont(
     # should already have the 15 paths
     # without using sub locate-font.
 
-    my $config = "%*ENV<HOME>/$dotFontFactory/Config.yml";
+    my $config = "%*ENV<HOME>/$dotFontFactory/Config";
     if $config.IO.r {
         # read yml
         my $str  = $config.IO.slurp;
@@ -52,12 +55,14 @@ sub find-freefont(
         # in module FontFactory::Utils
         $path = locate-font $nam;
     }
+    =end comment
 
     $path
 } # sub find-freefont(
 
+=begin comment
 sub manage-home-freefont(
-    :$home!, 
+    :$home!,
     :$dotFontFactory!,
     :$debug,
     --> Bool
@@ -112,7 +117,7 @@ sub manage-home-freefont(
     # extract the files in /resources and place in the /fonts or /docs
     # directory as appropriate
     my %h = get-resources-hash;
-    for %h.kv -> $basename, $path { 
+    for %h.kv -> $basename, $path {
         if $debug {
             note "DEBUG: basename: '$basename'";
             note "DEBUG: path    : '$basename'";
@@ -143,7 +148,7 @@ sub manage-home-freefont(
     }
 
     # don't forget the Config.yml file
-    create-config :$home, :$dotFontFactory, :$debug; 
+    create-config :$home, :$dotFontFactory, :$debug;
 
     # return final status
     $res;
@@ -185,7 +190,7 @@ sub check-config(
     # format is ok, check the hash
     # check expected keys
     my %n = %FontFactory::X::FontHashes::number;
-    for %n.keys -> $k { 
+    for %n.keys -> $k {
         my $bnam = %(%n{$k})<basename>;
         my $expected-path = %(%n{$k})<path>;
         if $tdir and $expected-path.contains("tbrow") {
@@ -234,6 +239,7 @@ sub check-config(
 
     $res;
 }
+=end comment
 
 sub locate-font(
     $font,
@@ -285,5 +291,4 @@ sub locate-font(
     $s2 = @lines2.head // "";
     say "DEBUG s  = '$s'" if $debug;
     say "DEBUG s2 = '$s2'" if $debug;
-
 }

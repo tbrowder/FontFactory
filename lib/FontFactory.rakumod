@@ -5,12 +5,72 @@ use PDF::Content;
 
 use QueryOS;
 
-use FontFactory::Classes;
+use FontFactory::FontClasses;
 use FontFactory::Resources;
 use FontFactory::Utils;
-use FontFactory::X::FontHashes;
+use FontFactory::Config;
 
-%number = %FontFactory::X::FontHashes::number;
+=begin comment
+  # move to FontClasses:
+# Translate the default list to the Config format:
+# 1 to 6 fields:  all are used for the default fonts
+# 1 to 6 fields:  1, 2, and 6 are mandatory for any user-added fonts
+#   and fields 3, 4, and 5 are optional
+#   if there are less than 6 fields, then the last must be a valid font path
+#   if there are more than 3 fields, the last is the path, and the remainder
+#   are taken to be in order Code, Code2, some alternate name
+# all values in the first field must be unique integers > 1
+#   and greater than 15 for user-added fonts
+# all values in the last field must be a valid OpenType or TrueType font path
+# all values in fields 2, 3, and 4 must be unique Raku strings (case-sensitive)
+#   Number is in order listed in
+#   The Red Book, Appendix E.1
+# integer Full-name  Code  Code2  alias path (path depends on OS)
+class FontClass {
+    has UInt $.number is required;     # field 1
+    # fullname may have spaces; the
+    # default fonts' fullname has
+    # hyphens which are removed in TWEAK
+    has Str  $.fullname is required;   # field 2
+    has Str  $.code = "";              # field 3
+    has Str  $.code2 = "";             # field 4
+    has Str  $.alias = "";             # field 5
+    has IO::Path:D $.path is required; # field 6
+
+    # Derived attributes
+    has $.shortname; # lower-case, no spaces, no suffix
+    has $.type;      # Open or TrueType
+    has $.basename;
+
+    submethod TWEAK {
+        if $!number < 16 {
+            $!fullname ~~ s:g/'-'/ /;
+        }
+        $!shortname = $!fullname.lc;
+        $!shortname ~~ s:g/'-'/ /;
+        $!basename = $!path.IO.basename;
+        if $!path ~~ /:i '.' otf $/ {
+            $!type = 'OpenType';
+        }
+        elsif $!path ~~ /:i '.' ttf $/ {
+            $!type = 'TrueType';
+        }
+        else {
+            die "FATAL: Unknown font type with basename '$!basename'";
+        }
+    }
+}
+
+role DocRole {
+    has UInt $.number;
+    has Numeric $.size is required;
+}
+
+class DocFont is FontClass {
+    has $.face;
+}
+=end comment
+
 
 # Several ways to lookup font faces:
 # User enters one of:
@@ -28,7 +88,6 @@ use FontFactory::X::FontHashes;
 #   number    - with subkeys for cross-reference
 #   license info
 
-
 # name (various)
 # code (see table)
 # code2 (see table)
@@ -36,24 +95,66 @@ has %.code;      # code -> number
 has %.code2;     # code2 -> number
 # font shortname, LC, no spaces -> number:
 has %.shortname;
-has %.number; # 1-13 -> subkeys:
-
+has %.number;    # 1-15 -> subkeys:
+#   name
 #   code
 #   code2
 #   shortname
-#   name
 #   fullname
 #   path
+# numbers > 15 are for user-added fonts
+
 #   font object
 has PDF::Content::FontObj %.fonts; # keep the loaded FontObj by number key
 
 submethod TWEAK {
+    # create the hash of FontClass from the Config file
+    my ($home, $dotFontFactory, $debug);
+    $home = %*ENV<HOME>;
+    if "$home/.FontFactory".IO.d {
+        $dotFontFactory = "$home/.FontFactory".IO.d
+    }
+    else {
+        die "Tom, fix this";
+    }
+
+
+
+    my @f = extract-config :$home, :$dotFontFactory, :$debug; # get-config-array;
+    for @f {
+        say "DEBUG: $_";
+    }
+    say "debug exit"; exit;
+
+    for @f.kv -> $i, $fontinfo {
+        my $N = $i+1;
+        my @fields = $fontinfo.words;
+        if $N < 16 {
+            # default MUST have 6 fields
+
+        }
+        else {
+        }
+
+    }
+
+    self!assemble-hashes
+
+    =begin comment
     %!code      = %FontFactory::X::FontHashes::code;      # code -> number
     %!code2     = %FontFactory::X::FontHashes::code2;     # code2 -> number
     # font names, LC, no spaces -> number:
     %!shortname = %FontFactory::X::FontHashes::shortname;
     %!number    = %FontFactory::X::FontHashes::number;    # 1-15 -> subkeys:
+    =end comment
     #note "DEBUG: successful TWEAK and exit"; exit;
+}
+
+# private method
+method !assemble-hashes {
+    # reads the Config file during TWEAK
+    # to populate the class hashes
+ #my @arr =
 }
 
 multi method get-font(
@@ -69,7 +170,7 @@ multi method get-font(
         $font = self.fonts{$number};
     }
     else {
-        my $path = %number{$number}<path>;
+        my $path = self.fonts{$number}<path>;
         $font = $fl.load-font: :file($path);
         %!fonts{$number} = $font;
     }
@@ -118,7 +219,7 @@ multi method get-font(
         $font = self.fonts{$number};
     }
     else {
-        my $path = %number{$number}<path>;
+        my $path = self.number{$number}<path>;
         $font = $fl.load-font: :file($path);
         self.fonts{$number} = $font;
     }
@@ -133,7 +234,7 @@ multi method get-font(
     --> DocFont
 ) {
     my ($number, $size);
-    # e.g.: 't12d5' OR 't12' OR 't' 
+    # e.g.: 't12d5' OR 't12' OR 't'
     my ($code, $code2, $cp1, $cp2, $sizint, $sizfrac);
     with $Code {
         when /^ :i (se|sa|m)  (b|i|o)?  (\d+)?    [['d'| '.'] (\d+)]? $/ {
@@ -182,7 +283,7 @@ multi method get-font(
         $font = self.fonts{$number};
     }
     else {
-        my $path = %number{$number}<path>;
+        my $path = self.fonts{$number}<path>;
         $font = $fl.load-font: :file($path);
         self.fonts{$number} = $font;
     }

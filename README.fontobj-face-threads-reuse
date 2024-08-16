@@ -1,0 +1,5 @@
+DONE: Check freefont vs loaded font for reuse
++ per David:
+    reuse of FontObj is okay
+    reuse of Face is not!
+

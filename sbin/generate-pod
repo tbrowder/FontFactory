@@ -1,0 +1,45 @@
+#!/usr/bin/env raku
+
+my @blines;
+my $s;
+
+if not @*ARGS {
+    print qq:to/HERE/;
+    Usage: {$*PROGRAM.basename} MyCode.rakumod
+              OR
+           go
+
+    Parses the input Rakumod file and converts the specially-formatted
+    class, method, and routine leading and inline declator blocks
+    into a separate pod document.
+    
+    See the input examples in the BEGIN block and their outputs
+    on STDOUT when using 'go'.
+    
+    HERE
+    exit;
+}
+
+my $file;
+my @lines = $s.lines;
+for @*ARGS {
+    if $_.IO.f {
+        $file = $_;
+        @lines = $_.IO.lines;
+    }
+}
+
+for @lines {
+    say "$_";
+}
+
+BEGIN {
+$s = q:to/HERE/; 
+    #| blah
+    sub Foo(
+        foo #= foo
+        ) is export {
+    }
+HERE
+}
+

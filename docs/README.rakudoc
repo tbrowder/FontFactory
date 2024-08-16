@@ -5,11 +5,10 @@
 B<FontFactory> - Provides convenience classes to ease OpenType and TrueType
 font handling in different faces and sizes.
 
-B<NOTE>: The intent is for this module 
-to work on Linux, MacOS, and Windows.
-Please file an issue if you need it on
-your OS.  The package requires use of the 'PDF::Font::Loader:ver<0.8.7>' 
-which has recently been ported to those two systems.
+B<NOTE>: The intent is for this module to work on Linux, MacOS, and
+Windows.  Please file an issue if you need it on your OS.  The package
+requires use of the 'PDF::Font::Loader:ver<0.8.7>' which has recently
+been ported to those two systems.
 
 =head1 SYNOPSIS
 
@@ -27,7 +26,8 @@ say $f1.license; # OUTPUT: «GNU GPL V3␤»
 
 =head1 Installation requirements
 
-The following system packages need to be installed to use all the features of this module.
+The following system packages need to be installed to use all the
+features of this module.
 
 =begin item
 The FontConfig library
@@ -64,7 +64,7 @@ $ brew install --cask font-freefont
 
 On Windows:
 =begin code
-$ choco install font-freefont 
+$ choco install font-freefont
 =end code
 
 =end item
@@ -73,34 +73,36 @@ On other systems the files may be downloaded from
 L<https://ftp.gnu.org/gnu/freefont> and installed in any desired
 place. The paths to the installed files should then be entered
 manually in the C<$HOME/.FontFactory/Config> file which is created
-upon installation.  That file should look like the following. Note
-the only critical parts are the first and last entries on a line. The
-first is a number that must be unique in the list, and any
-entry you make must be greater than 15. The last item on a line is 
-the path to the font file on your system.
+upon installation.  That file should look like the following. Note the
+only critical parts are the first and last entries on a line. The
+first is a number that must be unique in the list, and any entry you
+make must be greater than 15. The last item on a line is the path to
+the font file on your system.
 
-The I<code> entries are optional but can be convenient for you. If
-used, the entry B<must> be unique in that column. If you use only
-one code, it is used as a 'Code' entry. Note the file is checked
-each time you use this module, and any invalid entry will cause an error.
+The I<Code> and I<Code2> entries are optional but can be convenient
+for you. If used, the entry B<must> be unique in that column. If you
+use only one code, it is used as a 'Code' entry. Note the file is
+checked each time you use this module, and any invalid entry will
+cause an error.  In addition, you may use commas instead of spaces to
+separate entries on a line.
 
-The file will alse be checked upon any module update, and existng valid
-entries will not be modified.
+The file will alse be checked upon any module update, and existng
+valid entries will not be modified.
 
 =begin code
-# No. Code Code2 Path 
+# No. Code Code2 Path
 1     ?    ?     <dir>/FreeSerif.otf
-2                <dir>/FreeSerifBold.otf       
-3                <dir>/FreeSerifItalic.otf    
+2                <dir>/FreeSerifBold.otf
+3                <dir>/FreeSerifItalic.otf
 4                <dir>/FreeSerifBoldItalic.otf
-5                <dir>/FreeSans.otf          
-6                <dir>/FreeSansBold.otf        
-7                <dir>/FreeSansOblique.otf    
+5                <dir>/FreeSans.otf
+6                <dir>/FreeSansBold.otf
+7                <dir>/FreeSansOblique.otf
 8                <dir>/FreeSansBoldOblique.otf
-9                <dir>/FreeMono.otf          
-10               <dir>/FreeMonoBold.otf     
-11               <dir>/FreeMonoOblique.otf 
-12               <dir>/FreeMonoBoldOblique.otf 
+9                <dir>/FreeMono.otf
+10               <dir>/FreeMonoBold.otf
+11               <dir>/FreeMonoOblique.otf
+12               <dir>/FreeMonoBoldOblique.otf
 13               $HOME/.FontFactory/fonts/micrenc.ttf
 14               $HOME/.FontFactory/fonts/GnuMICR.otf
 15               $HOME/.FontFactory/fonts/CMC7.ttf
@@ -108,16 +110,16 @@ entries will not be modified.
 
 =head1 DESCRIPTION
 
-B<FontFactory> is a package that provides easy handling of the
-set of GNU FreeFont OpenType fonts which descended from the classic Adobe
-Type 1 free fonts shown in Table 2 below. Unlike the original
-Adobe fonts, these fonts also include thousands of Unicode
-characters. The fonts are also among the few, freely-available fonts
-that have Type 1 kerning.
+B<FontFactory> is a package that provides easy handling of the set of
+GNU FreeFont OpenType fonts which descended from the classic Adobe
+Type 1 free fonts shown in Table 2 below. Unlike the original Adobe
+fonts, these fonts also include thousands of Unicode characters. The
+fonts are also among the few, freely-available fonts that have Type 1
+kerning.
 
 See L<https://www.gnu.org/software/freefont/sources/> for much more
-information on the sources and Unicode coverage of the FontFactory
-GNU FreeFonts collection.
+information on the sources and Unicode coverage of the FontFactory GNU
+FreeFonts collection.
 
 Note the I<Code> and I<Code2> columns. Each row contains equivalent
 code you may use to select the FreeFont face. You can also use the
@@ -207,7 +209,8 @@ micrenc-license.txt
 and all three files will be installed in your '$HOME/.FontFactory' directory.
 
 The license basically says the font is free to use for non-commercial
-purposes. Consult the license carefully if you do intend to use it commercially.
+purposes. Consult the license carefully if you do intend to use it
+commercially.
 
 =head3 GnuMICR
 
@@ -227,12 +230,12 @@ the license in the I<CMC7.txt> file in the '/resources' directory.
 
 =head1 The DocFont class
 
-The C<$t12d5> object shown above in the I<SYNOPSIS> section is actually a
-C<DocFont> object that essentially pairs a C<PDF::Font::Loader::FontObj>
-with a C<size> attribute. That pairing, along with suitable naming
-of the object, can make it easier to manage font faces for complex
-documents as shown in a program constructing a simple PDF page (a copy
-is in this repository's 'examples' directory):
+The C<$t12d5> object shown above in the I<SYNOPSIS> section is
+actually a C<DocFont> object that essentially pairs a
+C<PDF::Font::Loader::FontObj> with a C<size> attribute. That pairing,
+along with suitable naming of the object, can make it easier to manage
+font faces for complex documents as shown in a program constructing a
+simple PDF page (a copy is in this repository's 'examples' directory):
 
 =begin code
 #!/usr/bin/env raku
@@ -253,9 +256,9 @@ $pdf.save-as: "ff-example.pdf";
 
 =head1 Binary executable file B<ff-download>
 
-The program is installed along with the module and can be used
-to get access to the module's '/resources' directory.
-Executing the file without arguments shows its options:
+The program is installed along with the module and can be used to get
+access to the module's '/resources' directory.  Executing the file
+without arguments shows its options:
 
 =begin code
 Usage: ff-download <mode>
@@ -272,8 +275,8 @@ Modes:
 =head1 The B<DocFont> class
 
 The class' attributes are scaled to the chosen size and the class
-provides several methods to enable the user to
-place text precisely on a PDF page:
+provides several methods to enable the user to place text precisely on
+a PDF page:
 
 Listing a font's general attributes:
 
@@ -284,7 +287,7 @@ Listing a font's general attributes:
 Listing a string's attributes:
 
 =item stringwidth (with or without :kern, :ligatures)
-=item 
+=item
 =head1 AUTHOR
 
 Tom Browder <tbrowder@acm.org>

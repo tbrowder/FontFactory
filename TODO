@@ -1,6 +1,18 @@
+RETHINK {
+
+  The FontFactory when created should get its font info
+  from the Config file as a hash of FontClass' keyed by number
+  WITHOUT size or face or whatever
+  attribute distinguishes a DocFont. Those unique attrs should be in 
+  a role named DocRole.
+
+  Then a new DocFont "is FontClass does DocRole" and identified in a
+  hash keyed by number AND Size.
+
+}
+
 Test SYNOPSIS for accuracy before release
  + also test install on mac and win
-
 
 DONE: Add new FontFactory repo on GitHub
 
