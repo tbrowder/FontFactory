@@ -1,7 +1,24 @@
 The Config file: default, creating, reading, checking, using
     manage it all by the FF class
     much if not all in private methods and TWEAK
-    pass a Config class to child classes to get data
+    pass a Config class to child classes to get data?
+
+    creating: default depends on OS
+              otherwise, it exists and must be checked
+
+    reading and checking
+        always at FF.new
+        check AND collect the data for use:
+           array of data classes in
+             FF @.fonts indexed by number: 1..Nfonts
+           FF hashes for lookup by %.code, %.code2, %.name, etc, no dups,
+             all keyed by number
+           fonts are not LOADED until first use in FontClass
+           faces are created NEW for each new DocFont class
+           use of 
+
+
+    
 
 RETHINK {
 

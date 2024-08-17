@@ -150,7 +150,7 @@ submethod TWEAK {
     #note "DEBUG: successful TWEAK and exit"; exit;
 }
 
-# private method
+# private methods
 method !assemble-hashes {
     # reads the Config file during TWEAK
     # to populate the class hashes
