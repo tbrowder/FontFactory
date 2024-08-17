@@ -14,13 +14,12 @@ my $os = OS.new;
 
 sub find-freefont(
     $number,
-    :$home!,
-    :$dotFontFactory!,
     :$debug,
 ) is export {
     # return path to the file
     # use the font basename
     my ($path, $nam);
+
     =begin comment
     my %number = get-fonts-hash;
     #$nam = %FontFactory::X::FontHashes::number{$number}<name>;
@@ -38,7 +37,7 @@ sub find-freefont(
         $nam ~= ".otf";
     }
 
-    # If the config.yml file exists, it
+    # If the Config file exists, it
     # should already have the 15 paths
     # without using sub locate-font.
 

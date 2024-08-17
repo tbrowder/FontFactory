@@ -1,3 +1,8 @@
+The Config file: default, creating, reading, checking, using
+    manage it all by the FF class
+    much if not all in private methods and TWEAK
+    pass a Config class to child classes to get data
+
 RETHINK {
 
   The FontFactory when created should get its font info
