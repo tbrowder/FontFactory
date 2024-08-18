@@ -4,7 +4,7 @@ The Config file: default, creating, reading, checking, using
     pass a Config class to child classes to get data?
 
     creating: default depends on OS
-              otherwise, it exists and must be checked
+              otherwise, it exists and will be read and checked
 
     reading and checking
         always at FF.new
@@ -15,7 +15,8 @@ The Config file: default, creating, reading, checking, using
              all keyed by number
            fonts are not LOADED until first use in FontClass
            faces are created NEW for each new DocFont class
-           use of 
+             object
+           DF objects are keyed by an id: <number|size>
 
 
     

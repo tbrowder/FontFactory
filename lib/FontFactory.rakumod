@@ -10,68 +10,6 @@ use FontFactory::Resources;
 use FontFactory::Utils;
 use FontFactory::Config;
 
-=begin comment
-  # move to FontClasses:
-# Translate the default list to the Config format:
-# 1 to 6 fields:  all are used for the default fonts
-# 1 to 6 fields:  1, 2, and 6 are mandatory for any user-added fonts
-#   and fields 3, 4, and 5 are optional
-#   if there are less than 6 fields, then the last must be a valid font path
-#   if there are more than 3 fields, the last is the path, and the remainder
-#   are taken to be in order Code, Code2, some alternate name
-# all values in the first field must be unique integers > 1
-#   and greater than 15 for user-added fonts
-# all values in the last field must be a valid OpenType or TrueType font path
-# all values in fields 2, 3, and 4 must be unique Raku strings (case-sensitive)
-#   Number is in order listed in
-#   The Red Book, Appendix E.1
-# integer Full-name  Code  Code2  alias path (path depends on OS)
-class FontClass {
-    has UInt $.number is required;     # field 1
-    # fullname may have spaces; the
-    # default fonts' fullname has
-    # hyphens which are removed in TWEAK
-    has Str  $.fullname is required;   # field 2
-    has Str  $.code = "";              # field 3
-    has Str  $.code2 = "";             # field 4
-    has Str  $.alias = "";             # field 5
-    has IO::Path:D $.path is required; # field 6
-
-    # Derived attributes
-    has $.shortname; # lower-case, no spaces, no suffix
-    has $.type;      # Open or TrueType
-    has $.basename;
-
-    submethod TWEAK {
-        if $!number < 16 {
-            $!fullname ~~ s:g/'-'/ /;
-        }
-        $!shortname = $!fullname.lc;
-        $!shortname ~~ s:g/'-'/ /;
-        $!basename = $!path.IO.basename;
-        if $!path ~~ /:i '.' otf $/ {
-            $!type = 'OpenType';
-        }
-        elsif $!path ~~ /:i '.' ttf $/ {
-            $!type = 'TrueType';
-        }
-        else {
-            die "FATAL: Unknown font type with basename '$!basename'";
-        }
-    }
-}
-
-role DocRole {
-    has UInt $.number;
-    has Numeric $.size is required;
-}
-
-class DocFont is FontClass {
-    has $.face;
-}
-=end comment
-
-
 # Several ways to lookup font faces:
 # User enters one of:
 #   code or code2 (+ size, default: 12)
@@ -108,7 +46,10 @@ has %.number;    # 1-15 -> subkeys:
 has PDF::Content::FontObj %.fonts; # keep the loaded FontObj by number key
 
 submethod TWEAK {
-    # create the hash of FontClass from the Config file
+    # Create the hash of FontClass objects from the Config file
+    # which was either created at first installation or may have
+    # been added to by the user.
+
     my ($home, $dotFontFactory, $debug);
     $home = %*ENV<HOME>;
     if "$home/.FontFactory".IO.d {

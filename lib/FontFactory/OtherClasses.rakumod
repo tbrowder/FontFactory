@@ -47,6 +47,7 @@ class String is export {
     }
 }
 
+=begin comment
 class Config is export {
     # holds the data read from the EXISTING Config file
     # which should have valid paths (checked and set by FF on startup)
@@ -90,3 +91,4 @@ class Config is export {
    
 }
 
+=end comment

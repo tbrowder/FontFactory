@@ -6,7 +6,6 @@ use PDF::Content::FontObj;
 
 use FontFactory::Config;
 
-#  # move to FontClasses:
 # Translate the default list to the Config format:
 # 1 to 6 fields:  all are used for the default fonts
 # 1 to 6 fields:  1, 2, and 6 are mandatory for any user-added fonts
@@ -14,10 +13,10 @@ use FontFactory::Config;
 #   if there are less than 6 fields, then the last must be a valid font path
 #   if there are more than 3 fields, the last is the path, and the remainder
 #   are taken to be in order Code, Code2, some alternate name
-# all values in the first field must be unique integers > 1
+# All values in the first field must be unique integers > 1
 #   and greater than 15 for user-added fonts
-# all values in the last field must be a valid OpenType or TrueType font path
-# all values in fields 2, 3, and 4 must be unique Raku strings (case-sensitive)
+# All values in the last field must be a valid OpenType or TrueType font path
+# All values in fields 2, 3, and 4 must be unique Raku strings (case-sensitive)
 #   Number is in order listed in
 #   The Red Book, Appendix E.1
 # integer Full-name  Code  Code2  alias path (path depends on OS)
@@ -37,8 +36,12 @@ class FontClass is export {
     has $.type;      # Open or TrueType
     has $.basename;
 
+    # Loaded at first use
+    has PDF::Content::FontObj $.font; 
+
     submethod TWEAK {
         if $!number < 16 {
+            # substitute spaces for '-'
             $!fullname ~~ s:g/'-'/ /;
         }
         $!shortname = $!fullname.lc;
@@ -56,18 +59,6 @@ class FontClass is export {
     }
 }
 
-role DocRole {
-    has UInt $.number;
-    has Numeric $.size is required;
-}
-
-
-=begin comment
-class DocFont is FontClass is DocRole {
-    has $.face;
-}
-=end comment
-
 =begin pod
 
 =head1 Class DocFont
@@ -79,8 +70,16 @@ methods to access most of its attributes.
 
 =end pod
 
-class DocFont is FontClass is DocRole is export {
-
+class DocFont is export {
+    has FontClass $.font is required;
+    has $.number is required;
+    has $.size is required;
+    has $.id;
+    submethod TWEAK {
+        $!id = "{$!number}|{$!size}";
+    }
+    # may add methods to expose FontClass attributes, otherwise, just
+    # get them by .font.SOME-ATTRIBUTE
 }
 
 =begin comment

@@ -13,16 +13,26 @@ $debug = 1 if @*ARGS.elems;
 
 # Run by Build.rakumod upon zef install
 # MICR et alii fonts, licenses, and 
-# supporting material
+# supporting material.
+# Will NOT run if the '$*HOME/.FontFactory/Config' file exists
+# unless $debug is true and then it will rerun a new installation.
 
-my $home = %*ENV<HOME>:exists ??
-           %*ENV<HOME> !! 0;
+my $home = $*HOME.IO.d ??
+           $*HOME      !! 0;
 
 if not $home {
-    die "FATAL: Unable to determine a \$HOME directory for the user.";
+    die "FATAL: Unable to determine a \$*HOME directory for the user.";
 }
 
 my $dotFontFactory = '.FontFactory';
+my $cfil = "$home/$dotFontFactory/Config";
+if $cfil.IO.r {
+    # It exists. We are done here.
+    exit 0;
+}
+
+=finish 
+# temp end
 
 # need some args to allow testing and
 # installation
