@@ -1,7 +1,6 @@
 use Test;
 use FontFactory;
 use FontFactory::BuildUtils;
-use FontFactory::X::FontHashes;
 
 my $ff = FontFactory.new;
 

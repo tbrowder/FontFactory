@@ -9,9 +9,8 @@ my $os = OS.new;
 
 use FontFactory;
 use FontFactory::Utils;
-use FontFactory::X::FontHashes;
-use FontFactory::Classes;
-use FontFactory::Font::Utils;
+use FontFactory::FontClasses;
+use FontFactory::FontUtils;
 
 my $ff = FontFactory.new;
 

@@ -1,8 +1,7 @@
 use Test;
 
 use FontFactory;
-use FontFactory::Classes;
-#use FontFactory::X::FontHashes;
+use FontFactory::FontClasses;
 
 my $ff = FontFactory.new;
 my $df = $ff.get-font: 1, 12;

@@ -4,7 +4,7 @@ use File::Temp;
 use File::Find;
 
 use FontFactory::Resources;
-use FontFactory::Font::Utils;
+use FontFactory::FontUtils;
 
 my $debug = 0;
 my @fils = find :dir("resources"), :type<file>;

@@ -11,8 +11,7 @@ my $os = OS.new;
 
 use FontFactory;
 use FontFactory::Utils;
-use FontFactory::X::FontHashes;
-use FontFactory::Classes;
+use FontFactory::FontClasses;
 
 #die "Tom, fix this";
 my $ff = FontFactory.new;

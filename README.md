@@ -116,7 +116,7 @@ Table 2
 Notes on the three additional fonts
 -----------------------------------
 
-Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$HOME/.FontFactory/fonts' or '$HOME/.FontFactory/docs' directories, as appropriate.
+Each table above shows three more fonts that are included in the '/resources' directory, along with several other files, that will be installed into your '$*HOME/.FontFactory/fonts' or '$*HOME/.FontFactory/docs' directories, as appropriate.
 
 The MICR fonts (more formally known as E13B) are designed to produce the machine-readable numbers found on bank checks in the US and Canada and other countries around the world, promarily in Asia.
 
@@ -137,19 +137,19 @@ The two files in single quotes were renamed to:
     DigitalGraphicLabs.html
     micrenc-license.txt
 
-and all three files will be installed in your '$HOME/.FontFactory' directory.
+and all three files will be installed in your '$*HOME/.FontFactory/docs' directory.
 
 The license basically says the font is free to use for non-commercial purposes. Consult the license carefully if you do intend to use it commercially.
 
 ### GnuMICR
 
-This is a GNU version of the MICRE font face, in OpenType format ('.otf'), which *can* be used commercially. See the GNU license in the *COPYING.txt* file in the '/resources' directory.
+This is a GNU version of the MICRE font face, in OpenType format ('.otf'), which *can* be used commercially. See the GNU license in the *COPYING.txt* file in the '/resources/docs' directory.
 
 See many more details and supporting files at the author's site at [](https://sandeen.net/GnuMICR).
 
 ### CMC7
 
-This is a free font designed by Harold Lohner, in 1998, and placed into the public domain by him. It was downloaded from [https://www.fonts4free.net/cmc-7-font.html](https://www.fonts4free.net/cmc-7-font.html). See more details and the license in the *CMC7.txt* file in the '/resources' directory.
+This is a free font designed by Harold Lohner, in 1998, and placed into the public domain by him. It was downloaded from [https://www.fonts4free.net/cmc-7-font.html](https://www.fonts4free.net/cmc-7-font.html). See more details and the license in the *CMC7.txt* file in the '/resources/docs' directory.
 
 The DocFont class
 =================
@@ -174,7 +174,7 @@ The `$t12d5` object shown above in the *SYNOPSIS* section is actually a `DocFont
 Binary executable file **ff-download**
 ======================================
 
-The program is installed along with the module and can be used to get access to the module's '/resources' directory. Executing the file without arguments shows its options:
+The program is installed along with the module and can be used to get access to the module's '/resources/bin' directory. Executing the file without arguments shows its options:
 
     Usage: ff-download <mode>
 
@@ -195,15 +195,13 @@ Listing a font's general attributes:
 
   * CapHeight
 
-  * ?Descender
+  * Descender
 
   * number of glyphs (characters)
 
 Listing a string's attributes:
 
   * stringwidth (with or without :kern, :ligatures)
-
-  * 
 
 AUTHOR
 ======
@@ -215,19 +213,19 @@ Summary of FONTS COPYRIGHT and LICENSE
 
   * GNU FreeFonts - GNU GENERAL PUBLIC LICENSE Version 3
 
-    See */resources/GPL-VERSION3.txt* and more information at [https://www.gnu.org/software/freefont/](https://www.gnu.org/software/freefont/).
+    See */resources/docs/GPL-VERSION3.txt* and more information at [https://www.gnu.org/software/freefont/](https://www.gnu.org/software/freefont/).
 
   * MICRE - DISTRIBUTED AS FREEWARE
 
-    See */resources/micrenc-license.txt*
+    See */resources/docs/micrenc-license.txt*
 
   * GnuMICRE - GNU GENERAL PUBLIC LICENSE Version 2, June 1991
 
-    See */resources/COPYING.txt*
+    See */resources/docs/COPYING.txt*
 
   * CMC7 - Public Domain
 
-    See */resources/CMC7.txt*
+    See */resources/docs/CMC7.txt*
 
 COPYRIGHT AND LICENSE
 =====================

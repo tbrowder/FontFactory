@@ -1,0 +1,5 @@
+Aborting due to test failure: FontFactory:ver<0.0.1>:auth<zef:tbrowder> (use --force-test to override)
+
+real	5m53.165s
+user	7m15.593s
+sys	0m31.068s

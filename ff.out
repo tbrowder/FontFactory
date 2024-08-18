@@ -1,0 +1,73 @@
+===> Dependencies: Text::Utils, JSON::Fast, File::Find, File::Temp, HarfBuzz, QueryOS, YAMLish, PDF::Lite, PDF::API6, PDF::Font::Loader
+===> Filtering: FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+===> Filtering [OK] for FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+===> Building: FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+[FontFactory] Building with plugin: Zef::Service::Shell::LegacyBuild
+[FontFactory] Command: /opt/rakudo-pkg/bin/rakudo -e require '/usr/local/git-repos/my-public-modules/FontFactory/Build.rakumod'; ::('Build').new.build('/usr/local/git-repos/my-public-modules/FontFactory') ?? exit(0) !! exit(1);
+===> Building [OK] for FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+===> Staging FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+===> Staging [OK] for FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+===> Testing: FontFactory:ver<0.0.1>:auth<zef:tbrowder>
+[FontFactory] Testing with plugin: Zef::Service::TAP
+[FontFactory] ok 1 - FontFactory module can be use-d ok
+[FontFactory] ok 2 - FontFactory::Args module can be use-d ok
+[FontFactory] ok 3 - FontFactory::FontClasses module can be use-d ok
+[FontFactory] ok 4 - FontFactory::OtherClasses module can be use-d ok
+[FontFactory] ok 5 - FontFactory::Config module can be use-d ok
+[FontFactory] ok 6 - FontFactory::Resources module can be use-d ok
+[FontFactory] ok 7 - FontFactory::Utils module can be use-d ok
+[FontFactory] ok 8 - FontFactory::PageProcs module can be use-d ok
+[FontFactory] ok 9 - FontFactory::FontUtils module can be use-d ok
+[FontFactory] ok 10 - FontFactory::PodUtils module can be use-d ok
+[FontFactory] ok 11 - FontFactory::BuildUtils module can be use-d ok
+[FontFactory] 1..11
+[FontFactory] t/0-load-test.t ........ ok
+[FontFactory] ok 1 - is Linux
+[FontFactory] t/2-query-os.t ......... Dubious, test returned 1
+[FontFactory] All 1 subtests passed 
+[FontFactory] ok 1 - find /usr/share/fonts -type f -name 'FreeSerif.otf' works
+[FontFactory] ok 2 - 1st found: '/usr/share/fonts/opentype/freefont/FreeSerif.otf'
+[FontFactory] ok 3 - file not found, exitcode 0
+[FontFactory] ok 4 - empty out as expected
+[FontFactory] 1..4
+[FontFactory] t/3-use-find.t ......... ok
+[FontFactory] ok 1 - 
+[FontFactory] ok 2 - find 'libharfbuzz.a'
+[FontFactory] ok 3 - one or more  files found
+[FontFactory] 1..3
+[FontFactory] t/4-has-harfbuzz.t ..... ok
+[FontFactory] ok 1 - check the bin file 'bin/ff-download' for option ''
+[FontFactory] 1..1
+[FontFactory] t/5-exe-ff-download.t .. ok
+[FontFactory] t/6-use-fonts.t ........ Dubious, test returned 1
+[FontFactory] No subtests run
+[FontFactory] t/7-load-fonts.t ....... Dubious, test returned 1
+[FontFactory] No subtests run
+[FontFactory] ok 1 - 
+[FontFactory] 1..1
+[FontFactory] t/8-spurt-slurp.t ...... ok
+[FontFactory] t/9-string-class.t ..... Dubious, test returned 1
+[FontFactory] No subtests run
+[FontFactory] All tests successful.
+[FontFactory] 
+
+[FontFactory] Test Summary Report
+[FontFactory] -------------------
+failures to put in bad
+ t/2 t/6 t/7 t/9
+
+[FontFactory] t/2-query-os.t  (Wstat: 256 Tests: 1 Failed: 0)
+[FontFactory] Non-zero exit status: 1
+[FontFactory]   Parse errors: No plan found in TAP output
+[FontFactory] t/6-use-fonts.t  (Wstat: 256 Tests: 0 Failed: 0)
+[FontFactory] Non-zero exit status: 1
+[FontFactory]   Parse errors: No plan found in TAP output
+[FontFactory] t/7-load-fonts.t  (Wstat: 256 Tests: 0 Failed: 0)
+[FontFactory] Non-zero exit status: 1
+[FontFactory]   Parse errors: No plan found in TAP output
+[FontFactory] t/9-string-class.t  (Wstat: 256 Tests: 0 Failed: 0)
+[FontFactory] Non-zero exit status: 1
+[FontFactory]   Parse errors: No plan found in TAP output
+[FontFactory] Files=9, Tests=21,  25 wallclock secs
+[FontFactory] Result: FAILED
+===> Testing [FAIL]: FontFactory:ver<0.0.1>:auth<zef:tbrowder>
