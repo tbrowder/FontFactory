@@ -255,14 +255,14 @@ $pdf.add-page.text: {
 $pdf.save-as: "ff-example.pdf";
 =end code
 
-=head1 Binary executable file B<ff-download>
+=head1 Binary executable file B<ff-helper>
 
 The program is installed along with the module and can be used to get
 access to the module's '/resources/bin' directory.  Executing the file
 without arguments shows its options:
 
 =begin code
-Usage: ff-download <mode>
+Usage: ff-helper <mode>
 
 Modes:
   s - show /resources contents

@@ -50,18 +50,16 @@ submethod TWEAK {
     # which was either created at first installation or may have
     # been added to by the user.
 
-    my ($home, $dotFontFactory, $debug);
-    $home = %*ENV<HOME>;
-    if "$home/.FontFactory".IO.d {
-        $dotFontFactory = "$home/.FontFactory".IO.d
-    }
-    else {
-        die "Tom, fix this";
+    my $debug = 0;
+    my $cfil = "$*HOME/.FontFactory/Config";
+    unless $cfil.IO.f {
+        die "FATAL: Config file doesn't exist" 
     }
 
-
-
-    my @f = extract-config :$home, :$dotFontFactory, :$debug; # get-config-array;
+=begin comment
+    # query FontFactory::Config; should be only mod file that's OS dependent
+    # except for tests
+    my @f = read-config :$debug; # get-config-array;
     for @f {
         say "DEBUG: $_";
     }
@@ -72,12 +70,11 @@ submethod TWEAK {
         my @fields = $fontinfo.words;
         if $N < 16 {
             # default MUST have 6 fields
-
         }
         else {
         }
-
     }
+=end comment
 
     self!assemble-hashes
 

@@ -1,10 +1,15 @@
+The '$*HOME/.FontFactory' subdirs and contents are also
+created at the first install, but there may be additional
+contents added in the future.
+    
 The Config file: default, creating, reading, checking, using
     manage it all by the FF class
     much if not all in private methods and TWEAK
     pass a Config class to child classes to get data?
 
     creating: default depends on OS
-              otherwise, it exists and will be read and checked
+              at installation it's ignored if it already exists
+              created if it doesn't
 
     reading and checking
         always at FF.new

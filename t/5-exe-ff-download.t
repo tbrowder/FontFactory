@@ -13,7 +13,7 @@ my ($cmd, $n, $s, $exit, $proc, @lines);
 # TODO fix all tests
 # see new xt/8*t
 
-$cmd = "bin/ff-download";
+$cmd = "bin/ff-helper";
 for "", <a p d L s> -> $opt {
     # skip 'all' for now
     next if $opt ~~ /^ :i a/;
@@ -25,7 +25,7 @@ for "", <a p d L s> -> $opt {
         }
         =end comment
         # expect normal output and no error
-        $proc = run "ff-download $opt".words, :out, :err;
+        $proc = run "ff-helper $opt".words, :out, :err;
         @lines = $proc.out.slurp(:close).lines;
         $exit  = $proc.exitcode;
         $n = @lines.elems;

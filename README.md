@@ -171,12 +171,12 @@ The `$t12d5` object shown above in the *SYNOPSIS* section is actually a `DocFont
     }
     $pdf.save-as: "ff-example.pdf";
 
-Binary executable file **ff-download**
-======================================
+Binary executable file **ff-helper**
+====================================
 
 The program is installed along with the module and can be used to get access to the module's '/resources/bin' directory. Executing the file without arguments shows its options:
 
-    Usage: ff-download <mode>
+    Usage: ff-helper <mode>
 
     Modes:
       s - show /resources contents

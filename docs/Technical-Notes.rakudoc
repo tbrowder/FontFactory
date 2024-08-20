@@ -8,34 +8,38 @@ The FontFactory class manages the provision and use of fonts defined
 in the user's '$HOME/.FontFactory/Config' file.
 
 That file is created upon first installation and populated for the
-also- installed 15 default fonts. After installation, the user can add
-new, unique fonts by properly adding them to the Config file.
+also-installed 15 default fonts. After installation, the user can add
+new, unique fonts by carefully editing the Config file.
 
-For upgrades as well as upon every use, the Config file is checked for
+B<NOTE>: If there is interest, I can create an new mode for
+the included C<ff-helper> script to update the user's
+Config file with new fonts--just file an issue.
+
+For every use, the Config file is checked for
 errors. Any found will cause an exception to be thrown.
 
 =head1 Classes
 
-=head2 FontFactory
+=head2 class FontFactory
 
 =begin code
 my $ff = FontFactory.new;
 =end code
 
 Instantiation of the class loads all font data in the Config file into
-a set of Font objects, one for each font file. Each such object has a
+a set of class Font objects, one for each font file. Each such object has a
 unique positive integer to reference it as a key in the C<$ff.fonts>
 hash.
 
-=head2 Font
+=head2 class Font
 
-This class is instantiated for each font listed in the Config
+This class is instantiated for each font listed in the 'Config'
 file. All are intantiated upon instantiation of the FontFactory
 class. Note this class does not load its C<font> attribute until first
 first use by a DocFont class object.  A hash in the FontFactory class
 object prevents multiple Font objects for the same font file.
 
-=head2 DocFont
+=head2 class DocFont
 
 This class is a Font class with two additional attributes: a size and
 a Font::FreeType face. Thus it can be used as one object inside a
@@ -53,9 +57,14 @@ my $box = PDF::Content::Text::Box.new: :$text,
 
 =head2 GNU Free Fonts
 
+TODO LIST...
 
 =head2 Other fonts
 
+TODO LIST...
+
 =head1 User-installed fonts
+
+TODO discuss...
 
 =end pod

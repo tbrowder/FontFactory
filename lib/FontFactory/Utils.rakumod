@@ -106,20 +106,12 @@ sub help is export {
       p - print PDF of font samples
       d - download example programs
       L - download licenses
-      a - do all the above
     HERE
     exit
 }
 
 sub with-args(@args) is export {
     for @args {
-        when /:i a / {
-            exec-d;
-            exec-p;
-            exec-L;
-            exec-s;
-            exec-f;
-        }
         when /:i d / {
             # download example programs
             exec-d

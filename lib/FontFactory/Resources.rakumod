@@ -15,6 +15,7 @@ sub show-resources(:$debug --> List) is export {
     }
 }
 
+#| Use :bin if in doubt of file type
 sub slurp-file(
     $path,
     :$bin    = False,
@@ -34,10 +35,13 @@ sub slurp-file(
     $content;
 }
 
+#| Use :bin if in doubt of file type
+#| Returns the new path
 sub spurt-file(
     $content,
     :$basename!,
-    :$dir is copy,        # = '.',  #= the desired output path
+    :$dir is copy,    #= the desired output directory
+                      #= default: $*CWD ('.')
     :$bin    = False,
     :$utf8c8 = False,
     :$debug,

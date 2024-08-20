@@ -1,6 +1,7 @@
 unit module FontFactory::Config;
 
 use QueryOS;
+use FontFactory::Resources;
 
 my $os = OS.new;
 
@@ -24,6 +25,7 @@ my $os = OS.new;
 #   /opt/homebrew/Caskroom/font-freefont/20120503/freefont-20120503/
 # windows
 #   /usr/share/fonts/opentype/freefont/
+
 
 my $Ld = "/usr/share/fonts/opentype/freefont";
 
@@ -116,37 +118,15 @@ sub extract-config(
     "$home/$dotFontFactory/Config".IO.lines;
 }
 
-# manage-config
-# called at installation only
-sub manage-config(
-    :$home!,
-    :$dotFontFactory!,
-    :$debug,
-    --> Bool
-    ) is export {
-    my $status = True;
-    if has-config(:$home, :$dotFontFactory, :$debug) {
-        check-config :$home, :$dotFontFactory, :$debug;
-    }
-    else {
-        create-config :$debug;
-    }
-}
-
 #== non-exported subs ===========================
 # has-config
 sub has-config(
-    :$home!,
-    :$dotFontFactory!,
     :$debug,
     --> Bool
     ) {
     my $status = True;
-    my $dir = "$home/$dotFontFactory";
-    unless $dir.IO.d {
-        $status = False;
-    }
-    unless "$dir/Config".IO.r {
+    my $cfil = "$*HOME/.FontFactory/Config";
+    unless $cfil.IO.r {
         $status = False;
     }
     $status;
@@ -154,28 +134,66 @@ sub has-config(
 
 # check-config
 sub check-config(
-    :$home!,
-    :$dotFontFactory!,
     :$debug,
     --> Bool
     ) {
+    my $status = True;
+    my $cfil = "$*HOME/.FontFactory/Config";
+
 }
 
 # create-config :$home, :$debug;
 sub create-config(
-    :$home!,
-    :$dotFontFactory!,
     :$debug,
     --> Bool
-) {
+) is export {
     # This is called ONLY if the Config file does NOT exist
+    #   along with the files in /resources placed in .FontFactory subdirs
     # the config file is at :
-    my $dir  = "$home/$dotFontFactory";
+    my $dir  = "{$*HOME}/.FontFactory";
     unless $dir.IO.d {
         mkdir $dir;
     }
+    for <docs bin fonts> {
+        my $sdir  = "{$*HOME}/.FontFactory/$_";
+        unless $sdir.IO.d {
+            mkdir $sdir;
+        }
+    }
+
     my $cfil = "$dir/Config";
+
     die "FATAL: Config file exists, take care of business, Tom!" if $cfil.IO.r;
+
+    my %h = get-resources-hash;
+    say "DEBUG: downloading /resources";
+   
+    for %h.kv -> $basename, $rpath {
+        say "bnam: '$basename', path: $rpath";
+        my $content = slurp-file $rpath, :bin; 
+        my $dir = "$*HOME/.FontFactory";
+        if $rpath.contains("/docs/") {
+            $dir ~= "/docs";
+            spurt-file $content, :$dir, :$basename, :bin;
+        }
+        elsif $rpath.contains("/bin/") {
+            $dir ~= "/bin";
+            spurt-file $content, :$dir, :$basename, :bin;
+        }
+        elsif $rpath.contains("/fonts/") {
+            $dir ~= "/fonts";
+            spurt-file $content, :$dir, :$basename, :bin;
+        }
+        else {
+            die "FATAL: Unknown path '$rpath'";
+        }
+    }
+    say "DEBUG: early exit after creating /resources in .FontFactory";
+    #say %h.gist;
+    exit;
+
+
+    die "Tom, take care of Config creation in lib/*/Config";
 
     # get a file handle
     my $fh = open $cfil, :w;
@@ -187,7 +205,7 @@ sub create-config(
         my $N = $b.chars;
         $nc = $N if $N > $nc;
     }
-    # add an ennding space for neatness
+    # add an ending space for neatness
     ++$nc;
 
     # create a comment header
@@ -285,6 +303,4 @@ sub create-config(
     }
     $fh.close;
     =end comment
-
-
 }
