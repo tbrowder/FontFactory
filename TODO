@@ -1,3 +1,9 @@
+"MUST ROUNDTRIP FontClass and Config file";
+  see:
+    FontFactory::Config
+    FontFactory::FontClasses
+  use :$test to trigger WHERE the stuff is created??
+ 
 The '$*HOME/.FontFactory' subdirs and contents are also
 created at the first install, but there may be additional
 contents added in the future.

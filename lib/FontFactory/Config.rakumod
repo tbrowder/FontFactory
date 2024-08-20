@@ -1,6 +1,8 @@
 unit module FontFactory::Config;
 
+use Text::Utils :strip-comment;
 use QueryOS;
+
 use FontFactory::Resources;
 
 my $os = OS.new;
@@ -33,15 +35,15 @@ my $Md = "/opt/homebrew/Caskroom/font-freefont/20120503/freefont-20120503";
 
 my $Wd = "/usr/share/fonts/opentype/freefont";
 
-my $fntdir;
+my $fontsdir;
 if $os.is-linux {
-    $fntdir = $Ld;
+    $fontsdir = $Ld;
 }
 elsif $os.is-macos {
-    $fntdir = $Md;
+    $fontsdir = $Md;
 }
 elsif $os.is-windows {
-    $fntdir = $Wd;
+    $fontsdir = $Wd;
 }
 
 # Details for the default installed fonts
@@ -80,9 +82,11 @@ constant @fontnames =
 #   and greater than 15 for user-added fonts
 # all values in the last field must be a valid OpenType or TrueType font path
 # all values in fields 2, 3, and 4 must be unique Raku strings (case-sensitive)
+#==================================
 my @fontnames2 =
 #   Number is in order listed in
 #   The Red Book, Appendix E.1
+#    1       2        3     4       5    6
 # integer Full-name  Code  Code2  alias path (path depends on OS)
 "1 Free-Serif se t Times ",
 "2 Free-Serif-Italic sei ti TimesItalic",
@@ -98,9 +102,9 @@ my @fontnames2 =
 "10 Free Mono Oblique mo co CourierOblique",
 "11 Free Mono Bold mb cb CourierBold",
 "12 Free Mono Bold Oblique mbo cbo CourierBoldOblique",
-"13 micrenc mi mi none",   # not available in a package
-"14 GnuMICR mi2 mi2 none", # not available in a package
-"15 CMC7      cm cm none ", #<dir>/$basename"       # not available in a package
+"13 micrenc mi mi none",    # not available in a package
+"14 GnuMICR mi2 mi2 none",  # not available in a package
+"15 CMC7      cm cm none ", # not available in a package
 ;
 
 #== exported subs ==========================
@@ -142,61 +146,145 @@ sub check-config(
 
 }
 
-# create-config :$home, :$debug;
+#| This sub is called only at installation and ONLY 
+#|   if the '$*HOME/.FontFactory/Config' file does NOT exist.
+#|   Otherwise, any checks of the file or its parent directory
+#|   are only checked at class FontFactory instantiation.
+#|
+#| Sequence of events upon call:
+#|   1. The files in the /resources directory are placed into
+#|      their correct subdirectories under the 
+#|      '$*HOME/.FontFactory' directory.
+#|   2. The 'Config' file is created with the correct paths
+#|      for the default fonts and the current operating system (OS)
 sub create-config(
+    :$test = False,
     :$debug,
     --> Bool
 ) is export {
-    # This is called ONLY if the Config file does NOT exist
-    #   along with the files in /resources placed in .FontFactory subdirs
-    # the config file is at :
-    my $dir  = "{$*HOME}/.FontFactory";
-    unless $dir.IO.d {
-        mkdir $dir;
+    my ($home, $dotFontFactory);
+    $home = $*HOME;
+    $dotFontFactory = ".FontFactory";
+
+    my $cdir = "$home/$dotFontFactory";
+    unless $cdir.IO.d {
+        mkdir $cdir;
     }
     for <docs bin fonts> {
-        my $sdir  = "{$*HOME}/.FontFactory/$_";
+        my $sdir  = "$cdir/$_";
         unless $sdir.IO.d {
             mkdir $sdir;
         }
     }
 
-    my $cfil = "$dir/Config";
+    my $cfil = "$cdir/Config";
 
     die "FATAL: Config file exists, take care of business, Tom!" if $cfil.IO.r;
 
     my %h = get-resources-hash;
-    say "DEBUG: downloading /resources";
+    say "DEBUG: downloading /resources" if $debug;
    
     for %h.kv -> $basename, $rpath {
-        say "bnam: '$basename', path: $rpath";
+        say "bnam: '$basename', path: $rpath" if $debug;
         my $content = slurp-file $rpath, :bin; 
-        my $dir = "$*HOME/.FontFactory";
+        my $dir = $cdir;
         if $rpath.contains("/docs/") {
             $dir ~= "/docs";
+            if "$dir/$basename".IO.r {
+                next if not $debug;
+            }
             spurt-file $content, :$dir, :$basename, :bin;
         }
         elsif $rpath.contains("/bin/") {
             $dir ~= "/bin";
+            if "$dir/$basename".IO.r {
+                next if not $debug;
+            }
             spurt-file $content, :$dir, :$basename, :bin;
         }
         elsif $rpath.contains("/fonts/") {
             $dir ~= "/fonts";
+            if "$dir/$basename".IO.r {
+                next if not $debug;
+            }
             spurt-file $content, :$dir, :$basename, :bin;
         }
         else {
             die "FATAL: Unknown path '$rpath'";
         }
     }
-    say "DEBUG: early exit after creating /resources in .FontFactory";
-    #say %h.gist;
-    exit;
 
+    if $debug {
+        say "DEBUG: early exit after creating /resources in .FontFactory";
+        #say %h.gist;
+        exit;
+    }
 
     die "Tom, take care of Config creation in lib/*/Config";
 
+    # To create the virgin Config file:
+    # + read @fontnames2 array: 5 fields per font
+    # add correct $fontsdir/$basename for the OS
+    # write the info to the Config file
+
     # get a file handle
     my $fh = open $cfil, :w;
+    $fh.print: q:to/HERE/; #: "# See the README for more details.";
+    # This file contains font data for the 15 default fonts in this
+    # package. Any user-entered fonts MUST be numbered with unique
+    # integers > 15 and MUST have unique entries for fields 1, 2, and 6.
+    # Note each line's fields are space-separated.
+    # Note "fullname" may have hyphens representing spaces.
+    #   1       2      3    4      5    6
+    # Number Fullname Code Code2 Alias Path
+    HERE
+
+    # get the data
+    my $N = 0;
+    for @fontnames2.kv -> $i, $line is copy {
+        $line = strip-comment $line;
+        next unless $line ~~ /\S/;
+       
+        $N += 1;
+        my @w = $line.words;
+        my $nf = @w.elems;
+        die "FATAL: Font data line should have 5 fields but has $nf" if $nf !== 5; 
+
+        my $number   = @w.shift;
+        die "FATAL: Font data line number $N should be font number $number"
+            if $N !== $nf;
+
+        my $fullname = @w.shift;
+        my $code     = @w.shift;
+        my $code2    = @w.shift;
+        my $alias    = @w.shift;
+
+        # the input fullname may have hyphens representing spaces
+        # retain them for the Config file
+
+        # create the basename from 'fullname' (which may have hyphens)
+        my $basename = $fullname;
+        $basename ~~ s:g/'-'//;
+
+        # all default fonts are OpenType except:
+        #   micrenc.ttf
+        #   CMC7.ttf
+        if ($basename ~~ /micrenc/) or ($basename ~~ /CMC7/) {
+            $basename ~= '.ttf';
+        }
+        else {
+            $basename ~= '.otf';
+        }
+        # finally, get the real source directory
+        my $path = "$fontsdir/$basename";
+
+        #==============================
+        # IMPORTANT THIS DATA MUST BE ABLE TO ROUNDTRIP WITH 
+        # class FontClass
+        #   see file lib/FontFactory/FontClasses.rakumod
+        #   see test in t/?-class-
+        #==============================
+    }
 
     =begin comment
     my $nc = 0;
