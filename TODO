@@ -2,7 +2,9 @@
   see:
     FontFactory::Config
     FontFactory::FontClasses
-  use :$test to trigger WHERE the stuff is created??
+  use :$test-dir to trigger WHERE the stuff is created
+    use dir xt
+  consider changing class FontClass to Font when code is good
  
 The '$*HOME/.FontFactory' subdirs and contents are also
 created at the first install, but there may be additional

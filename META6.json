@@ -33,6 +33,7 @@
     "FontFactory::PageProcs": "lib/FontFactory/PageProcs.rakumod",
     "FontFactory::PodUtils": "lib/FontFactory/PodUtils.rakumod",
     "FontFactory::Resources": "lib/FontFactory/Resources.rakumod",
+    "FontFactory::Roles": "lib/FontFactory/Roles.rakumod",
     "FontFactory::Utils": "lib/FontFactory/Utils.rakumod"
   },
   "resources": [

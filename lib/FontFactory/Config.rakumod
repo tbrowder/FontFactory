@@ -4,6 +4,7 @@ use Text::Utils :strip-comment;
 use QueryOS;
 
 use FontFactory::Resources;
+use FontFactory::Roles;
 
 my $os = OS.new;
 
@@ -158,15 +159,21 @@ sub check-config(
 #|   2. The 'Config' file is created with the correct paths
 #|      for the default fonts and the current operating system (OS)
 sub create-config(
-    :$test = False,
+    :$test-dir, #= for testing locally in the xt dir
     :$debug,
     --> Bool
 ) is export {
-    my ($home, $dotFontFactory);
-    $home = $*HOME;
+    my ($cdir, $home, $dotFontFactory);
+    if $test-dir.IO.d {
+        $home = $test-dir;;
+    }
+    else {
+        $home = $*HOME;
+    }
+ 
     $dotFontFactory = ".FontFactory";
 
-    my $cdir = "$home/$dotFontFactory";
+    $cdir = "$home/$dotFontFactory";
     unless $cdir.IO.d {
         mkdir $cdir;
     }
@@ -220,7 +227,7 @@ sub create-config(
         exit;
     }
 
-    die "Tom, take care of Config creation in lib/*/Config";
+    die "Tom, take care of Config creation in lib/*/Config" if 0;
 
     # To create the virgin Config file:
     # + read @fontnames2 array: 5 fields per font
@@ -259,14 +266,14 @@ sub create-config(
         my $code2    = @w.shift;
         my $alias    = @w.shift;
 
-        # the input fullname may have hyphens representing spaces
-        # retain them for the Config file
+        # The input fullname may have hyphens representing spaces
+        # but retain them for the Config file
 
-        # create the basename from 'fullname' (which may have hyphens)
+        # Create the basename from 'fullname' (which may have hyphens)
         my $basename = $fullname;
         $basename ~~ s:g/'-'//;
 
-        # all default fonts are OpenType except:
+        # All default fonts are OpenType except:
         #   micrenc.ttf
         #   CMC7.ttf
         if ($basename ~~ /micrenc/) or ($basename ~~ /CMC7/) {
@@ -275,15 +282,17 @@ sub create-config(
         else {
             $basename ~= '.otf';
         }
-        # finally, get the real source directory
+        # Finally, get the real source directory
         my $path = "$fontsdir/$basename";
 
         #==============================
         # IMPORTANT THIS DATA MUST BE ABLE TO ROUNDTRIP WITH 
-        # class FontClass
-        #   see file lib/FontFactory/FontClasses.rakumod
-        #   see test in t/?-class-
+        # role FontData
+        #   see file lib/FontFactory/Roles.rakumod
+        #   see test in xt/0-class-
         #==============================
+        my $fc = FontData.new: :$number, :$fullname, :$code, :$code2, :$alias, 
+                               :$path; 
     }
 
     =begin comment

@@ -4,7 +4,36 @@ use Font::FreeType;
 use PDF::Font::Loader :load-font;
 use PDF::Content::FontObj;
 
-use FontFactory::Config;
+use FontFactory::Roles;
+
+=begin comment
+class FontData is export {
+    has UInt     $.number   is required: # field 1
+    has Str      $.fullname is required; # field 2
+    has Str      $.code;                 # field 3
+    has Str      $.code2;                # field 4
+    has Str      $.alias;                # field 5
+    has IO::Path $.path     is required; # field 6
+    
+    submethod TWEAK {
+        # fonts with $!number < 16 MUST have all 6 attributes defined
+        if $!number < 16 {
+            my @errs;
+            my $err = 0;
+            unless $!code.defined  { @errs.push: "undefined .code";  }
+            unless $!code2.defined { @errs.push: "undefined .code2"; }
+            unless $!alias.defined { @errs.push: "undefined .code2"; }
+            my $ne = @errs.elems;
+            if @errs {
+                my $s = $ne > 1 ?? 's' !! '';
+                note "FATAL: Font number $!number has $nd error$s:"; 
+                note " $_" for @errs;
+                die  "Early ending after fatal error$s.";
+            }
+        }
+    }
+}
+=end comment
 
 # Translate the default list to the Config format:
 # 1 to 6 fields:  all are used for the default fonts
@@ -20,16 +49,17 @@ use FontFactory::Config;
 #   Number is in order listed in
 #   The Red Book, Appendix E.1
 # integer Full-name  Code  Code2  alias path (path depends on OS)
-class FontClass is export {
-    has UInt $.number is required;     # field 1
+
+class FontClass is FontData is export {
+#   has UInt $.number is required;     # field 1
     # fullname may have spaces; the
     # default fonts' fullname has
     # hyphens which are removed in TWEAK
-    has Str  $.fullname is required;   # field 2
-    has Str  $.code = "";              # field 3
-    has Str  $.code2 = "";             # field 4
-    has Str  $.alias = "";             # field 5
-    has IO::Path:D $.path is required; # field 6
+#   has Str  $.fullname is required;   # field 2
+#   has Str  $.code  = "";             # field 3
+#   has Str  $.code2 = "";             # field 4
+#   has Str  $.alias = "";             # field 5
+#   has IO::Path:D $.path is required; # field 6
 
     # Derived attributes
     has $.shortname; # lower-case, no spaces, no suffix
@@ -40,8 +70,8 @@ class FontClass is export {
     has PDF::Content::FontObj $.font; 
 
     submethod TWEAK {
-        if $!number < 16 {
-            # substitute spaces for '-'
+        #if $!number < 16 {
+        #   # substitute spaces for '-'
             $!fullname ~~ s:g/'-'/ /;
         }
         $!shortname = $!fullname.lc;

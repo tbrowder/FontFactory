@@ -6,6 +6,7 @@ use FontFactory::FontClasses;
 use FontFactory::OtherClasses;
 use FontFactory::Config;
 use FontFactory::Resources;
+use FontFactory::Roles;
 use FontFactory::PageProcs;
 use FontFactory::Utils;
 use FontFactory::FontUtils; # to become its own repo later
@@ -18,6 +19,7 @@ use-ok "FontFactory::FontClasses";
 use-ok "FontFactory::OtherClasses";
 use-ok "FontFactory::Config";
 use-ok "FontFactory::Resources";
+use-ok "FontFactory::Roles";
 use-ok "FontFactory::Utils";
 use-ok "FontFactory::PageProcs";
 use-ok "FontFactory::FontUtils"; # to become its own repo later
