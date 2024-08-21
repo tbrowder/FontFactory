@@ -34,6 +34,24 @@ if not $fdir.IO.r {
 }
  
 =begin comment
+
+# The output filename:
+my $bnam = "FontHashes";
+my $f = "$*CWD/lib/FontFactory/X/{$bnam}.rakumod";
+my $fh = open $f, :w;
+$fh.print: qq:to/HERE/;
+#==============================
+# AUTO-GENERATED DO NOT EDIT
+# CREATED BY /sbin/createhashes
+#==============================
+
+unit module FontFactory::X::{$bnam};
+
+constant %code is export = %\(
+HERE
+=end comment
+
+=begin comment
 # on Debian
 # all font files in dir /usr/share/fonts/opentype/freefont
 # on MacOS
