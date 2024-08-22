@@ -1,3 +1,8 @@
+Use the algorithms in file ./unused/createhashes to (1) create the initial Conig file and (2) to fill the FF class' %nuumber, %code, %code2, and %shortname hashes at FF.new;
+  + first try to create at least part of it so that it can be used in both circumstances
+  + for instance, the Build step writes a file but the FF step inserts the same data into FF hashes. the only diff is the FF step READS the Config file while the Build step WRITES the Config file.
+    Maybe just the default 1-15 data lines can be a constant somehow but I think I'll bite the bullet and just make them "separate but equal"
+
 "MUST ROUNDTRIP FontClass and Config file";
   see:
     FontFactory::Config
