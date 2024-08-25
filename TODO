@@ -1,5 +1,20 @@
-SEE COKE's link for reading a pod file
+SEE COKE's link for reading a pod file:
+  Raku/doc/xt/rakuast-validate.rakutest
+
+
   in 0-TODO gmail label
+  + looks like I would use it on a pod file something like this:
+       use experimental :rakuast;
+       %*ENV<RAKUDO_RAKUAST> = 1;
+       my @pod-chunks; # a global array
+       for $pod-file.IO.slurp.AST.rakudoc -> $pod-node {
+           #  $=pod
+           walk-pod $pod-node;
+       }
+
+       sub walk-pod($pod-node) {
+           # as defined in the link above as "sub walk($node)"
+       } 
 
 Use the algorithms in file ./unused/createhashes to (1) create the initial Conig file and (2) to fill the FF class' %nuumber, %code, %code2, and %shortname hashes at FF.new;
   + first try to create at least part of it so that it can be used in both circumstances
