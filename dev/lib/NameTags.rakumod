@@ -31,16 +31,22 @@ my $bh = $bhi * 72; # badge height
 my $hm = 0.5*72;  # horizontal margins
 my $vm = 0.75*72; # vertical margins
 
-our %dims is export = %(
+our %dims = %(
   bwi => $bwi,
   bhi => $bhi,
   bw  => $bwi * 72, # badge width
   bh  => $bhi * 72, # badge height
   hm  => 0.5*72,    # horizontal margins
   vm  => 0.75*72,   # vertical margins
+  pw  => $pw,
+  ph  => $ph,
 );
 
 #==== subroutines
+sub get-dims-hash(--> Hash) is export {
+    %dims;
+}
+
 sub make-front-side(
     @p,       # list of 8 or less names for a page
     :$page,

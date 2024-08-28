@@ -7,7 +7,7 @@ use PDF::Content::Color :ColorName, :color;
 use lib "./lib";
 use NameTags;
 
-my %dims = %NameTags::dims;
+my %dims = get-dims-hash;
 
 # TODO create a file name with date and time included
 my $ofile = "Name-tags.pdf";

@@ -30,9 +30,7 @@ my $os = OS.new;
 #   /usr/share/fonts/opentype/freefont/
 
 my $Ld = "/usr/share/fonts/opentype/freefont";
-
 my $Md = "/opt/homebrew/Caskroom/font-freefont/20120503/freefont-20120503";
-
 my $Wd = "/usr/share/fonts/opentype/freefont";
 
 
