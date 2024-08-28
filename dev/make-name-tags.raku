@@ -12,7 +12,19 @@ my %dims = get-dims-hash;
 # TODO create a file name with date and time included
 my $ofile = "Name-tags.pdf";
 
-my @names = "more-names.txt".IO.lines;
+my @names;
+for "more-names.txt".IO.lines {
+    my @w = $_.words;
+    my $last = @w.pop;
+    my $first = @w.shift;
+    $first ~= " " ~ @w.pop if @w;;
+    my $name = "$last $first";
+    @names.push: $name;
+}
+@names .= sort;
+#.say for @names;
+#exit;
+
 #my @names = "Missy Browder", "Tom Browder";
 
 if not @*ARGS {

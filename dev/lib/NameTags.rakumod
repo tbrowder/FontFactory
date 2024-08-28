@@ -31,6 +31,26 @@ my $bh = $bhi * 72; # badge height
 my $hm = 0.5*72;  # horizontal margins
 my $vm = 0.75*72; # vertical margins
 
+# Given 2 columns x 4 rows per page and the
+# margins and gutters, we need to define
+# midpoints of each badge.
+# Per row, margins are 0.5" total. Midpoint
+# in width is 4.25". Give 1/4" between badges. Then:
+my $mx = 4.25 * 72;
+my $dx = (0.125 + (0.5 * $bwi)) * 72;
+my $x1 = $mx - $dx;
+my $x2 = $mx + $dx;
+
+# Allow 1/4" between rows. Top of first
+# row 1.5" with 1/14" between rows.
+my $v1 = (11 - 1.5 - (0.5 * $bhi)) * 72;
+my $dy = ($bhi + 0.25) * 72;
+my $v2 = $v1 - $dy;
+my $v3 = $v2 - $dy;
+my $v4 = $v3 - $dy;
+
+# With remaining
+# space of 7", 
 our %dims = %(
   bwi => $bwi,
   bhi => $bhi,
