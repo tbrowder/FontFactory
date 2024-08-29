@@ -13,7 +13,9 @@ my %dims = get-dims-hash;
 my $ofile = "Name-tags.pdf";
 
 my @names;
-for "more-names.txt".IO.lines {
+#my $names-file = "more-names.txt";
+my $names-file = "less-names.txt";
+for $names-file.IO.lines {
     my @w = $_.words;
     my $last = @w.pop;
     my $first = @w.shift;
@@ -25,7 +27,6 @@ for "more-names.txt".IO.lines {
 #.say for @names;
 #exit;
 
-#my @names = "Missy Browder", "Tom Browder";
 
 if not @*ARGS {
     print qq:to/HERE/;
@@ -101,6 +102,7 @@ my @n = @names; # sample name "Mary Ann Deaver"
 my PDF::Lite $pdf .= new;
 $pdf.media-box = [0, 0, %dims<pw>, %dims<ph>];
 my $page;
+my $page-num = 0;
 while @n.elems {
 
     # a new page of names <= 8
@@ -109,17 +111,19 @@ while @n.elems {
 
     say @p.raku if 0 and $debug;
 
-    say "Working front page...";
+    say "Working front page..." if $debug;
     # process the front page
     $page = $pdf.add-page;
     # put first and last name found in top margin
-    make-front-side @p, :$page, :$debug;
+    ++$page-num;
+    make-badge-page @p, :side<front>, :$page, :$page-num, :$debug;
 
-    say "Working back page...";
+    say "Working back page..." if $debug;
     # process the back side of the page
     $page = $pdf.add-page;
     # put first and last name found in top margin
-    make-back-side @p, :$page, :$debug;
+    ++$page-num;
+    make-badge-page @p, :side<back>, :$page, :$page-num, :$debug;
 
     =begin comment
     my @c = @p.batch(2);
@@ -133,7 +137,7 @@ $pdf.save-as: $ofile;
 say "See name tags file: $ofile";
 
 =finish
-# now in ./lib/GBUMC.rakumod
+# now in ./lib/NameTags.rakumod
 #==== subroutines
 
 sub write-cell-line(
