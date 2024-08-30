@@ -275,7 +275,64 @@ sub make-label(
 
 }
 
+our &draw-disk = &draw-ring;
+sub draw-ring(
+    $x, $y,  # center point
+    $r,      # radius
+    :$thick!,
+    :$page!,
+    :$fill = True, # else stroke
+    :$color = [1], # white
+    :$linewidth = 0,
+    ) is export {
+
+    # need inside clip of a disk
+    # first draw the outer circle path clockwise
+    # then draw the inner circle path counterclockwise
+    # then clip
+
+    $page.graphics: {
+        .Save;
+        .SetLineWidth: $linewidth; #, :$color;
+	.StrokeColor = color $color;
+	.FillColor   = color $color;
+        # from stack overflow: copyright 2022 by Spencer Mortenson
+        .transform: :translate[$x, $y];
+        constant c = 0.551915024495;
+
+        # outer cicle
+        .MoveTo: 0*$r, 1*$r; # top of the circle
+        # use four curves, clockwise
+        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
+        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
+        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
+        .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
+        .ClosePath;
+
+        # inner circle
+        my $R = $r - $thick;
+        .MoveTo: 0*$R, 1*$R; # top of the circle
+        # use four curves, counterclockwise
+        .CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
+        .CurveTo: -c*$R, -1*$R, -1*$R, -c*$R, -1*$R,  0*$R;
+        .CurveTo:  1*$R, -c*$R,  c*$R, -1*$R,  0*$R, -1*$R;
+        .CurveTo:  c*$R,  1*$R,  1*$R,  c*$R,  1*$R,  0*$R;
+        .ClosePath;
+        if $fill {
+            .Fill;
+        }
+        else {
+            .Stroke;
+        }
+        .Restore;
+    }
+}
+
 sub draw-cross(
+    :$height!,
+    :$width = $height, # default is same as height
+    :$hcross = 0.5, # ratio of height and distance of crossbar from the top
+    :$thick!,
     :$page!,
     ) is export {
 }
@@ -334,14 +391,20 @@ sub draw-circle(
         # from stack overflow: copyright 2022 by Spencer Mortenson
         .transform: :translate[$x, $y];
         constant c = 0.551915024495;
+
         .MoveTo: 0*$r, 1*$r; # top of the circle
-        # use four curves
-        .CurveTo:  c*$r, 1*$r,  1*$r, c*$r,  1*$r, 0*$r;
-        .CurveTo:  1*$r,-c*$r,  c*$r,-1*$r,  0*$r,-1*$r;
-        .CurveTo: -c*$r,-1*$r, -1*$r,-c*$r, -1*$r, 0*$r;
-        .CurveTo: -1*$r, c*$r, -c*$r, 1*$r,  0*$r, 1*$r;
+        # use four curves, clockwise
+        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
+        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
+        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
+        .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
         .ClosePath;
-        .Fill;
+        if $fill {
+            .Fill;
+        }
+        else {
+            .Stroke;
+        }
         .Restore;
     }
 }
