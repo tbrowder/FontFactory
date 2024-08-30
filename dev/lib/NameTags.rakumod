@@ -160,7 +160,6 @@ sub make-label(
     my $line3Y     = (0.3 + 0.35 + 0.1725) * $height; # 0.35 size of label
     my $line3size  = 40;
 
-
     # the outline
     $page.graphics: {
         .Save;
@@ -178,14 +177,15 @@ sub make-label(
     }
 
     # the blue part
+    my $blue = [0, 102, 255]; # from color picker
     $page.graphics: {
         .Save;
         # translate to top-left corner
         my $ulx = $cx - 0.5 * $width;
         my $uly = $cy + 0.5 * $height;
         .transform: :translate($ulx, $uly);
-        .FillColor = color 0.8; # light gray
-        #.FillColor = color Navy; #rgb(0, 0, 0.5);
+        #.FillColor = color 0.8; # light gray
+        .FillColor = color $blue; #[0, 0, 0.3]; #Navy; #rgb(0, 0, 0.5);
         #.FillColor = color Blue; #rgb(0, 0, 1);
         .LineWidth = 0;
         # the height is part of label $height
@@ -200,7 +200,7 @@ sub make-label(
         .Save;
         my $gb = "GBUMC";
         my $tx = $cx;
-        my $ty = $cy + ($height * 0.35);
+        my $ty = $cy + ($height * 0.5) - $line1Y;
         .transform: :translate($tx, $ty); # where $x/$y is the desired reference point
         #.text-transform: :translate($tx, $ty);
         .FillColor = color White; #rgb(0, 0, 0); # color Black
@@ -210,7 +210,21 @@ sub make-label(
         .Restore;
     }
 
-    #make-cross(:diam(15), :thick(10), :width(25), :height(25), :cx(0), :cy(0), :$page, :$debug);
+    my $diam = 0.35*72;
+    my $thick = 3; 
+    my $cwidth = 1*72;
+    my $cheight = 0.3 * 72;
+    my $ccxL = $cx - ($width * 0.5);
+    my $ccxR = $cx + ($width * 0.5);
+    my $cross-offset = 30;
+    $ccxL += $cross-offset; # center of cross 30 points right of left side
+    $ccxR -= $cross-offset; # center of cross 30 points left of right side
+    my $ccy = $cy + ($height * 0.5) - $line1Y;
+
+    make-cross(:$diam, :$thick, :width($cwidth), 
+                :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
+    make-cross(:$diam, :$thick, :width($cwidth), 
+                :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
 
     my @w = $text.words;
     my $last = @w.shift;
@@ -220,7 +234,8 @@ sub make-label(
     say "first: $first" if $debug;
     say "last: $last" if $debug;
 
-    # line 2 (first name)
+    # line 2 (first name), grays:
+    my $tcolor = 0.2; #[72, 72, 72]; # 0.7;
     $page.graphics: {
         .Save;
         # translate to top-middle
@@ -232,7 +247,7 @@ sub make-label(
         $ty -= 5;
         .transform: :translate($tx, $ty); # where $x/$y is the desired reference point
         #.text-transform: :translate($tx, $ty);
-        .FillColor = color Black; #rgb(0, 0, 0); # color Black
+        .FillColor = color $tcolor; #Black; #rgb(0, 0, 0); # color Black
         .font = %fonts<hb>, #.core-font('HelveticaBold'),
                  $line2size; # the size
         .print: $first, :align<center>, :valign<center>;
@@ -251,7 +266,7 @@ sub make-label(
         $ty += 5;
         .transform: :translate($tx, $ty); # where $x/$y is the desired reference point
         #.text-transform: :translate($tx, $ty);
-        .FillColor = color Black; #rgb(0, 0, 0); # color Black
+        .FillColor = color $tcolor; #Black; #rgb(0, 0, 0); # color Black
         .font = %fonts<hb>, #.core-font('HelveticaBold'),
                  $line3size; # the size
         .print: $last, :align<center>, :valign<center>;
@@ -260,12 +275,17 @@ sub make-label(
 
 }
 
+sub draw-cross(
+    :$page!,
+    ) is export {
+}
+
 sub make-cross(
     # overall dia
     :$diam!,
     :$thick!,
-    :$width!,      # points
-    :$height!,     # points
+    :$width!,     # points
+    :$height!,    # points
     :$cx!, :$cy!, # points
     :$page!,
     :$debug,
@@ -277,10 +297,13 @@ sub make-cross(
     # GBUMC's rose window
     my $radius = $diam*0.5;
 
-    # outer filled with white
-    draw-circle $cx, $cy, $radius, :color([0]), :$page;
     # inner filled with rose
-    draw-circle $cx, $cy, $radius, :color([1]), :$page;
+    my $rose = [255, 153, 255]; # from color picker
+    draw-circle $cx, $cy, $radius-$thick, :color($rose), :$page;
+
+    # outer filled with white with a cross inside as part of it
+    # is placed over the "rose" part
+    draw-circle $cx, $cy, $radius, :color(1), :$page;
 
     =begin comment
     $page.graphics: {
@@ -301,11 +324,13 @@ sub draw-circle(
     :$page!,
     :$fill = True,
     :$color = [1], # white
-    :$linewidth = 0
+    :$linewidth = 0,
 ) is export {
     $page.graphics: {
         .Save;
-        .setline: :$linewidth, :$color;
+        .SetLineWidth: $linewidth; #, :$color;
+	.StrokeColor = color $color;
+	.FillColor   = color $color;
         # from stack overflow: copyright 2022 by Spencer Mortenson
         .transform: :translate[$x, $y];
         constant c = 0.551915024495;
