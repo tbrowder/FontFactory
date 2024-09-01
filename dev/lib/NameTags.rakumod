@@ -160,7 +160,7 @@ sub make-label(
     my $line3Y     = (0.3 + 0.35 + 0.1725) * $height; # 0.35 size of label
     my $line3size  = 40;
 
-    # the outline
+    # the rectangular outline
     $page.graphics: {
         .Save;
         # translate to top-left corner
@@ -176,7 +176,7 @@ sub make-label(
         .Restore;
     }
 
-    # the blue part
+    # the upper blue part
     my $blue = [0, 102, 255]; # from color picker
     $page.graphics: {
         .Save;
@@ -226,6 +226,7 @@ sub make-label(
     make-cross(:$diam, :$thick, :width($cwidth), 
                 :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
 
+    # the names on two lines
     my @w = $text.words;
     my $last = @w.shift;
     my $first = @w.shift;
@@ -236,6 +237,7 @@ sub make-label(
 
     # line 2 (first name), grays:
     my $tcolor = 0.2; #[72, 72, 72]; # 0.7;
+
     $page.graphics: {
         .Save;
         # translate to top-middle
@@ -307,7 +309,7 @@ sub draw-ring(
         .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
         .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
         .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
-        .ClosePath;
+        #.ClosePath;
 
         # inner circle
         my $R = $r - $thick;
@@ -318,6 +320,7 @@ sub draw-ring(
         .CurveTo:  1*$R, -c*$R,  c*$R, -1*$R,  0*$R, -1*$R;
         .CurveTo:  c*$R,  1*$R,  1*$R,  c*$R,  1*$R,  0*$R;
         .ClosePath;
+        .Clip;
         if $fill {
             .Fill;
         }
@@ -326,6 +329,22 @@ sub draw-ring(
         }
         .Restore;
     }
+}
+
+sub draw-rose-window(
+    ) is export {
+    # My initial guess at the rose window colors (rgb triplets)
+    # based on my comparing the image on the church website
+    # to the W3C rgb color picker website.
+    # 
+    # I may update the values as needed after seeing printed results.
+    my @colors = 
+    <255 204 102>,
+    <  0   0   0>,      
+    <153 204 255>,
+    <  0 102 255>,
+    < 51 153 102>,
+    <204  51   0>;
 }
 
 sub draw-cross(
