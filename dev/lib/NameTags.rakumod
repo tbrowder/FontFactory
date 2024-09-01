@@ -160,6 +160,21 @@ sub make-label(
     my $line3Y     = (0.3 + 0.35 + 0.1725) * $height; # 0.35 size of label
     my $line3size  = 40;
 
+    # cross/rose window params
+    my $diam = 0.35*72;
+    my $thick = 3;
+    my $cwidth = 1*72;
+    my $cheight = 0.3 * 72;
+    my $ccxL = $cx - ($width * 0.5);
+    my $ccxR = $cx + ($width * 0.5);
+    my $cross-offset = 30;
+    $ccxL += $cross-offset; # center of cross 30 points right of left side
+    $ccxR -= $cross-offset; # center of cross 30 points left of right side
+    my $ccy = $cy + ($height * 0.5) - $line1Y;
+
+    # rose window in the background of the top blue part
+    #draw-rose-pattern;
+
     # the rectangular outline
     $page.graphics: {
         .Save;
@@ -210,20 +225,9 @@ sub make-label(
         .Restore;
     }
 
-    my $diam = 0.35*72;
-    my $thick = 3; 
-    my $cwidth = 1*72;
-    my $cheight = 0.3 * 72;
-    my $ccxL = $cx - ($width * 0.5);
-    my $ccxR = $cx + ($width * 0.5);
-    my $cross-offset = 30;
-    $ccxL += $cross-offset; # center of cross 30 points right of left side
-    $ccxR -= $cross-offset; # center of cross 30 points left of right side
-    my $ccy = $cy + ($height * 0.5) - $line1Y;
-
-    make-cross(:$diam, :$thick, :width($cwidth), 
+    make-cross(:$diam, :$thick, :width($cwidth),
                 :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
-    make-cross(:$diam, :$thick, :width($cwidth), 
+    make-cross(:$diam, :$thick, :width($cwidth),
                 :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
 
     # the names on two lines
@@ -304,23 +308,26 @@ sub draw-ring(
 
         # outer cicle
         .MoveTo: 0*$r, 1*$r; # top of the circle
-        # use four curves, clockwise
-        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
-        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
-        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
+        # use four curves, counterclockwise (positive direction)
         .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
+        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
+        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
+        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
         #.ClosePath;
 
         # inner circle
         my $R = $r - $thick;
         .MoveTo: 0*$R, 1*$R; # top of the circle
-        # use four curves, counterclockwise
-        .CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
-        .CurveTo: -c*$R, -1*$R, -1*$R, -c*$R, -1*$R,  0*$R;
-        .CurveTo:  1*$R, -c*$R,  c*$R, -1*$R,  0*$R, -1*$R;
+        # use four curves, clockwise (negative direction)
+	.StrokeColor = color [0]; # black$color;
+	.FillColor   = color [0]; # black$color;
         .CurveTo:  c*$R,  1*$R,  1*$R,  c*$R,  1*$R,  0*$R;
+        .CurveTo:  1*$R, -c*$R,  c*$R, -1*$R,  0*$R, -1*$R;
+        .CurveTo: -c*$R, -1*$R, -1*$R, -c*$R, -1*$R,  0*$R;
+        .CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
         .ClosePath;
         .Clip;
+
         if $fill {
             .Fill;
         }
@@ -336,11 +343,11 @@ sub draw-rose-window(
     # My initial guess at the rose window colors (rgb triplets)
     # based on my comparing the image on the church website
     # to the W3C rgb color picker website.
-    # 
+    #
     # I may update the values as needed after seeing printed results.
-    my @colors = 
+    my @colors =
     <255 204 102>,
-    <  0   0   0>,      
+    <  0   0   0>,
     <153 204 255>,
     <  0 102 255>,
     < 51 153 102>,
@@ -394,6 +401,13 @@ sub make-cross(
     }
     =end comment
 }
+
+sub draw-rose-pattern(
+    :$ccxL,
+    :$ccxR.
+) is export {
+}
+
 
 sub draw-circle(
     $x, $y, $r,

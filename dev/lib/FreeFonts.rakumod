@@ -1,5 +1,6 @@
 unit module FreeFonts;
 
+use PDF::Font::Loader::HarfBuzz;
 use PDF::Font::Loader :load-font;
 use PDF::Content;
 
@@ -44,20 +45,20 @@ sub get-loaded-fonts-hash(:$debug --> Hash) is export {
     my $ffcbo = "$fontdir/FreeMonoBoldOblique.otf";
 
     my %fonts;
-    %fonts<t>   = load-font :file($fft);
-    %fonts<tb>  = load-font :file($fftb);
-    %fonts<ti>  = load-font :file($ffti);
-    %fonts<tbi> = load-font :file($fftbi);
+    %fonts<t>   = load-font :file($fft); # deb 12, :subset;
+    %fonts<tb>  = load-font :file($fftb); # deb 12, :subset;
+    %fonts<ti>  = load-font :file($ffti); # deb 12, :subset;
+    %fonts<tbi> = load-font :file($fftbi); # deb 12, :subset;
 
-    %fonts<h>   = load-font :file($ffh);
-    %fonts<hb>  = load-font :file($ffhb);
-    %fonts<ho>  = load-font :file($ffho);
-    %fonts<hbo> = load-font :file($ffhbo);
+    %fonts<h>   = load-font :file($ffh); # deb 12, :subset;
+    %fonts<hb>  = load-font :file($ffhb); # deb 12, :subset;
+    %fonts<ho>  = load-font :file($ffho); # deb 12, :subset;
+    %fonts<hbo> = load-font :file($ffhbo); # deb 12, :subset;
 
-    %fonts<c>   = load-font :file($ffc);
-    %fonts<cb>  = load-font :file($ffcb);
-    %fonts<co>  = load-font :file($ffco);
-    %fonts<cbo> = load-font :file($ffcbo);
+    %fonts<c>   = load-font :file($ffc); # deb 12, :subset;
+    %fonts<cb>  = load-font :file($ffcb); # deb 12, :subset;
+    %fonts<co>  = load-font :file($ffco); # deb 12, :subset;
+    %fonts<cbo> = load-font :file($ffcbo); # deb 12, :subset;
 
     %fonts;
 }
