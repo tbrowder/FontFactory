@@ -210,6 +210,13 @@ sub make-label(
         .Restore;
     }
 
+    # the "master" subs that create the entire cross symbols, including
+    # the rose window background
+    make-cross(:$diam, :$thick, :width($cwidth),
+                :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
+    make-cross(:$diam, :$thick, :width($cwidth),
+                :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
+
     # gbumc text in the blue part
     $page.graphics: {
         .Save;
@@ -224,11 +231,6 @@ sub make-label(
         .print: $gb, :align<center>, :valign<center>;
         .Restore;
     }
-
-    make-cross(:$diam, :$thick, :width($cwidth),
-                :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
-    make-cross(:$diam, :$thick, :width($cwidth),
-                :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
 
     # the names on two lines
     my @w = $text.words;
@@ -380,6 +382,33 @@ sub make-cross(
     # GBUMC's rose window
     my $radius = $diam*0.5;
 
+    # create a white, filled, thinly stroked circle of the total
+    # diameter
+
+    # create a clipped, inner circular path with radius inside
+    # by the thickness
+
+    # create the stained-glass portion
+    # as a rectangular pattern set
+    # to the height and width of the circle
+
+    # 4 pieces
+    # upper left rectangle
+    draw-ul-rect
+    # upper right rectangle
+    draw-ur-rect;
+    # lower left rectangle
+    draw-ll-rect;
+    # lower right rectangle
+    draw-lr-rect;
+    
+
+    # create the white spokes
+
+
+
+
+    =begin comment
     # inner filled with rose
     my $rose = [255, 153, 255]; # from color picker
     draw-circle $cx, $cy, $radius-$thick, :color($rose), :$page;
@@ -387,6 +416,7 @@ sub make-cross(
     # outer filled with white with a cross inside as part of it
     # is placed over the "rose" part
     draw-circle $cx, $cy, $radius, :color(1), :$page;
+    =end comment
 
     =begin comment
     $page.graphics: {
@@ -404,7 +434,7 @@ sub make-cross(
 
 sub draw-rose-pattern(
     :$ccxL,
-    :$ccxR.
+    :$ccxR,
 ) is export {
 }
 
@@ -538,4 +568,86 @@ sub show-nums($landscape = 0) is export {
     $hgutter /= 72.0;
     $vgutter /= 72.0;
     $nc, $nr, $hgutter, $vgutter
+}
+
+# upper-left quadrant
+sub draw-ul-rect(
+    :$lrx!,  # in centimeters
+    :$lry!,  # in centimeters
+    :$xlen!, # in desired PS points, scale accordingly
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
+    :$page!,
+    ) is export {
+    # on the sketch are 10 rectangle numbers, use them here
+    # also rgb colors are on the sketch for some blocks
+    # the sketch is accompanied by a graph drawing showing blown-up
+    #   dimensions in centimeters which must be scaled down by the
+    #   appropriate factor
+    # pane 1 rgb: 204, 51, 0
+    # pane 2 rgb:
+    # pane 3 rgb: 153, 204, 255
+    # pane 4 rgb: 0, 0, 0
+    # pane 5 rgb: 255, 204, 102
+    # pane 6 rgb:
+    # pane 7 rgb:
+    # pane 8 rgb:
+    # pane 9 rgb: 0, 102, 255
+    # pane 10 rgb: 51, 153, 102
+}
+
+# upper-right quadrant
+sub draw-ur-rect(
+    :$llx!,  # in centimeters
+    :$lly!,  # in centimeters
+    :$xlen!, # in desired PS points, scale accordingly
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
+    :$page!,
+    ) is export {
+}
+
+# lower-left quadrant
+sub draw-ll-rect(
+    :$urx!,  # in centimeters
+    :$ury!,  # in centimeters
+    :$xlen!, # in desired PS points, scale accordingly
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
+    :$page!,
+    ) is export {
+}
+
+# lower-right quadrant
+sub draw-lr-rect(
+    :$ulx!,  # in centimeters
+    :$uly!,  # in centimeters
+    :$xlen!, # in desired PS points, scale accordingly
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
+    :$page!,
+    ) is export {
+}
+
+sub draw-rectangle(
+    :$llx!,
+    :$lly!,
+    :$width!,
+    :$height!,
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
+    :$page!,
+    ) is export {
+
+    $page.graphics: {
+        .Save;
+        # translate to lower-left corner
+        .transform: :translate($llx, $lly);
+        .FillColor = color $fill-color;
+        .StrokeColor = color $stroke-color;
+        .LineWidth = 0;
+        .Fill;
+        .Stroke;
+        .Restore;
+    }
 }
