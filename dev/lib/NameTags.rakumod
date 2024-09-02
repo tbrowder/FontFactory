@@ -340,21 +340,19 @@ sub draw-ring(
     }
 }
 
-sub draw-rose-window(
-    ) is export {
-    # My initial guess at the rose window colors (rgb triplets)
-    # based on my comparing the image on the church website
-    # to the W3C rgb color picker website.
-    #
-    # I may update the values as needed after seeing printed results.
-    my @colors =
-    <255 204 102>,
-    <  0   0   0>,
-    <153 204 255>,
-    <  0 102 255>,
-    < 51 153 102>,
-    <204  51   0>;
-}
+# My initial guess at the rose window colors (rgb triplets)
+# based on my comparing the image on the church website
+# to the W3C rgb color picker website.
+#
+# I may update the values as needed after seeing printed results.
+constant %colors = %(
+    1 => [255, 204, 102],
+    2 => [  0,   0,   0],
+    3 => [153, 204, 255],
+    4 => [  0, 102, 255],
+    5 => [ 51, 153, 102],
+    6 => [204,  51,   0],
+);
 
 sub draw-cross(
     :$height!,
@@ -393,14 +391,20 @@ sub make-cross(
     # to the height and width of the circle
 
     # 4 pieces
+    my ($lrx, $lry, $llx, $lly, $urx, $ury, $ulx, $uly); 
+    my ($width-pts, $stroke-color, $fill-color); 
     # upper left rectangle
-    draw-ul-rect
+    draw-ul-rect :$lrx, :$lry, :$width, :$height, :$width-pts, 
+                 :$stroke-color, :$fill-color, :$page;
     # upper right rectangle
-    draw-ur-rect;
+    draw-ur-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
+                 :$stroke-color, :$fill-color, :$page;
     # lower left rectangle
-    draw-ll-rect;
+    draw-ll-rect :$urx, :$ury, :$width, :$height, :$width-pts, 
+                 :$stroke-color, :$fill-color, :$page;
     # lower right rectangle
-    draw-lr-rect;
+    draw-lr-rect :$ulx, :$uly, :$width, :$height, :$width-pts, 
+                 :$stroke-color, :$fill-color, :$page;
     
 
     # create the white spokes
@@ -572,9 +576,11 @@ sub show-nums($landscape = 0) is export {
 
 # upper-left quadrant
 sub draw-ul-rect(
-    :$lrx!,  # in centimeters
-    :$lry!,  # in centimeters
-    :$xlen!, # in desired PS points, scale accordingly
+    :$lrx!,       # in centimeters
+    :$lry!,       # in centimeters
+    :$width!,     # in centimeters
+    :$height!,    # in centimeters
+    :$width-pts!, # in desired PS points, scale cm dimens accordingly
     :$stroke-color = [0], # black
     :$fill-color   = [1], # white
     :$page!,
@@ -585,6 +591,8 @@ sub draw-ul-rect(
     #   dimensions in centimeters which must be scaled down by the
     #   appropriate factor
     # pane 1 rgb: 204, 51, 0
+    draw-rectangle :LLX(0), :LLY(0), :width(0), :height(0), 
+                   :$stroke-color, :$fill-color, :$page;
     # pane 2 rgb:
     # pane 3 rgb: 153, 204, 255
     # pane 4 rgb: 0, 0, 0
@@ -630,8 +638,8 @@ sub draw-lr-rect(
 }
 
 sub draw-rectangle(
-    :$llx!,
-    :$lly!,
+    :$LLX!, # in caps to avoid confusion with quadrant notation
+    :$LLY!,
     :$width!,
     :$height!,
     :$stroke-color = [0], # black
@@ -642,7 +650,7 @@ sub draw-rectangle(
     $page.graphics: {
         .Save;
         # translate to lower-left corner
-        .transform: :translate($llx, $lly);
+        .transform: :translate($LLX, $LLY);
         .FillColor = color $fill-color;
         .StrokeColor = color $stroke-color;
         .LineWidth = 0;
