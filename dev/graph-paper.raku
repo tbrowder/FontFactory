@@ -5,15 +5,20 @@ use PDF::Lite;
 use PDF::Content::Color :ColorName, :color;
 
 use lib "./lib";
-use NameTags;
-use GraphPaper;
 
+use FreeFonts;
+use MiscGraphics;
+
+=begin comment
+# this data is in lib/NameTags.rakumod
 my $margins = 0.4 * 72;
 # use letter paper
-my $cell    = 0.1; # desired minimum cell size (inches)
 my $cell-lw =   0; # very fine line
-my $grid    =   5; # heavier line every X cells
 my $grid-lw =   1; # heavier line width
+=end comment
+my $grid    =   5; # heavier line every X cells
+my $cell    = 0.1; # desired minimum cell size (inches)
+
 my $ofil    = "graph-paper.pdf";
 if not @*ARGS {
     print qq:to/HERE/;
@@ -34,7 +39,7 @@ if not @*ARGS {
 }
 
 for @*ARGS {
-    when /^ :i pdf '=' (\S+) /{
+    when /^ :i pdf '=' (\S+) / {
         $ofil = ~$0;    
     }
 }
