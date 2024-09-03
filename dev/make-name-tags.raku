@@ -5,7 +5,8 @@ use PDF::Lite;
 use PDF::Content::Color :ColorName, :color;
 
 use lib "./lib";
-use NameTags;
+use FreeFonts;
+use MiscGraphics;
 
 my %dims = get-dims-hash;
 

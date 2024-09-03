@@ -1,4 +1,4 @@
-unit module NameTags;
+unit module MiscGraphics;
 
 use PDF::API6;
 use PDF::Lite;
@@ -392,19 +392,22 @@ sub make-cross(
 
     # 4 pieces
     my ($lrx, $lry, $llx, $lly, $urx, $ury, $ulx, $uly); 
-    my ($width-pts, $stroke-color, $fill-color); 
+    my ($width-pts); 
+    my ($stroke-color, $fill-color) = 1, 0; 
     # upper left rectangle
-    draw-ul-rect :$lrx, :$lry, :$width, :$height, :$width-pts, 
+    draw-ul-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
                  :$stroke-color, :$fill-color, :$page;
+    =begin comment
     # upper right rectangle
     draw-ur-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
                  :$stroke-color, :$fill-color, :$page;
     # lower left rectangle
-    draw-ll-rect :$urx, :$ury, :$width, :$height, :$width-pts, 
+    draw-ll-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
                  :$stroke-color, :$fill-color, :$page;
     # lower right rectangle
-    draw-lr-rect :$ulx, :$uly, :$width, :$height, :$width-pts, 
+    draw-lr-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
                  :$stroke-color, :$fill-color, :$page;
+    =end comment
     
 
     # create the white spokes
@@ -576,11 +579,12 @@ sub show-nums($landscape = 0) is export {
 
 # upper-left quadrant
 sub draw-ul-rect(
-    :$lrx!,       # in centimeters
-    :$lry!,       # in centimeters
+    :$llx!,       # in centimeters
+    :$lly!,       # in centimeters
     :$width!,     # in centimeters
     :$height!,    # in centimeters
     :$width-pts!, # in desired PS points, scale cm dimens accordingly
+    # probably don't need these
     :$stroke-color = [0], # black
     :$fill-color   = [1], # white
     :$page!,
@@ -591,7 +595,7 @@ sub draw-ul-rect(
     #   dimensions in centimeters which must be scaled down by the
     #   appropriate factor
     # pane 1 rgb: 204, 51, 0
-    draw-rectangle :LLX(0), :LLY(0), :width(0), :height(0), 
+    draw-rectangle :llx(0), :lly(0), :width(0), :height(0), 
                    :$stroke-color, :$fill-color, :$page;
     # pane 2 rgb:
     # pane 3 rgb: 153, 204, 255
@@ -617,8 +621,8 @@ sub draw-ur-rect(
 
 # lower-left quadrant
 sub draw-ll-rect(
-    :$urx!,  # in centimeters
-    :$ury!,  # in centimeters
+    :$llx!,  # in centimeters
+    :$lly!,  # in centimeters
     :$xlen!, # in desired PS points, scale accordingly
     :$stroke-color = [0], # black
     :$fill-color   = [1], # white
@@ -628,8 +632,8 @@ sub draw-ll-rect(
 
 # lower-right quadrant
 sub draw-lr-rect(
-    :$ulx!,  # in centimeters
-    :$uly!,  # in centimeters
+    :$llx!,  # in centimeters
+    :$lly!,  # in centimeters
     :$xlen!, # in desired PS points, scale accordingly
     :$stroke-color = [0], # black
     :$fill-color   = [1], # white
@@ -638,24 +642,115 @@ sub draw-lr-rect(
 }
 
 sub draw-rectangle(
-    :$LLX!, # in caps to avoid confusion with quadrant notation
-    :$LLY!,
+    :$llx!, 
+    :$lly!,
     :$width!,
     :$height!,
     :$stroke-color = [0], # black
     :$fill-color   = [1], # white
+    :$fill is copy,
+    :$stroke is copy,
     :$page!,
     ) is export {
+
+    $stroke = False if not $stroke.defined;
+    $fill   = False if not $fill.defined;
+    if not ($fill or $stroke) {
+        # make stroke the default
+        $stroke = True;
+    }
 
     $page.graphics: {
         .Save;
         # translate to lower-left corner
-        .transform: :translate($LLX, $LLY);
+        .transform: :translate($llx, $lly);
         .FillColor = color $fill-color;
         .StrokeColor = color $stroke-color;
         .LineWidth = 0;
-        .Fill;
-        .Stroke;
+        .MoveTo: $llx, $lly; 
+        .LineTo: $llx+$width, $lly;
+        .LineTo: $llx+$width, $lly+$height;
+        .LineTo: $llx       , $lly+$height;
+        .ClosePath;
+        
+        .Fill if $fill;
+        .Stroke if $stroke;
         .Restore;
     }
+}
+
+my $page-margins   = 0.4 * 72;
+# use letter paper
+my $cell-size      = 0.1; # desired minimum cell size (inches)
+   $cell-size     *= 72;  # now in points
+my $cells-per-grid = 10;  # heavier line every X cells
+
+my $cell-linewidth     =  0; # very fine line
+my $mid-grid-linewidth =  0.75; # heavier line width (every 5 cells)
+my $grid-linewidth     =  1.40; # heavier line width (every 10 cells)
+
+sub make-graph-paper($ofil) is export {
+    # Determine maximum horizontal grid squares for Letter paper,
+    # portrait orientation, and 0.4-inch horizontal margins.
+    my $page-width  = 8.5 * 72;
+    my $page-height = 11  * 72;
+    my $max-graph-size = $page-width - $page-margins * 2;
+    my $max-ncells = $max-graph-size div $cell-size; 
+
+    my $ngrids = $max-ncells div $cells-per-grid;
+    my $graph-size = $ngrids * $cells-per-grid * $cell-size;
+    my $ncells = $ngrids * $cells-per-grid;
+    say qq:to/HERE/;
+    Given cells of size $cell-size x $cell-size points, with margins, 
+      with grids of $cells-per-grid cells per grid = $ngrids.
+    HERE
+
+    my $pdf  = PDF::Lite.new;
+    $pdf.media-box = 0, 0, $page-width, $page-height;
+    my $page = $pdf.add-page;
+
+    # Translate to the lower-left corner of the grid area
+    my $llx = 0 + 0.5 * $page-width - 0.5 * $graph-size;
+    my $lly = $page-height - 72 - $graph-size;
+    $page.graphics: {
+        .transform: :translate($llx, $lly);
+
+        # draw horizontal lines, $y is varying 0 to $twidth
+        #   bottom to top
+        for 0..$ncells -> $i {
+            my $y = $i * $cell-size;
+            if not $i mod 10 {
+                .LineWidth = $grid-linewidth;
+            }
+            elsif not $i mod 5 {
+                .LineWidth = $mid-grid-linewidth;
+            }
+            else {
+                .LineWidth = $cell-linewidth;
+            }
+            .MoveTo: 0,           $y;
+            .LineTo: $graph-size, $y;
+            .Stroke;
+        }
+        # draw vertical lines, $x is varying 0 to $twidth
+        #   left to right
+        for 0..$ncells -> $i {
+            my $x = $i * $cell-size;
+            if not $i mod 10 {
+                .LineWidth = $grid-linewidth;
+            }
+            elsif not $i mod 5 {
+                .LineWidth = $mid-grid-linewidth;
+            }
+            else {
+                .LineWidth = $cell-linewidth;
+            }
+            .MoveTo: $x, 0;
+            .LineTo: $x, $graph-size;
+            .Stroke;
+        }
+    }
+
+    $pdf.save-as: $ofil;
+    say "See output file: '$ofil'";
 }
