@@ -6,6 +6,8 @@ use experimental :rakuast;
 %*ENV<RAKUDO_RAKUAST> = 1;
 
 my $pod-file = "../docs/README.rakudoc";
+my $debug = 0;
+
 if not @*ARGS {
     print qq:to/HERE/;
     Usage: {$*PROGRAM} go | <rakudoc file>
@@ -19,6 +21,18 @@ if not @*ARGS {
 
     HERE
     exit;
+}
+
+for @*ARGS {
+    when /^ :i d / {
+        ++$debug;
+    }
+    when /^ :i 'doc=' (\S+) / {
+        $pod-file = ~$0;
+        unless $pod-file.IO.r {
+            die "FATAL: Unable to open input file '$pod-file'";
+        }
+    }
 }
 
 my @unhandled-pod;
@@ -45,12 +59,10 @@ sub walk-pod($node, :$debug) is export {
 
     my @children;
 
-    =begin comment
     my $Typ = "(none)";
     my $Nam = "(none)";
-    my $Nam = $node.^name // "(none)";
-    my $Typ = $node.type  // "(none)";
 
+    =begin comment
     note qq:to/HERE/;
     DEBUG: found new node 
       pod type name: $Nam
@@ -60,11 +72,14 @@ sub walk-pod($node, :$debug) is export {
 
     my ($pod-type-name, $node-type) = "N/A", "N/A";
     with $node {
-        when ~~ RakuAst::Doc::Paragraph {
-            $node-type-name = "RakuAst::Doc::Paragraph";
+        when $_ ~~ 'RakuAst::Doc::Paragraph' {
+            $pod-type-name = "RakuAst::Doc::Paragraph";
         }
-        when ~~ RakuAst::Doc::Block {
-            $node-type-name = "RakuAst::Doc::Block";
+        when $_ ~~ 'RakuAst::Doc::Block' {
+            $pod-type-name = "RakuAst::Doc::Block";
+        }
+        when $_ ~~ Str {
+            $pod-type-name = "String";
         }
         default {
         }
@@ -78,7 +93,7 @@ sub walk-pod($node, :$debug) is export {
         my $typ = $node.type;
         $Typ = $typ;
         if $node.type eq 'code'|'implicit-code'|'comment'|'table' {
-            note "NOTE: skipping node typ '$typ' for now." if 1 or $debug;
+            note "NOTE: skipping node typ '$typ' for now." if 0 or $debug;
             @unhandled-pod.push: $typ;
             return;
         }
@@ -94,7 +109,7 @@ sub walk-pod($node, :$debug) is export {
         
         if 1 {
             note "NOTE: skipping node name '$Nam', type '$typ' for now."
-               if 1 or $debug;
+               if 0 or $debug;
             @unhandled-pod.push: $typ;
             return;
         }
@@ -102,17 +117,23 @@ sub walk-pod($node, :$debug) is export {
 
         #note "WARNING: Unhandled pod node type: $node.^name";
     }
+    elsif $node ~~ Str {
+        @pod-chunks.push: $node;
+        
+    }
     else {
         # report unhandled types
-        note "WARNING: Unhandled pod node name: $node.^name";
+        note "WARNING: Unhandled pod node name: $node.^name" if $debug;
     }
 
     my $nc = @children.elems;
     my $nam = $node.^name;
     my $typ = $Typ;
-    note qq:to/HERE/;
-    NOTE: found $nc child nodes for node name '$nam' and type '$typ'.
-    HERE
+    if $debug {
+        note qq:to/HERE/;
+        NOTE: found $nc child nodes for node name '$nam' and type '$typ'.
+        HERE
+    }
     for @children -> $child {
         =begin comment
         if $child ~~ Str {
