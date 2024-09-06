@@ -905,3 +905,13 @@ sub draw-hex-wedge(
     }
     =end comment
 } # sub draw-hex-wedge(
+
+sub simple-clip1(
+    :$page!,
+    ) is export {
+
+    # draw a local circle for clipping
+    # draw a local star overflowing the circle
+    
+} # sub simple-clip(
+

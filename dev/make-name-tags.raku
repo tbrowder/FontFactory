@@ -39,6 +39,8 @@ if not @*ARGS {
     The first two-page will contain job details.
 
     Options:
+      clip - Produces a clip example for testing
+
       show - Gives details of the job based on the input name list
              and card dimension parameters, then exits. The information
              is the same as on the printed job cover sheet.
