@@ -12,6 +12,8 @@ my %dims = get-dims-hash;
 
 # TODO create a file name with date and time included
 my $ofile = "Name-tags.pdf";
+# input data file: rose-glass-patterns.dat
+my $gfile = "rose-glass-patterns.dat";
 
 my @names;
 #my $names-file = "more-names.txt";
@@ -81,22 +83,6 @@ if $show {
     exit;
 }
 
-=begin comment
-# rows
-my $height = 1*72;
-my $width  = 1.5*72;
-my $x0     = 0.5*72;
-my $y0     = 8*72;
-for 1..3 -> $i {
-    my $x = $x0 + $i * $width;
-    my $text = "Number $i";
-    draw-cell :$text, :$page, :x0($x), :$y0, :$width, :$height;
-    write-cell-line :$text, :$page, :x0($x), :$y0, :$width, :$height,
-    :Halign<left>;
-$pdf.save-as: $ofile;
-say "See output file: ", $ofile;
-=end comment
-
 # cols 2, rows 4, total 8, portrait
 my @n = @names; # sample name "Mary Ann Deaver"
 my PDF::Lite $pdf .= new;
@@ -106,7 +92,6 @@ my $page-num = 0;
 while @n.elems {
 
     # a new page of names <= 8
-    #my @p = @n.batch(8);
     my @p = @n.splice(0,8); # weird name
 
     say @p.raku if 0 and $debug;
