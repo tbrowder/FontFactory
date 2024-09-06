@@ -121,7 +121,7 @@ sub make-badge-page(
         }
 
         make-label($nam1, :width($bw), :height($bh), :cx($hmid1), :$cy, :$page);
-        make-label($nam2, :width($bw), :height($bh), :cx($hmid2), :$cy, :$page) 
+        make-label($nam2, :width($bw), :height($bh), :cx($hmid2), :$cy, :$page)
             if $nam2;
     }
 
@@ -179,7 +179,6 @@ sub make-label(
     #==========================================
     # the rectangular outline
     $page.graphics: {
-        .Save;
         # translate to top-left corner
         my $ulx = $cx - 0.5 * $width;
         my $uly = $cy + 0.5 * $height;
@@ -190,33 +189,28 @@ sub make-label(
         .LineWidth = 0;
         .Rectangle(0, -$height, $width, $height);
         .Stroke; #paint: :fill, :stroke;
-        .Restore;
     }
 
     #==========================================
     # the upper blue part
     my $blue = [0, 102, 255]; # from color picker
     $page.graphics: {
-        .Save;
         # translate to top-left corner
         my $ulx = $cx - 0.5 * $width;
         my $uly = $cy + 0.5 * $height;
         .transform: :translate($ulx, $uly);
-        #.FillColor = color 0.8; # light gray
         .FillColor = color $blue; #[0, 0, 0.3]; #Navy; #rgb(0, 0, 0.5);
-        #.FillColor = color Blue; #rgb(0, 0, 1);
         .LineWidth = 0;
         # the height is part of label $height
         my $bh = $height * 0.3;
         .Rectangle(0, -$bh, $width, $bh);
         .paint: :fill, :stroke;
-        .Restore;
     }
 
     #==========================================
     # the "master" subs that create the entire cross symbols, including
     # the rose window background
-    
+
     make-cross(:$diam, :$thick, :width($cwidth),
                 :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
     make-cross(:$diam, :$thick, :width($cwidth),
@@ -389,7 +383,6 @@ sub make-cross(
     # default color is white
 ) is export {
 
-
     # initial model will be a hollow circle with symmetrical spokes in
     # shape of a cross, with a rose background color to simulate
     # GBUMC's rose window
@@ -406,31 +399,31 @@ sub make-cross(
 
     # create a clipped, inner circular path with radius inside
     # by the thickness
-
     # create the stained-glass portion
     # as a rectangular pattern set
     # to the height and width of the circle
- draw-color-wheel :$cx, :$cy, :$radius, :$page;
+# clip inside this sub:
+#draw-color-wheel :$cx, :$cy, :$radius, :$page;
 
     =begin comment
     # 4 pieces
-    my ($lrx, $lry, $llx, $lly, $urx, $ury, $ulx, $uly); 
-    my ($width-pts); 
-    my ($stroke-color, $fill-color) = 1, 0; 
+    my ($lrx, $lry, $llx, $lly, $urx, $ury, $ulx, $uly);
+    my ($width-pts);
+    my ($stroke-color, $fill-color) = 1, 0;
     # upper left rectangle
-    draw-ul-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
+    draw-ul-rect :$llx, :$lly, :$width, :$height, :$width-pts,
                  :$stroke-color, :$fill-color, :$page;
     # upper right rectangle
-    draw-ur-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
+    draw-ur-rect :$llx, :$lly, :$width, :$height, :$width-pts,
                  :$stroke-color, :$fill-color, :$page;
     # lower left rectangle
-    draw-ll-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
+    draw-ll-rect :$llx, :$lly, :$width, :$height, :$width-pts,
                  :$stroke-color, :$fill-color, :$page;
     # lower right rectangle
-    draw-lr-rect :$llx, :$lly, :$width, :$height, :$width-pts, 
+    draw-lr-rect :$llx, :$lly, :$width, :$height, :$width-pts,
                  :$stroke-color, :$fill-color, :$page;
     =end comment
-    
+
 
     # create the white spokes
 
@@ -465,14 +458,15 @@ sub make-cross(
 sub draw-circle(
     $x, $y, $r,
     :$page!,
-    :$stroke,
-    :$fill,
     :$stroke-color = [0], # black
     :$fill-color   = [1], # white
     :$linewidth = 0,
+    :$fill,
+    :$stroke,
+    :$clip,
 ) is export {
-    $page.graphics: {
-        .Save;
+    $page.gfx: {
+        .Save if not $clip;
         .SetLineWidth: $linewidth; #, :$color;
 	.StrokeColor = color $stroke-color;
 	.FillColor   = color $fill-color;
@@ -480,16 +474,41 @@ sub draw-circle(
         .transform: :translate[$x, $y];
         constant c = 0.551915024495;
 
+        #=begin comment
         .MoveTo: 0*$r, 1*$r; # top of the circle
         # use four curves, clockwise
         .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
         .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
         .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
         .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
-        #.ClosePath;
-        .Fill if $fill;
-        .Stroke if $stroke;
-        .Restore;
+        .ClosePath;
+        #=end comment
+        =begin comment
+        .MoveTo: 0*$r, 1*$r; # top of the circle
+        # use four curves, counter-clockwise
+        .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
+        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
+        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
+        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
+        .ClosePath;
+        =end comment
+
+        if not $clip {
+            if $fill and $stroke {
+                .FillStroke;
+            }
+            elsif $fill {
+                .Fill;
+            }
+            elsif $stroke {
+                .Stroke;
+            }
+            .Restore;
+        }
+        else {
+            #.Clip; # .EOClip; # ??
+            .EOClip; # ??
+        }
     }
 } # sub draw-circle(
 
@@ -609,7 +628,7 @@ sub draw-ul-rect(
     #   dimensions in centimeters which must be scaled down by the
     #   appropriate factor
     # pane 1 rgb: 204, 51, 0
-    draw-rectangle :llx(0), :lly(0), :width(20), :height(20), 
+    draw-rectangle :llx(0), :lly(0), :width(20), :height(20),
                    :$stroke-color, :$fill-color, :$page;
     # pane 2 rgb:
     # pane 3 rgb: 153, 204, 255
@@ -656,7 +675,7 @@ sub draw-lr-rect(
 }
 
 sub draw-rectangle(
-    :$llx!, 
+    :$llx!,
     :$lly!,
     :$width!,
     :$height!,
@@ -681,12 +700,12 @@ sub draw-rectangle(
         .FillColor = color $fill-color;
         .StrokeColor = color $stroke-color;
         .LineWidth = 0;
-        .MoveTo: $llx, $lly; 
+        .MoveTo: $llx, $lly;
         .LineTo: $llx+$width, $lly;
         .LineTo: $llx+$width, $lly+$height;
         .LineTo: $llx       , $lly+$height;
         .ClosePath;
-        
+
         if $fill and $stroke {
             .FillStroke;
         }
@@ -715,13 +734,13 @@ sub make-graph-paper($ofil) is export {
     my $page-width  = 8.5 * 72;
     my $page-height = 11  * 72;
     my $max-graph-size = $page-width - $page-margins * 2;
-    my $max-ncells = $max-graph-size div $cell-size; 
+    my $max-ncells = $max-graph-size div $cell-size;
 
     my $ngrids = $max-ncells div $cells-per-grid;
     my $graph-size = $ngrids * $cells-per-grid * $cell-size;
     my $ncells = $ngrids * $cells-per-grid;
     say qq:to/HERE/;
-    Given cells of size $cell-size x $cell-size points, with margins, 
+    Given cells of size $cell-size x $cell-size points, with margins,
       with grids of $cells-per-grid cells per grid = $ngrids.
     HERE
 
@@ -779,7 +798,7 @@ sub deg2rad($degrees) {
     $degrees * pi / 180
 }
 
-sub rad2deg($radians) { 
+sub rad2deg($radians) {
     $radians * 180 / pi
 }
 
@@ -790,18 +809,18 @@ sub draw-color-wheel(
     ) is export {
     # a hex wheel of different-colored triangles centered
     # on the circle defined with the inputs
-    
+
 # TODO
 
-    $page.graphics: {
+    #$page.graphics: {
+    $page.gfx: {
         .Save;
         # clip to a circle
-        #draw-circle $cx, $cy, $radius, :$page;
+        draw-circle $cx, $cy, $radius, :$page, :clip;
 
         my $cnum = 0;
         #my $stroke-color = color Black;
         my $stroke-color = color White;
-        my $stroke = True;
         for 0..^6 {
             my $angle = $_ * 60;
             ++$cnum; # color number in %colors
@@ -817,7 +836,7 @@ sub draw-hex-wedge(
     :$cx!, :$cy!,
     :$height!, # apex at cx, ch, height is perpendicular at the base
     :$angle!,  # degrees ccw from 3 o'clock
-    :$fill, 
+    :$fill,
     :$stroke,
     :$fill-color   = [1],
     :$stroke-color = [0],
@@ -827,7 +846,7 @@ sub draw-hex-wedge(
     #          0
     #         /|\ equilateral triangle
     #        / | \ c
-    #       /  |h \ 60 deg 
+    #       /  |h \ 60 deg
     #    1 /---+---\ 2      given: h, angles 1 and 2 60 degrees each
     #        a   a
     #                    h/a = tan 60 deg
@@ -838,6 +857,30 @@ sub draw-hex-wedge(
     # rotate as desired by $angle
     # draw the triangle
 
+    #my $g = $page.graphics;
+    my $g = $page.gfx;
+    $g.Save;
+    $g.transform :translate($cx,$cy);
+    $g.transform :rotate(deg2rad($angle));
+    $g.LineWidth = 0;
+    $g.FillColor = color $fill-color;
+    $g.StrokeColor = color $stroke-color;
+    $g.MoveTo: -$a, -$height;
+    $g.LineTo: +$a, -$height;
+    $g.LineTo:   0,   0;
+    $g.ClosePath;
+    if $fill and $stroke {
+        $g.FillStroke;
+    }
+    elsif $fill {
+        $g.Fill;
+    }
+    elsif $stroke {
+        $g.Stroke;
+    }
+    $g.Restore;
+
+    =begin comment
     $page.graphics: {
         .Save;
         .transform :translate($cx,$cy);
@@ -860,5 +903,5 @@ sub draw-hex-wedge(
         }
         .Restore;
     }
+    =end comment
 } # sub draw-hex-wedge(
-
