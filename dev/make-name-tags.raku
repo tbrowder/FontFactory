@@ -39,11 +39,12 @@ if not @*ARGS {
     The first two-page will contain job details.
 
     Options:
-      clip - Produces a clip example for testing
+      clip[=N] - Produces muultiple clip example PDFs
+                 With N, produces example N.
 
-      show - Gives details of the job based on the input name list
-             and card dimension parameters, then exits. The information
-             is the same as on the printed job cover sheet.
+      show  - Gives details of the job based on the input name list
+              and card dimension parameters, then exits. The information
+              is the same as on the printed job cover sheet.
 
     HERE
     exit
@@ -54,11 +55,20 @@ my $debug     = 0;
 my $landscape = 0;
 my $go        = 0;
 my $clip      = 0;
+my $Nclips    = 2;
+
+my $NC; # selected clip number [0..^$Nclips]
 for @*ARGS {
     when /^ :i s/ { ++$show  }
     when /^ :i d/ { ++$debug }
     when /^ :i g/ { ++$go    }
-    when /^ :i c/ { ++$clip  }
+    when /^ :i c \w*? ['=' (\d) ] / {
+        ++$clip;
+        if $0.defined {
+            $NC = +$0;
+            $NC = $Nclips if $NC > $Nclips;
+        }
+    }
     default {
         say "Unknown arg '$_'...exiting.";
         exit;
@@ -90,19 +100,29 @@ if $show {
 # cols 2, rows 4, total 8, portrait
 my @n = @names; # sample name "Mary Ann Deaver"
 
-if $clip {
-    my $N = 1;
-    for 0..^$N -> $i {
+if $clip {;
+    for 0..^$Nclips -> $i {
         my $n = $i+1;
         my PDF::Lite $pdf .= new;
         my $page = $pdf.add-page;
         $page.media-box = [0, 0, 8.5*72, 11*72];
-        if $n == 1 {
-            simple-clip1 :$page, :$debug;
-            my $of = "simple-clip$n.pdf";
-            $pdf.save-as: $of;
-            say "See clip example file: $of";
+        next if $NC.defined and $n !== $NC;
+        with $n {
+            when $n == 2 {
+                simple-clip2 :$page, :$debug;
+                my $of = "simple-clip$n.pdf";
+                $pdf.save-as: $of;
+                say "See clip example file: $of";
+                exit;
+            }
+            when $n == 1 {
+                simple-clip1 :$page, :$debug;
+                my $of = "simple-clip$n.pdf";
+                $pdf.save-as: $of;
+                say "See clip example file: $of";
+            }
         }
+
     }
     exit;
 }
@@ -142,4 +162,3 @@ while @n.elems {
 # add page numbers: Page N of M
 $pdf.save-as: $ofile;
 say "See name tags file: $ofile";
-
