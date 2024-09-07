@@ -3,6 +3,7 @@ unit module MiscGraphics;
 use PDF::API6;
 use PDF::Lite;
 use PDF::Content::Color :ColorName, :color;
+use PDF::Tags;
 
 use FreeFonts;
 
@@ -907,11 +908,90 @@ sub draw-hex-wedge(
 } # sub draw-hex-wedge(
 
 sub simple-clip1(
+    :$x is copy,
+    :$y is copy,
+    :$width  is copy,
+    :$height is copy,
+    :$stroke-color = [0]; # black
+    :$fill-color   = [1]; # white
     :$page!,
+    :$debug,
     ) is export {
 
     # draw a local circle for clipping
-    # draw a local star overflowing the circle
-    
-} # sub simple-clip(
+    if not ($x.defined and $y.defined) {
+        $x = 0.5 * $page.media-box[2];
+        $y = 0.5 * $page.media-box[3];
+    }
+    if not ($width.defined and $height.defined) {
+        $width  = 72;
+        $height = 72;
+    }
+    my $radius = 0.5 * $width;
+    my $R = $radius;
 
+    my $g = $page.gfx;
+    $g.Save;
+    $g.transform: :translate($x, $y);
+
+    $g.StrokeColor = color Black;
+    $g.FillColor   = color White;
+
+    #=== Begin: define the clipping path ===
+    # define the path per the localized CTM
+    $g.Rectangle: -1*72, -1*72, 2*72, 2*72;
+    # clip the path
+    $g.Clip;
+    # end the clipping path definition
+    $g.EndPath;
+    #=== End: define the clipping path ===
+
+    # show the clipping path
+    $g.Rectangle: -1*72, -1*72, 2*72, 2*72;
+    $g.Stroke;
+    # an offset rectangle
+    $g.Rectangle: -1.5*72, -1.5*72, 2*72, 2*72;
+    $g.Stroke;
+
+    =begin comment
+    # use four Bezier curves, counter-clockwise
+    # from stack overflow: copyright 2022 by Spencer Mortenson
+    #   but reversed direction
+    constant c = 0.551915024495;
+    $g.MoveTo:   0*$R,  1*$R; # top of the circle
+    $g.CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
+    $g.CurveTo: -c*$R, -1*$R, -1*$R, -c*$R, -1*$R,  0*$R;
+    $g.CurveTo:  1*$R, -c*$R,  c*$R, -1*$R,  0*$R, -1*$R;
+    $g.CurveTo:  c*$R,  1*$R,  1*$R,  c*$R,  1*$R,  0*$R;
+    $g.ClosePath;
+
+    $g.Clip;
+    $g.EndPath;
+    =end comment
+
+    =begin comment
+    # draw a local 5-pointed star overflowing the circle
+    # first point is at top center
+    my $RS = 1.5 * $R;
+
+    my %point;
+    # create the proper values for the five points
+    my $delta-degrees = 360.0 / 5;
+    for 0..^5 -> $i {
+        my $degrees = $i * $delta-degrees;
+        my $radians = deg2rad($degrees);
+        %point{$i}<x> = $RS * sin($radians);
+        %point{$i}<y> = $RS * cos($radians);
+    }
+    $g.MoveTo: %point<0><x>, %point<0><y>; # point 0 (top of the star)
+    $g.LineTo: %point<2><x>, %point<2><y>; # point 2
+    $g.LineTo: %point<4><x>, %point<4><y>; # point 4
+    $g.LineTo: %point<1><x>, %point<1><y>; # point 1
+    $g.LineTo: %point<3><x>, %point<3><y>; # point 3
+    $g.LineTo: %point<0><x>, %point<0><y>; # point 0
+    $g.CloseFillStroke;
+    =end comment
+
+    $g.Restore;
+
+} # sub simple-clip(

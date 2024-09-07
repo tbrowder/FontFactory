@@ -53,10 +53,12 @@ my $show      = 0;
 my $debug     = 0;
 my $landscape = 0;
 my $go        = 0;
+my $clip      = 0;
 for @*ARGS {
     when /^ :i s/ { ++$show  }
     when /^ :i d/ { ++$debug }
     when /^ :i g/ { ++$go    }
+    when /^ :i c/ { ++$clip  }
     default {
         say "Unknown arg '$_'...exiting.";
         exit;
@@ -87,6 +89,24 @@ if $show {
 
 # cols 2, rows 4, total 8, portrait
 my @n = @names; # sample name "Mary Ann Deaver"
+
+if $clip {
+    my $N = 1;
+    for 0..^$N -> $i {
+        my $n = $i+1;
+        my PDF::Lite $pdf .= new;
+        my $page = $pdf.add-page;
+        $page.media-box = [0, 0, 8.5*72, 11*72];
+        if $n == 1 {
+            simple-clip1 :$page, :$debug;
+            my $of = "simple-clip$n.pdf";
+            $pdf.save-as: $of;
+            say "See clip example file: $of";
+        }
+    }
+    exit;
+}
+
 my PDF::Lite $pdf .= new;
 $pdf.media-box = [0, 0, %dims<pw>, %dims<ph>];
 my $page;
