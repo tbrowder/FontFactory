@@ -994,4 +994,4 @@ sub simple-clip1(
 
     $g.Restore;
 
-} # sub simple-clip(
+} # sub simple-clip1(
