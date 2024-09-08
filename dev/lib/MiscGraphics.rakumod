@@ -209,7 +209,7 @@ sub make-label(
     }
 
     #==========================================
-    # the "master" subs that create the entire cross symbols, including
+    # the "master" subs that create the entire cross symbol, including
     # the rose window background
 
     make-cross(:$diam, :$thick, :width($cwidth),
@@ -220,7 +220,6 @@ sub make-label(
     #==========================================
     # gbumc text in the blue part
     $page.graphics: {
-        .Save;
         my $gb = "GBUMC";
         my $tx = $cx;
         my $ty = $cy + ($height * 0.5) - $line1Y;
@@ -229,7 +228,6 @@ sub make-label(
         .font = %fonts<hb>, #.core-font('HelveticaBold'),
                  $line1size; # the size
         .print: $gb, :align<center>, :valign<center>;
-        .Restore;
     }
 
     #==========================================
@@ -246,7 +244,6 @@ sub make-label(
     my $tcolor = 0.2; #[72, 72, 72]; # 0.7;
 
     $page.graphics: {
-        .Save;
         # translate to top-middle
         my $uly = $cy + 0.5 * $bh;
         my $tx = $cx;
@@ -260,12 +257,10 @@ sub make-label(
         .font = %fonts<hb>, #.core-font('HelveticaBold'),
                  $line2size; # the size
         .print: $first, :align<center>, :valign<center>;
-        .Restore;
     }
 
     # line 3 (last name)
     $page.graphics: {
-        .Save;
         # translate to top-middle
         my $uly = $cy + 0.5 * $bh;
         my $tx = $cx;
@@ -279,7 +274,6 @@ sub make-label(
         .font = %fonts<hb>, #.core-font('HelveticaBold'),
                  $line3size; # the size
         .print: $last, :align<center>, :valign<center>;
-        .Restore;
     }
 
     #==========================================
@@ -305,7 +299,6 @@ sub draw-ring(
     # then clip
 
     $page.graphics: {
-        .Save;
         .SetLineWidth: $linewidth; #, :$color;
 	.StrokeColor = color $color;
 	.FillColor   = color $color;
@@ -344,7 +337,6 @@ sub draw-ring(
         elsif $stroke {
             .Stroke;
         }
-        .Restore;
     }
 }
 =end comment
@@ -392,8 +384,8 @@ sub make-cross(
     # create a white, filled, thinly stroked circle of the total
     # diameter
     # draw a white circle with a black center hole
-    draw-circle $cx, $cy, $radius, :fill-color(1), :fill, :$page;
-    draw-circle $cx, $cy, $radius-$thick, :fill-color(0), :fill, :$page;
+    draw-circle $cx, $cy, $radius, :fill-color([1]), :fill, :$page;
+#    draw-circle $cx, $cy, $radius-$thick, :fill-color(0), :fill, :$page;
 
 # good to this point
 # TODO get it going!!
@@ -443,14 +435,12 @@ sub make-cross(
 
     =begin comment
     $page.graphics: {
-        .Save;
         .transform: :translate($cx, $cy);
         #.StrokeColor = color Black;
         .FillColor = Blue; #rgb(0, 0, 0); #color Black
         #.LineWidth = 2;
         .Rectangle(0, -$height, $width, $height);
         .paint: :fill, :stroke;
-        .Restore;
     }
     =end comment
 
@@ -468,6 +458,7 @@ sub draw-circle(
 ) is export {
     $page.gfx: {
         .Save if not $clip;
+
         .SetLineWidth: $linewidth; #, :$color;
 	.StrokeColor = color $stroke-color;
 	.FillColor   = color $fill-color;
@@ -475,24 +466,28 @@ sub draw-circle(
         .transform: :translate[$x, $y];
         constant c = 0.551915024495;
 
-        #=begin comment
-        .MoveTo: 0*$r, 1*$r; # top of the circle
-        # use four curves, clockwise
-        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
-        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
-        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
-        .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
-        .ClosePath;
-        #=end comment
-        =begin comment
         .MoveTo: 0*$r, 1*$r; # top of the circle
         # use four curves, counter-clockwise
-        .CurveTo: -1*$r,  c*$r, -c*$r,  1*$r,  0*$r,  1*$r;
-        .CurveTo: -c*$r, -1*$r, -1*$r, -c*$r, -1*$r,  0*$r;
-        .CurveTo:  1*$r, -c*$r,  c*$r, -1*$r,  0*$r, -1*$r;
-        .CurveTo:  c*$r,  1*$r,  1*$r,  c*$r,  1*$r,  0*$r;
+        # upper-left arc
+        .CurveTo: -c*$r,  1*$r,   
+                  -1*$r,  c*$r, 
+                  -1*$r,  0*$r;  
+
+        # lower-left arc
+        .CurveTo: -1*$r, -c*$r, 
+                  -c*$r, -1*$r, 
+                   0*$r, -1*$r;
+
+        # lower-right arc
+        .CurveTo:  c*$r, -1*$r, 
+                   1*$r, -c*$r,  
+                   1*$r,  0*$r;
+
+        # upper-right arc
+        .CurveTo:  1*$r,  c*$r,  
+                   c*$r,  1*$r,  
+                   0*$r,  1*$r;
         .ClosePath;
-        =end comment
 
         if not $clip {
             if $fill and $stroke {
@@ -505,10 +500,6 @@ sub draw-circle(
                 .Stroke;
             }
             .Restore;
-        }
-        else {
-            #.Clip; # .EOClip; # ??
-            .EOClip; # ??
         }
     }
 } # sub draw-circle(
@@ -566,7 +557,6 @@ sub draw-cell(
     # Note we bound the area by width and height and put any
     # graphics inside that area.
     $page.graphics: {
-        .Save;
         .transform: :translate($x0, $y0);
         # color the entire form
         .StrokeColor = color Black;
@@ -574,7 +564,6 @@ sub draw-cell(
         .LineWidth = 2;
         .Rectangle(0, -$height, $width, $height);
         .Stroke; #paint: :fill, :stroke;
-        .Restore;
     }
 } # sub draw-cell(
 
@@ -695,7 +684,6 @@ sub draw-rectangle(
     }
 
     $page.graphics: {
-        .Save;
         # translate to lower-left corner
         .transform: :translate($llx, $lly);
         .FillColor = color $fill-color;
@@ -813,7 +801,6 @@ sub draw-color-wheel(
 
 # TODO
 
-    #$page.graphics: {
     $page.gfx: {
         .Save;
         # clip to a circle
@@ -883,7 +870,6 @@ sub draw-hex-wedge(
 
     =begin comment
     $page.graphics: {
-        .Save;
         .transform :translate($cx,$cy);
         .transform :rotate(deg2rad($angle));
         .LineWidth = 0;
@@ -902,7 +888,6 @@ sub draw-hex-wedge(
         elsif $stroke {
             .Stroke;
         }
-        .Restore;
     }
     =end comment
 } # sub draw-hex-wedge(
@@ -1043,9 +1028,9 @@ sub simple-clip2(
 
     =begin comment
     # use four Bezier curves, counter-clockwise
-    # from stack overflow: copyright 2022 by Spencer Mortenson
+    # from: https://github.com/pomax/Bezier
     #   but reversed direction
-    constant c = 0.551915024495;
+    constant k = 0.551_785_777_790_14;
     $g.MoveTo:   0*$R,  1*$R; # top of the circle
     $g.CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
     $g.CurveTo: -c*$R, -1*$R, -1*$R, -c*$R, -1*$R,  0*$R;
@@ -1083,3 +1068,5 @@ sub simple-clip2(
     } # end $page.graphics: {
 
 } # sub simple-clip2(
+
+
