@@ -30,6 +30,7 @@ for $names-file.IO.lines {
 #.say for @names;
 #exit;
 
+my $Nclips = 3;
 if not @*ARGS {
     print qq:to/HERE/;
     Usage: {$*PROGRAM.basename} go | <csv file> [...options...]
@@ -39,12 +40,15 @@ if not @*ARGS {
     The first two-page will contain job details.
 
     Options:
-      clip[=N] - Produces muultiple clip example PDFs
-                 With N, produces example N.
+      clip   - Produces $Nclips example PDFs. Currently there 
+               are $Nclips examples numbered from 1 to $Nclips.
 
-      show  - Gives details of the job based on the input name list
-              and card dimension parameters, then exits. The information
-              is the same as on the printed job cover sheet.
+      clip=N - With N, produces only PDF example N.
+
+      show   - Gives details of the job based on the input name 
+               list and card dimension parameters, then exits. 
+               The information is the same as on the printed job 
+               cover sheet.
 
     HERE
     exit
@@ -55,7 +59,6 @@ my $debug     = 0;
 my $landscape = 0;
 my $go        = 0;
 my $clip      = 0;
-my $Nclips    = 2;
 
 my $NC; # selected clip number [0..^$Nclips]
 for @*ARGS {
@@ -108,6 +111,13 @@ if $clip {;
         $page.media-box = [0, 0, 8.5*72, 11*72];
         next if $NC.defined and $n !== $NC;
         with $n {
+            when $n == 3 {
+                simple-clip3 :$page, :$debug;
+                my $of = "simple-clip$n.pdf";
+                $pdf.save-as: $of;
+                say "See clip example file: $of";
+                exit;
+            }
             when $n == 2 {
                 simple-clip2 :$page, :$debug;
                 my $of = "simple-clip$n.pdf";

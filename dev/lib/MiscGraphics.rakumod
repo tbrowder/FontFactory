@@ -1125,3 +1125,16 @@ sub simple-clip2(
     $g.Restore;
 
 } # sub simple-clip2(
+
+sub simple-clip3(
+    :$x is copy,
+    :$y is copy,
+    :$width  is copy,
+    :$height is copy,
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
+    :$page!,
+    :$debug,
+    ) is export {
+
+} # sub simple-clip3(
