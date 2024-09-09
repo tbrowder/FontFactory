@@ -106,7 +106,8 @@ sub make-badge-page(
 
         $hmid1 = $h1; # for front side
         $hmid2 = $h2; # for front side
-        say "  row $rnum with $ncells badges" if $debug;
+        my $s = $ncells > 1 ?? 's' !! '';
+        say "  row $rnum with $ncells badge$s" if $debug;
 
         my $cy = $vmid;
         # make the labels at their correct locations
@@ -121,9 +122,10 @@ sub make-badge-page(
             $hmid2 = $h1; # for back side
         }
 
-        make-label($nam1, :width($bw), :height($bh), :cx($hmid1), :$cy, :$page);
-        make-label($nam2, :width($bw), :height($bh), :cx($hmid2), :$cy, :$page)
-            if $nam2;
+        make-label($nam1, :width($bw), :height($bh), :cx($hmid1), :$cy,
+            :$page, :$debug);
+        make-label($nam2, :width($bw), :height($bh), :cx($hmid2), :$cy,
+            :$page, :$debug) if $nam2;
     }
 
 } # sub make-badge-page(
@@ -132,12 +134,16 @@ sub make-label(
     $text,        # string: "last first middle"
     :$width,      # points
     :$height,     # points
-    :$cx!, :$cy!, # points
+    :$cx!, :$cy!, # center of label in points
     :$page!,
     :$debug,
-    # default color for top portion is blue
+    # default color for top portion is blu
 
 ) is export {
+    if $debug {
+        say "Making a name tag...";
+    }
+
     # translate to the center
     #   blue the top section
     #   GBUMC in white in blue section
@@ -146,7 +152,7 @@ sub make-label(
     #
     # outline the labels with a 0 width interior line
 
-    # Note we bound the area by width and height and put any
+    # Note we bound the top area by width and height and put any
     # graphics inside that area.
 
     # label constants for tweaking (in points):
@@ -166,15 +172,15 @@ sub make-label(
     my $line3size  = 40;
 
     # cross/rose window params
-    my $diam = 0.35*72;
-    my $thick = 3;
-    my $cwidth = 1*72;
+    my $diam    = 0.35*72;
+    my $thick   = 3;
+    my $cwidth  = 1*72;
     my $cheight = 0.3 * 72;
-    my $ccxL = $cx - ($width * 0.5);
-    my $ccxR = $cx + ($width * 0.5);
+    my $ccxL    = $cx - ($width * 0.5);
+    my $ccxR    = $cx + ($width * 0.5);
     my $cross-offset = 30;
-    $ccxL += $cross-offset; # center of cross 30 points right of left side
-    $ccxR -= $cross-offset; # center of cross 30 points left of right side
+    $ccxL  += $cross-offset; # center of cross 30 points right of left side
+    $ccxR  -= $cross-offset; # center of cross 30 points left of right side
     my $ccy = $cy + ($height * 0.5) - $line1Y;
 
     #==========================================
@@ -214,8 +220,8 @@ sub make-label(
 
     make-cross(:$diam, :$thick, :width($cwidth),
                 :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
-    make-cross(:$diam, :$thick, :width($cwidth),
-                :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
+#   make-cross(:$diam, :$thick, :width($cwidth),
+#               :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
 
     #==========================================
     # gbumc text in the blue part
@@ -327,6 +333,7 @@ sub draw-ring(
         .CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
         .ClosePath;
         .Clip;
+        .EndPath;
 
         if $fill and $stroke {
             .FillStroke;
@@ -355,6 +362,7 @@ constant %colors = %(
     6 => [204,  51,   0],
 );
 
+=begin comment
 sub draw-cross(
     :$height!,
     :$width = $height, # default is same as height
@@ -363,6 +371,7 @@ sub draw-cross(
     :$page!,
     ) is export {
 }
+=end comment
 
 sub make-cross(
     # overall dia
@@ -376,15 +385,22 @@ sub make-cross(
     # default color is white
 ) is export {
 
+    if $debug {
+        say "  Making the cross parts...";
+    }
+
     # initial model will be a hollow circle with symmetrical spokes in
     # shape of a cross, with a rose background color to simulate
     # GBUMC's rose window
-    my $radius = $diam*0.5;
+    my $radius = $diam*0.5 * 200;
 
     # create a white, filled, thinly stroked circle of the total
     # diameter
     # draw a white circle with a black center hole
-    draw-circle $cx, $cy, $radius, :fill-color([1]), :fill, :$page;
+    if $debug {
+        say "    Drawing a filled, white circle...";
+    }
+    draw-circle $cx, $cy, $radius, :fill-color(color Red), :fill(1), :$page, :$debug;
 #    draw-circle $cx, $cy, $radius-$thick, :fill-color(0), :fill, :$page;
 
 # good to this point
@@ -420,9 +436,6 @@ sub make-cross(
 
     # create the white spokes
 
-
-
-
     =begin comment
     # inner filled with rose
     my $rose = [255, 153, 255]; # from color picker
@@ -446,47 +459,121 @@ sub make-cross(
 
 } # sub make-cross(
 
+sub draw-star(
+    $x, $y, $r,
+    :$stroke,
+    :$fill,
+    :$page,
+    :$debug,
+) is export {
+    # draw a local 5-pointed star
+    # first point is at top center
+
+    my %point;
+    # create the proper values for the five points
+    my $delta-degrees = 360.0 / 5;
+    for 0..^5 -> $i {
+        my $degrees = $i * $delta-degrees;
+        my $radians = deg2rad($degrees);
+
+
+        if $i == 0 {
+            %point{$i}<x> = 0;  #$r * sin($radians);
+            %point{$i}<y> = $r; #  * cos($radians);
+            next;
+        }
+
+        %point{$i}<x> = $r * sin($radians);
+        %point{$i}<y> = $r * cos($radians);
+    }
+    if $debug {
+        say "DEBUG: Star points:";
+        for 0..4 {
+            my $x = %point{$_}<x>;
+            my $y = %point{$_}<y>;
+            say "  point $_: x ($x), y ($y)";
+        }
+
+    }
+
+
+    $page.graphics: {
+    .transform: :translate($x, $y);
+    .StrokeColor = color Black;
+    .FillColor   = color White;
+    .MoveTo: %point<0><x>, %point<0><y>; # point 0 (top of the star)
+    .LineTo: %point<2><x>, %point<2><y>; # point 2
+    .LineTo: %point<4><x>, %point<4><y>; # point 4
+    .LineTo: %point<1><x>, %point<1><y>; # point 1
+    .LineTo: %point<3><x>, %point<3><y>; # point 3
+    .LineTo: %point<0><x>, %point<0><y>; # point 0
+    .CloseStroke;
+    } # end of $page-graphics
+
+} # sub draw-star(
+
+
 sub draw-circle(
     $x, $y, $r,
     :$page!,
-    :$stroke-color = [0], # black
-    :$fill-color   = [1], # white
+    :$stroke-color = 0, # color Black, #0, # black
+    :$fill-color   = 1, #color White, #1, # white
     :$linewidth = 0,
-    :$fill,
-    :$stroke,
-    :$clip,
+    :$fill is copy,
+    :$stroke is copy,
+    :$clip is copy,
+    :$debug,
 ) is export {
+    $fill   = 0 if not $fill.defined;
+    $stroke = 0 if not $stroke.defined;
+    $clip   = 0 if not $clip.defined;
+    if $debug {
+        say "   Drawing a circle...";
+        if $fill {
+            say "     Filling with color $fill-color...";
+        }
+        if $stroke {
+            say "     Stroking with color $stroke-color...";
+        }
+        if $clip {
+            say "     Clipping the circle";
+        }
+        else {
+            say "     NOT clipping the circle";
+        }
+    }
+
     $page.gfx: {
         .Save if not $clip;
 
-        .SetLineWidth: $linewidth; #, :$color;
+#        .SetLineWidth: $linewidth; #, :$color;
 	.StrokeColor = color $stroke-color;
-	.FillColor   = color $fill-color;
-        # from stack overflow: copyright 2022 by Spencer Mortenson
+	.FillColor   = color Red; # $fill-color;
         .transform: :translate[$x, $y];
-        constant c = 0.551915024495;
+        constant k = 0.551_785_777_790_14;
 
         .MoveTo: 0*$r, 1*$r; # top of the circle
         # use four curves, counter-clockwise
         # upper-left arc
-        .CurveTo: -c*$r,  1*$r,   
-                  -1*$r,  c*$r, 
-                  -1*$r,  0*$r;  
+        #          -X-    -Y-
+        .CurveTo: -k*$r,  1*$r,  # 1
+                  -1*$r,  k*$r,  # 2
+                  -1*$r,  0*$r;  # 3
 
         # lower-left arc
-        .CurveTo: -1*$r, -c*$r, 
-                  -c*$r, -1*$r, 
-                   0*$r, -1*$r;
+        .CurveTo: -1*$r, -k*$r,  # 4
+                  -k*$r, -1*$r,  # 5
+                   0*$r, -1*$r;  # 6
 
         # lower-right arc
-        .CurveTo:  c*$r, -1*$r, 
-                   1*$r, -c*$r,  
-                   1*$r,  0*$r;
+        .CurveTo:  k*$r, -1*$r,  # 7
+                   1*$r, -k*$r,  # 8
+                   1*$r,  0*$r;  # 9
 
         # upper-right arc
-        .CurveTo:  1*$r,  c*$r,  
-                   c*$r,  1*$r,  
-                   0*$r,  1*$r;
+        .CurveTo:  1*$r,  k*$r,  # 10
+                   k*$r,  1*$r,  # 11
+                   0*$r,  1*$r;  # 12 (also the starting point)
         .ClosePath;
 
         if not $clip {
@@ -499,9 +586,18 @@ sub draw-circle(
             elsif $stroke {
                 .Stroke;
             }
+            else {
+                die "FATAL: Unknow drawing status";
+            }
+
             .Restore;
         }
+        else {
+            .Clip;
+            .EndPath;
+        }
     }
+
 } # sub draw-circle(
 
 sub write-cell-line(
@@ -917,6 +1013,7 @@ sub simple-clip1(
 
     my $g = $page.gfx;
     $g.Save;
+
     $g.transform: :translate($x, $y);
 
     $g.StrokeColor = color Black;
@@ -934,6 +1031,7 @@ sub simple-clip1(
     # show the clipping path
     $g.Rectangle: -1*72, -1*72, 2*72, 2*72;
     $g.Stroke;
+
     # an offset rectangle
     $g.Rectangle: -1.5*72, -1.5*72, 2*72, 2*72;
     $g.Stroke;
@@ -986,8 +1084,8 @@ sub simple-clip2(
     :$y is copy,
     :$width  is copy,
     :$height is copy,
-    :$stroke-color = [0]; # black
-    :$fill-color   = [1]; # white
+    :$stroke-color = [0], # black
+    :$fill-color   = [1], # white
     :$page!,
     :$debug,
     ) is export {
@@ -1001,72 +1099,29 @@ sub simple-clip2(
         $width  = 72;
         $height = 72;
     }
+
     my $radius = 0.5 * $width;
-    my $R = $radius;
-
-    $page.graphics: {
-    .transform: :translate($x, $y);
-
-    .StrokeColor = color Black;
-    .FillColor   = color White;
-
-    #=== Begin: define the clipping path ===
-    # define the path per the localized CTM
-    .Rectangle: -1*72, -1*72, 2*72, 2*72;
-    # clip the path
-    .Clip;
-    # end the clipping path definition
-    .EndPath;
-    #=== End: define the clipping path ===
-
-    # show the clipping path
-    .Rectangle: -1*72, -1*72, 2*72, 2*72;
-    .Stroke;
-    # an offset rectangle
-    .Rectangle: -1.5*72, -1.5*72, 2*72, 2*72;
-    .Stroke;
-
-    =begin comment
-    # use four Bezier curves, counter-clockwise
-    # from: https://github.com/pomax/Bezier
-    #   but reversed direction
-    constant k = 0.551_785_777_790_14;
-    $g.MoveTo:   0*$R,  1*$R; # top of the circle
-    $g.CurveTo: -1*$R,  c*$R, -c*$R,  1*$R,  0*$R,  1*$R;
-    $g.CurveTo: -c*$R, -1*$R, -1*$R, -c*$R, -1*$R,  0*$R;
-    $g.CurveTo:  1*$R, -c*$R,  c*$R, -1*$R,  0*$R, -1*$R;
-    $g.CurveTo:  c*$R,  1*$R,  1*$R,  c*$R,  1*$R,  0*$R;
-    $g.ClosePath;
-
-    $g.Clip;
-    $g.EndPath;
-    =end comment
-
-    =begin comment
-    # draw a local 5-pointed star overflowing the circle
-    # first point is at top center
-    my $RS = 1.5 * $R;
-
-    my %point;
-    # create the proper values for the five points
-    my $delta-degrees = 360.0 / 5;
-    for 0..^5 -> $i {
-        my $degrees = $i * $delta-degrees;
-        my $radians = deg2rad($degrees);
-        %point{$i}<x> = $RS * sin($radians);
-        %point{$i}<y> = $RS * cos($radians);
+    if $debug {
+        say "DEBUG: circle params:";
+        say "  x ($x), y ($y), radius ($radius)";
     }
-    $g.MoveTo: %point<0><x>, %point<0><y>; # point 0 (top of the star)
-    $g.LineTo: %point<2><x>, %point<2><y>; # point 2
-    $g.LineTo: %point<4><x>, %point<4><y>; # point 4
-    $g.LineTo: %point<1><x>, %point<1><y>; # point 1
-    $g.LineTo: %point<3><x>, %point<3><y>; # point 3
-    $g.LineTo: %point<0><x>, %point<0><y>; # point 0
-    $g.CloseFillStroke;
-    =end comment
 
-    } # end $page.graphics: {
+    my $g = $page.gfx;
+    $g.Save;
+
+    $g.transform: :translate($x, $y);
+
+    $g.StrokeColor = color Black;
+    $g.FillColor   = color White;
+
+    # clip
+    draw-circle 0, 0, $radius+60, :clip, :$page, :$debug;
+
+    # stroke it
+    draw-circle 0, 0, $radius, :stroke, :$page, :$debug;
+
+    draw-star 0, 0, $radius+30, :stroke, :$page, :$debug;
+
+    $g.Restore;
 
 } # sub simple-clip2(
-
-

@@ -62,7 +62,7 @@ for @*ARGS {
     when /^ :i s/ { ++$show  }
     when /^ :i d/ { ++$debug }
     when /^ :i g/ { ++$go    }
-    when /^ :i c \w*? ['=' (\d) ] / {
+    when /^ :i c \w*? ['=' (\d) ]? / {
         ++$clip;
         if $0.defined {
             $NC = +$0;
@@ -122,7 +122,6 @@ if $clip {;
                 say "See clip example file: $of";
             }
         }
-
     }
     exit;
 }
