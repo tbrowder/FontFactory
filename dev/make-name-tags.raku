@@ -37,13 +37,16 @@ if not @*ARGS {
 
     Given a list of names, writes them on reversible paper
       for a two-sided name tag on Letter paper.
-    The first two-page will contain job details.
+    The front side of the first two-sided page will contain 
+      job details (and the back side will be blank).
 
     Options:
-      clip   - Produces $Nclips example PDFs. Currently there 
+      eg     - Produces $Nclips example PDFs. Currently there 
                are $Nclips examples numbered from 1 to $Nclips.
 
-      clip=N - With N, produces only PDF example N.
+      eg=N   - With N, produces only PDF example N.
+        OR
+      egN
 
       show   - Gives details of the job based on the input name 
                list and card dimension parameters, then exits. 
@@ -65,7 +68,7 @@ for @*ARGS {
     when /^ :i s/ { ++$show  }
     when /^ :i d/ { ++$debug }
     when /^ :i g/ { ++$go    }
-    when /^ :i c \w*? ['=' (\d) ]? / {
+    when /^ :i e \w*? ['='? (\d) ]? / {
         ++$clip;
         if $0.defined {
             $NC = +$0;
@@ -103,33 +106,35 @@ if $show {
 # cols 2, rows 4, total 8, portrait
 my @n = @names; # sample name "Mary Ann Deaver"
 
-if $clip {;
+if $clip {
     for 0..^$Nclips -> $i {
         my $n = $i+1;
+        next if $NC.defined and $n !== $NC;
+
         my PDF::Lite $pdf .= new;
         my $page = $pdf.add-page;
         $page.media-box = [0, 0, 8.5*72, 11*72];
-        next if $NC.defined and $n !== $NC;
+        my $base-name = "example";
         with $n {
             when $n == 3 {
                 simple-clip3 :$page, :$debug;
-                my $of = "simple-clip$n.pdf";
+                my $of = "$base-name$n.pdf";
                 $pdf.save-as: $of;
-                say "See clip example file: $of";
-                exit;
+                say "See example file: $of";
+                exit if $NC.defined;;
             }
             when $n == 2 {
                 simple-clip2 :$page, :$debug;
-                my $of = "simple-clip$n.pdf";
+                my $of = "$base-name$n.pdf";
                 $pdf.save-as: $of;
-                say "See clip example file: $of";
-                exit;
+                say "See example file: $of";
+                exit if $NC.defined;;
             }
             when $n == 1 {
                 simple-clip1 :$page, :$debug;
-                my $of = "simple-clip$n.pdf";
+                my $of = "$base-name$n.pdf";
                 $pdf.save-as: $of;
-                say "See clip example file: $of";
+                say "See example file: $of";
             }
         }
     }
