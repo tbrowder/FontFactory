@@ -31,6 +31,9 @@ use experimental :rakuast;
 %*ENV<RAKUDO_RAKUAST> = 1;
 
 my $pod-file = "../docs/README.rakudoc";
+my $ofil1    = "pod-dump.txt":
+my $ofil2    = "pod-unhandled.txt":
+
 my $debug = 0;
 
 if not @*ARGS {
@@ -71,8 +74,21 @@ for $pod-file.IO.slurp.AST.rakudoc -> $pod-node {
 }
 
 if @pod-chunks {
-    say "Dumping pod chunks:";
+    my $ofil = "pod-chunks.txt":
+    my $fh = $ofil open, :w;
+    say "#== Dumping pod chunks:";
     say "  $_" for @pod-chunks;
+    say "#== End Dumping pod chunks";
+    $fh.close;
+}
+
+if @unhandled-pod {
+    my $ofil = "pod-unhandled.txt":
+    my $fh = $ofil open, :w;
+    say "#== Dumping unhandled pod:";
+    say "  $_" for @pod-chunks;
+    say "#== End Dumping unhandled pod";
+    $fh.close;
 }
 
 #=== subroutines ====
