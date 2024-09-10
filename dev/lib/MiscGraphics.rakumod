@@ -1010,8 +1010,8 @@ sub simple-clip1(
     :$y is copy,
     :$width  is copy,
     :$height is copy,
-    :$stroke-color = [0]; # black
-    :$fill-color   = [1]; # white
+    :$stroke-color = (color Black),
+    :$fill-color   = (color White),
     :$page!,
     :$debug,
     ) is export {
@@ -1037,6 +1037,7 @@ sub simple-clip1(
     $g.FillColor   = color White;
 
     #=== Begin: define the clipping path ===
+    #==    without calling subs
     # define the path per the localized CTM
     $g.Rectangle: -1*72, -1*72, 2*72, 2*72;
     # clip the path
@@ -1046,12 +1047,14 @@ sub simple-clip1(
     #=== End: define the clipping path ===
 
     # show the clipping path
+    $g.FillColor = color Red; # White;
     $g.Rectangle: -1*72, -1*72, 2*72, 2*72;
-    $g.Stroke;
+    $g.FillStroke;
 
     # an offset rectangle
+    $g.FillColor = color Blue; # White;
     $g.Rectangle: -1.5*72, -1.5*72, 2*72, 2*72;
-    $g.Stroke;
+    $g.FillStroke;
 
     =begin comment
     # use four Bezier curves, counter-clockwise
@@ -1102,7 +1105,7 @@ sub simple-clip2(
     :$width  is copy,
     :$height is copy,
     :$stroke-color = (color Black),
-    :$fill-color   = (color White), 
+    :$fill-color   = (color White),
     :$page!,
     :$debug,
     ) is export {
@@ -1163,13 +1166,14 @@ sub simple-clip3(
     my $pg-width  = $page.media-box[2];
     my $pg-height = $page.media-box[3];
 
-    my $cy1 = 0.75 * $pg-height; 
-    my $cy2 = 0.25 * $pg-height; 
+    my $cy1 = 0.75 * $pg-height;
+    my $cy2 = 0.25 * $pg-height;
 
     # title: plain-circle
     $x = 0.5 * $pg-width;
     $y = 0.5 * $pg-height;
 
+    #== first example, no clip
     # draw a colored box
     my $side = 3*72;
     draw-box :llx($x-0.5*$side), :lly($cy1-0.5*$side), :width($side), :height($side),
@@ -1178,10 +1182,18 @@ sub simple-clip3(
     my $radius = 72;
     draw-circle $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
 
+    #== second example, clip to the circle
+    #draw-circle $x, $cy2, $radius, :clip, :$page;
+    draw-box :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), :height($side),
+             :fill-color(color Blue), :fill, :$page;
+
+
 } # sub simple-clip3(
 
 our %eg-names is export = %(
     # only some have fancy names
+    1 => "clipped-box",
+    2 => "star-and-circle",
     3 => "plain-circle",
 );
 sub get-base-name(UInt $N --> Str) is export {
