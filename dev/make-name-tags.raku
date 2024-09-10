@@ -31,6 +31,7 @@ for $names-file.IO.lines {
 #exit;
 
 my $Nclips = 3;
+
 if not @*ARGS {
     print qq:to/HERE/;
     Usage: {$*PROGRAM.basename} go | <csv file> [...options...]
@@ -45,7 +46,6 @@ if not @*ARGS {
                are $Nclips examples numbered from 1 to $Nclips.
 
       eg=N   - With N, produces only PDF example N.
-        OR
       egN
 
       show   - Gives details of the job based on the input name 
@@ -68,7 +68,7 @@ for @*ARGS {
     when /^ :i s/ { ++$show  }
     when /^ :i d/ { ++$debug }
     when /^ :i g/ { ++$go    }
-    when /^ :i e \w*? ['='? (\d) ]? / {
+    when /^ :i [e|c] \w*? ['='? (\d) ]? / {
         ++$clip;
         if $0.defined {
             $NC = +$0;
@@ -82,6 +82,7 @@ for @*ARGS {
 }
 
 if $show {
+    # TODO make a two-sided page of this:
     my ($nc, $nr, $hgutter, $vgutter) = show-nums;
     say "Badge width (inches):  {%dims<bwi>}";
     say "Badge height (inches): {%dims<bhi>}";
@@ -106,33 +107,35 @@ if $show {
 # cols 2, rows 4, total 8, portrait
 my @n = @names; # sample name "Mary Ann Deaver"
 
+
 if $clip {
     for 0..^$Nclips -> $i {
         my $n = $i+1;
         next if $NC.defined and $n !== $NC;
 
+        my $base-name = get-base-name($n);
+
         my PDF::Lite $pdf .= new;
         my $page = $pdf.add-page;
         $page.media-box = [0, 0, 8.5*72, 11*72];
-        my $base-name = "example";
         with $n {
             when $n == 3 {
                 simple-clip3 :$page, :$debug;
-                my $of = "$base-name$n.pdf";
+                my $of = "$base-name.pdf";
                 $pdf.save-as: $of;
                 say "See example file: $of";
                 exit if $NC.defined;;
             }
             when $n == 2 {
                 simple-clip2 :$page, :$debug;
-                my $of = "$base-name$n.pdf";
+                my $of = "$base-name.pdf";
                 $pdf.save-as: $of;
                 say "See example file: $of";
                 exit if $NC.defined;;
             }
             when $n == 1 {
                 simple-clip1 :$page, :$debug;
-                my $of = "$base-name$n.pdf";
+                my $of = "$base-name.pdf";
                 $pdf.save-as: $of;
                 say "See example file: $of";
             }
