@@ -515,8 +515,8 @@ sub draw-star(
 sub draw-circle(
     $x, $y, $r,
     :$page!,
-    :$stroke-color = 0, # color Black, #0, # black
-    :$fill-color   = 1, #color White, #1, # white
+    :$stroke-color = (color Black), #, #[0], # color Black, #0, # black
+    :$fill-color   = (color White), #[1], #color White, #1, # white
     :$linewidth = 0,
     :$fill is copy,
     :$stroke is copy,
@@ -528,15 +528,12 @@ sub draw-circle(
     $clip   = 0 if not $clip.defined;
     # what if none are defined?
     if $clip {
-        # illegal to do anything else
-        $fill   = 0;
-        $stroke = 0;
+        # illegal to do anything else with current state of PDF::Content
+        ($fill, $stroke) = 0, 0;
     }
     else {
-        unless $fill or $stroke {
-            # choose stroke
-            $stroke = 1;
-        }
+        # make stroke the default
+        $stroke = 1 if not ($fill or $stroke);
     }
 
     if $debug {
@@ -559,8 +556,8 @@ sub draw-circle(
     $g.Save if not $clip;
 
     $g.SetLineWidth: $linewidth; #, :$color;
-    $g.StrokeColor = color $stroke-color;
-    $g.FillColor   = color Red; # $fill-color;
+    $g.StrokeColor = $stroke-color;
+    $g.FillColor   = $fill-color; # $fill-color;
     $g.transform: :translate[$x, $y];
     constant k = 0.551_785; #_777_790_14;
 
@@ -772,6 +769,7 @@ sub draw-lr-rect(
     ) is export {
 }
 
+our &draw-box = &draw-rectangle;
 sub draw-rectangle(
     :$llx!,
     :$lly!,
@@ -781,19 +779,26 @@ sub draw-rectangle(
     :$fill-color   = [1], # white
     :$fill is copy,
     :$stroke is copy,
+    :$clip is copy,
     :$page!,
     ) is export {
 
-    $stroke = False if not $stroke.defined;
-    $fill   = False if not $fill.defined;
-    if not ($fill or $stroke) {
+    $stroke = 0 if not $stroke.defined;
+    $fill   = 0 if not $fill.defined;
+    $clip   = 0 if not $clip.defined;
+    # what if none are defined?
+    if $clip {
+        # illegal to do anything else with current state of PDF::Content
+        ($fill, $stroke) = 0, 0;
+    }
+    else {
         # make stroke the default
-        $stroke = True;
+        $stroke = 1 if not ($fill or $stroke);
     }
 
     $page.graphics: {
         # translate to lower-left corner
-        .transform: :translate($llx, $lly);
+        #.transform: :translate($llx, $lly);
         .FillColor = color $fill-color;
         .StrokeColor = color $stroke-color;
         .LineWidth = 0;
@@ -1096,16 +1101,19 @@ sub simple-clip2(
     :$y is copy,
     :$width  is copy,
     :$height is copy,
-    :$stroke-color = [0], # black
-    :$fill-color   = [1], # white
+    :$stroke-color = (color Black),
+    :$fill-color   = (color White), 
     :$page!,
     :$debug,
     ) is export {
 
+    my $pg-width  = $page.media-box[2];
+    my $pg-height = $page.media-box[3];
+
     # draw a local circle for clipping
     if not ($x.defined and $y.defined) {
-        $x = 0.5 * $page.media-box[2];
-        $y = 0.5 * $page.media-box[3];
+        $x = 0.5 * $pg-width;
+        $y = 0.5 * $pg-height;
     }
     if not ($width.defined and $height.defined) {
         $width  = 72;
@@ -1143,18 +1151,32 @@ sub simple-clip3(
     :$y is copy,
     :$width  is copy,
     :$height is copy,
-    :$stroke-color = [0], # black
-    :$fill-color   = [1], # white
+    :$stroke-color = (color Black),
+    :$fill-color   = (color White),
     :$page!,
     :$debug,
     ) is export {
 
-    # title: plain-circle
-    $x = 0.5 * $page.media-box[2];
-    $y = 0.5 * $page.media-box[3];
-    my $radius = 72;
+    # put the first examples on y = 1/4 page height from the top
+    # put the second examples on y = 3/4 page height from the top
 
-    draw-circle $x, $y, $radius, :stroke,:$page;
+    my $pg-width  = $page.media-box[2];
+    my $pg-height = $page.media-box[3];
+
+    my $cy1 = 0.75 * $pg-height; 
+    my $cy2 = 0.25 * $pg-height; 
+
+    # title: plain-circle
+    $x = 0.5 * $pg-width;
+    $y = 0.5 * $pg-height;
+
+    # draw a colored box
+    my $side = 3*72;
+    draw-box :llx($x-0.5*$side), :lly($cy1-0.5*$side), :width($side), :height($side),
+             :fill-color(color Blue), :fill, :$page;
+    # on top of it draw a white-filled circle
+    my $radius = 72;
+    draw-circle $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
 
 } # sub simple-clip3(
 
@@ -1174,10 +1196,9 @@ sub get-base-name(UInt $N --> Str) is export {
 
 sub label(
     $x, $y,
-    :$text!
+    :$text!,
     :$page!,
     :$position where 0 <= $_ < 8, # increments of 45 degrees, starting from 3 o'clock
     :$debug
     ) is export {
 } # sub label(
-
