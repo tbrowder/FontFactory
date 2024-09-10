@@ -11,8 +11,8 @@
 #        a list of its children's IDs
 
 # master data for the entire document
-my $pod-id = 0;
-my %nodes; # hash of IDs and pod nodes
+my $numnodes = 0; # same as pod ID
+my %nodes;        # hash of IDs and pod nodes
 
 role PodNode {
     has UInt $.id is required;
@@ -31,8 +31,8 @@ use experimental :rakuast;
 %*ENV<RAKUDO_RAKUAST> = 1;
 
 my $pod-file = "../docs/README.rakudoc";
-my $ofil1    = "pod-dump.txt":
-my $ofil2    = "pod-unhandled.txt":
+my $ofil1    = "pod-dump.txt";
+my $ofil2    = "pod-unhandled.txt";
 
 my $debug = 0;
 
@@ -74,25 +74,35 @@ for $pod-file.IO.slurp.AST.rakudoc -> $pod-node {
 }
 
 if @pod-chunks {
-    my $ofil = "pod-chunks.txt":
-    my $fh = $ofil open, :w;
-    say "#== Dumping pod chunks:";
-    say "  $_" for @pod-chunks;
-    say "#== End Dumping pod chunks";
+    my $ofil = "pod-chunks.txt";
+    my $nlines = $ofil.IO.lines.elems - 2;
+
+    my $fh = open $ofil, :w;
+    $fh.say: "#== Dumping pod chunks:";
+    $fh.say: "  $_" for @pod-chunks;
+    $fh.say: "#== End Dumping pod chunks";
     $fh.close;
+    say "See file '$ofil' ($nlines lines)";
 }
 
 if @unhandled-pod {
-    my $ofil = "pod-unhandled.txt":
-    my $fh = $ofil open, :w;
-    say "#== Dumping unhandled pod:";
-    say "  $_" for @pod-chunks;
-    say "#== End Dumping unhandled pod";
+    my $ofil = "pod-unhandled.txt";
+    my $nlines = $ofil.IO.lines.elems - 2;
+
+    my $fh = open $ofil, :w;
+    $fh.say: "#== Dumping unhandled pod:";
+    $fh.say: "  $_" for @pod-chunks;
+    $fh.say: "#== End Dumping unhandled pod";
     $fh.close;
+    say "See file '$ofil' ($nlines lines)";
 }
+
+say "Found $numnodes pod nodes.";
 
 #=== subroutines ====
 sub walk-pod($node, :$debug) is export {
+    ++$numnodes;
+
     # as defined in the link above as "sub walk($node)"
     # also see the supporting test code using nqp and precomp and cache
 
