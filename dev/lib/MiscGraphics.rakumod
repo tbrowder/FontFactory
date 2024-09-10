@@ -493,9 +493,7 @@ sub draw-star(
             my $y = %point{$_}<y>;
             say "  point $_: x ($x), y ($y)";
         }
-
     }
-
 
     $page.graphics: {
     .transform: :translate($x, $y);
@@ -543,60 +541,61 @@ sub draw-circle(
         }
     }
 
-    $page.gfx: {
-        .Save if not $clip;
+    my $g = $page.gfx;
+    $g.Save if not $clip;
 
-#        .SetLineWidth: $linewidth; #, :$color;
-	.StrokeColor = color $stroke-color;
-	.FillColor   = color Red; # $fill-color;
-        .transform: :translate[$x, $y];
-        constant k = 0.551_785_777_790_14;
+    $g.SetLineWidth: $linewidth; #, :$color;
+    $g.StrokeColor = color $stroke-color;
+    $g.FillColor   = color Red; # $fill-color;
+    $g.transform: :translate[$x, $y];
+    #constant k = 0.551_785_777_790_14;
+    constant k = 0.551_785; #_777_790_14;
 
-        .MoveTo: 0*$r, 1*$r; # top of the circle
-        # use four curves, counter-clockwise
-        # upper-left arc
-        #          -X-    -Y-
-        .CurveTo: -k*$r,  1*$r,  # 1
-                  -1*$r,  k*$r,  # 2
-                  -1*$r,  0*$r;  # 3
+    $g.MoveTo: 0*$r, 1*$r; # top of the circle
+    # use four curves, counter-clockwise
+    # upper-left arc
+    #          -X-    -Y-
+    $g.CurveTo: -k*$r,  1*$r,  # 1
+              -1*$r,  k*$r,  # 2
+              -1*$r,  0*$r;  # 3
 
-        # lower-left arc
-        .CurveTo: -1*$r, -k*$r,  # 4
-                  -k*$r, -1*$r,  # 5
-                   0*$r, -1*$r;  # 6
+    # lower-left arc
+    $g.CurveTo: -1*$r, -k*$r,  # 4
+              -k*$r, -1*$r,  # 5
+               0*$r, -1*$r;  # 6
 
-        # lower-right arc
-        .CurveTo:  k*$r, -1*$r,  # 7
-                   1*$r, -k*$r,  # 8
-                   1*$r,  0*$r;  # 9
+    # lower-right arc
+    $g.CurveTo:  k*$r, -1*$r,  # 7
+               1*$r, -k*$r,  # 8
+               1*$r,  0*$r;  # 9
 
-        # upper-right arc
-        .CurveTo:  1*$r,  k*$r,  # 10
-                   k*$r,  1*$r,  # 11
-                   0*$r,  1*$r;  # 12 (also the starting point)
-        .ClosePath;
+    # upper-right arc
+    $g.CurveTo:  1*$r,  k*$r,  # 10
+               k*$r,  1*$r,  # 11
+               0*$r,  1*$r;  # 12 (also the starting point)
+    $g.ClosePath;
 
-        if not $clip {
-            if $fill and $stroke {
-                .FillStroke;
-            }
-            elsif $fill {
-                .Fill;
-            }
-            elsif $stroke {
-                .Stroke;
-            }
-            else {
-                die "FATAL: Unknow drawing status";
-            }
-
-            .Restore;
+    if not $clip {
+        if $fill and $stroke {
+            $g.FillStroke;
+        }
+        elsif $fill {
+            $g.Fill;
+        }
+        elsif $stroke {
+            $g.Stroke;
         }
         else {
-            .Clip;
-            .EndPath;
+            die "FATAL: Unknown drawing status";
         }
+
+        $g.Restore;
     }
+    else {
+        $g.Clip;
+        $g.EndPath;
+    }
+    #}
 
 } # sub draw-circle(
 
@@ -1137,4 +1136,25 @@ sub simple-clip3(
     :$debug,
     ) is export {
 
+    # title: plain-circle
+    $x = 0.5 * $page.media-box[2];
+    $y = 0.5 * $page.media-box[3];
+    my $radius = 72;
+
+    draw-circle $x, $y, $radius, :stroke,:$page;
+
 } # sub simple-clip3(
+
+our %eg-names is export = %(
+    # only some have fancy names
+    3 => "plain-circle",
+);
+sub get-base-name(UInt $N --> Str) is export {
+    my $base-name = "example" ~ $N.Str;
+    # given an example number, determine a name
+    if %eg-names{$N}:exists {
+        my $s = %eg-names{$N};
+        $base-name = "{$s}-example-$N";
+    }
+    $base-name
+} # sub get-base-name(UInt $N --> Str)
