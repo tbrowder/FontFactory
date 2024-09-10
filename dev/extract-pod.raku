@@ -1,5 +1,30 @@
 #!/usr/bin/env raku
 
+# Ideas:
+#   treat like a vulnerability tree:
+#
+#   top-level nodes have no parent (except the rakudoc file)
+#   every pod node has:
+#        a link to its parent
+#        a level number (increasing from zero)
+#        a unique ID 
+#        a list of its children's IDs
+
+# master data for the entire document
+my $pod-id = 0;
+my %nodes; # hash of IDs and pod nodes
+
+role PodNode {
+    has UInt $.id is required;
+    has UInt $.level is required;
+    has UInt $.parent is required;
+
+    has UInt @.children; # their IDs
+    has Str  $.text;
+    has Str  $.type;
+    has      @.content; # from the original parse
+}
+
 # SEE COKE's link for reading a pod file
 
 use experimental :rakuast;
