@@ -130,6 +130,7 @@ sub make-badge-page(
 
 } # sub make-badge-page(
 
+our &make-name-tag = &make-label;
 sub make-label(
     $text,        # string: "last first middle"
     :$width,      # points
@@ -525,6 +526,19 @@ sub draw-circle(
     $fill   = 0 if not $fill.defined;
     $stroke = 0 if not $stroke.defined;
     $clip   = 0 if not $clip.defined;
+    # what if none are defined?
+    if $clip {
+        # illegal to do anything else
+        $fill   = 0;
+        $stroke = 0;
+    }
+    else {
+        unless $fill or $stroke {
+            # choose stroke
+            $stroke = 1;
+        }
+    }
+
     if $debug {
         say "   Drawing a circle...";
         if $fill {
@@ -548,7 +562,6 @@ sub draw-circle(
     $g.StrokeColor = color $stroke-color;
     $g.FillColor   = color Red; # $fill-color;
     $g.transform: :translate[$x, $y];
-    #constant k = 0.551_785_777_790_14;
     constant k = 0.551_785; #_777_790_14;
 
     $g.MoveTo: 0*$r, 1*$r; # top of the circle
@@ -1158,3 +1171,13 @@ sub get-base-name(UInt $N --> Str) is export {
     }
     $base-name
 } # sub get-base-name(UInt $N --> Str)
+
+sub label(
+    $x, $y,
+    :$text!
+    :$page!,
+    :$position where 0 <= $_ < 8, # increments of 45 degrees, starting from 3 o'clock
+    :$debug
+    ) is export {
+} # sub label(
+
