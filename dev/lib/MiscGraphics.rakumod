@@ -310,7 +310,7 @@ sub draw-ring(
 	.StrokeColor = color $color;
 	.FillColor   = color $color;
         # from stack overflow: copyright 2022 by Spencer Mortenson
-        .transform: :translate[$x, $y];
+        .transform: :translate($x, $y);
         constant c = 0.551915024495;
 
         # outer cicle
@@ -521,6 +521,7 @@ sub draw-circle(
     :$fill is copy,
     :$stroke is copy,
     :$clip is copy,
+    :$gfx,
     :$debug,
 ) is export {
     $fill   = 0 if not $fill.defined;
@@ -552,37 +553,42 @@ sub draw-circle(
         }
     }
 
-    my $g = $page.gfx;
+    my $g = $gfx ?? $gfx !! $page.gfx;
     $g.Save if not $clip;
 
-    $g.SetLineWidth: $linewidth; #, :$color;
-    $g.StrokeColor = $stroke-color;
-    $g.FillColor   = $fill-color; # $fill-color;
-    $g.transform: :translate[$x, $y];
+    if not $clip {
+        $g.SetLineWidth: $linewidth; #, :$color;
+        $g.StrokeColor = $stroke-color;
+        $g.FillColor   = $fill-color; # $fill-color;
+        #$g.transform: :translate($x, $y);
+        #$g.MoveTo: 0*$r, 1*$r; # top of the circle
+    }
+    else {
+    }
     constant k = 0.551_785; #_777_790_14;
 
-    $g.MoveTo: 0*$r, 1*$r; # top of the circle
+    $g.MoveTo: $x+0*$r, 1*$r; # top of the circle
     # use four curves, counter-clockwise
     # upper-left arc
     #          -X-    -Y-
-    $g.CurveTo: -k*$r,  1*$r,  # 1
-              -1*$r,  k*$r,  # 2
-              -1*$r,  0*$r;  # 3
+    $g.CurveTo: $x+(-k*$r),  $y+(1*$r),  # 1
+                $x+(-1*$r),  $y+(k*$r),  # 2
+                $x+(-1*$r),  $y+(0*$r);  # 3
 
     # lower-left arc
-    $g.CurveTo: -1*$r, -k*$r,  # 4
-              -k*$r, -1*$r,  # 5
-               0*$r, -1*$r;  # 6
+    $g.CurveTo: $x+(-1*$r), $y+(-k*$r),  # 4
+                $x+(-k*$r), $y+(-1*$r),  # 5
+                $x+( 0*$r), $y+(-1*$r);  # 6
 
     # lower-right arc
-    $g.CurveTo:  k*$r, -1*$r,  # 7
-               1*$r, -k*$r,  # 8
-               1*$r,  0*$r;  # 9
+    $g.CurveTo: $x+(k*$r),  $y+(-1*$r),  # 7
+                $x+(1*$r),  $y+(-k*$r),  # 8
+                $x+(1*$r),  $y+(0*$r);   # 9
 
     # upper-right arc
-    $g.CurveTo:  1*$r,  k*$r,  # 10
-               k*$r,  1*$r,  # 11
-               0*$r,  1*$r;  # 12 (also the starting point)
+    $g.CurveTo: $x+(1*$r),  $y+(k*$r),   # 10
+                $x+(k*$r),  $y+(1*$r),   # 11
+                $x+(0*$r),  $y+(1*$r);   # 12 (also the starting point)
     $g.ClosePath;
 
     if not $clip {
@@ -796,28 +802,31 @@ sub draw-rectangle(
         $stroke = 1 if not ($fill or $stroke);
     }
 
-    $page.graphics: {
-        # translate to lower-left corner
-        #.transform: :translate($llx, $lly);
-        .FillColor = color $fill-color;
-        .StrokeColor = color $stroke-color;
-        .LineWidth = 0;
-        .MoveTo: $llx, $lly;
-        .LineTo: $llx+$width, $lly;
-        .LineTo: $llx+$width, $lly+$height;
-        .LineTo: $llx       , $lly+$height;
-        .ClosePath;
+    #$page.graphics: {
+    my $g = $page.gfx;
+    $g.Save;
+    # NO translation
+    $g.FillColor = color $fill-color;
+    $g.StrokeColor = color $stroke-color;
+    $g.LineWidth = 0;
+    $g.MoveTo: $llx, $lly;
+    $g.LineTo: $llx+$width, $lly;
+    $g.LineTo: $llx+$width, $lly+$height;
+    $g.LineTo: $llx       , $lly+$height;
+    $g.ClosePath;
 
-        if $fill and $stroke {
-            .FillStroke;
-        }
-        elsif $fill {
-            .Fill;
-        }
-        elsif $stroke {
-            .Stroke;
-        }
+    if $fill and $stroke {
+        $g.FillStroke;
     }
+    elsif $fill {
+        $g.Fill;
+    }
+    elsif $stroke {
+        $g.Stroke;
+    }
+    $g.Restore;
+    # }
+
 } # sub draw-rectangle(
 
 my $page-margins   = 0.4 * 72;
@@ -1051,7 +1060,10 @@ sub simple-clip1(
     $g.Rectangle: -1*72, -1*72, 2*72, 2*72;
     $g.FillStroke;
 
-    # an offset rectangle
+    # an offset blue rectangle
+    # offset to the lower left so
+    # its top-right corner is stiil
+    # visible
     $g.FillColor = color Blue; # White;
     $g.Rectangle: -1.5*72, -1.5*72, 2*72, 2*72;
     $g.FillStroke;
@@ -1183,9 +1195,12 @@ sub simple-clip3(
     draw-circle $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
 
     #== second example, clip to the circle
-    #draw-circle $x, $cy2, $radius, :clip, :$page;
+    draw-circle $x, $cy2, $radius, :clip, :$page;
+
+    #=begin comment
     draw-box :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), :height($side),
-             :fill-color(color Blue), :fill, :$page;
+             :fill-color(color Blue), :fill, :$page; #, :gfx($page.gfx);
+    #=end comment
 
 
 } # sub simple-clip3(
@@ -1211,6 +1226,6 @@ sub label(
     :$text!,
     :$page!,
     :$position where 0 <= $_ < 8, # increments of 45 degrees, starting from 3 o'clock
-    :$debug
+    :$debug,
     ) is export {
 } # sub label(
