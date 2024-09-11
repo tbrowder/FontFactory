@@ -138,7 +138,7 @@ sub make-label(
     :$cx!, :$cy!, # center of label in points
     :$page!,
     :$debug,
-    # default color for top portion is blu
+    # default color for top portion is blue
 
 ) is export {
     if $debug {
@@ -393,7 +393,7 @@ sub make-cross(
     # initial model will be a hollow circle with symmetrical spokes in
     # shape of a cross, with a rose background color to simulate
     # GBUMC's rose window
-    my $radius = $diam*0.5 * 200;
+    my $radius = $diam*0.5; # * 200;
 
     # create a white, filled, thinly stroked circle of the total
     # diameter
@@ -515,8 +515,8 @@ sub draw-star(
 sub draw-circle(
     $x, $y, $r,
     :$page!,
-    :$stroke-color = (color Black), #, #[0], # color Black, #0, # black
-    :$fill-color   = (color White), #[1], #color White, #1, # white
+    :$stroke-color = (color Black), 
+    :$fill-color   = (color White),
     :$linewidth = 0,
     :$fill is copy,
     :$stroke is copy,
@@ -567,7 +567,7 @@ sub draw-circle(
     }
     constant k = 0.551_785; #_777_790_14;
 
-    $g.MoveTo: $x+0*$r, 1*$r; # top of the circle
+    $g.MoveTo: $x+(0*$r), $y+(1*$r); # top of the circle
     # use four curves, counter-clockwise
     # upper-left arc
     #          -X-    -Y-
