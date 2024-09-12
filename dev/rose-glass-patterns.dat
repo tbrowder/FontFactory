@@ -1,8 +1,4 @@
 # input data file: rose-glass-patterns.dat
-# 
-# origin is center of the outer/inner circular ring
-# llx lly width height color number part-code # notes
-#  units in inches, part-code (optional): quadrant-number, e.g., UL-1
-0 0 
-
-
+#
+# origin is left, middle of the underlying graph paper
+# see rose-glas.patterns.csv file for parameters
