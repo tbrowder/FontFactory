@@ -4,6 +4,7 @@ use PDF::API6;
 use PDF::Lite;
 use PDF::Content::Color :ColorName, :color;
 use PDF::Tags;
+use PDF::Content::Text::Box;
 
 use FreeFonts;
 
@@ -511,7 +512,6 @@ sub draw-star(
 
 } # sub draw-star(
 
-
 sub draw-circle(
     $x, $y, $r,
     :$page!,
@@ -521,7 +521,6 @@ sub draw-circle(
     :$fill is copy,
     :$stroke is copy,
     :$clip is copy,
-    :$gfx,
     :$debug,
 ) is export {
     $fill   = 0 if not $fill.defined;
@@ -553,7 +552,8 @@ sub draw-circle(
         }
     }
 
-    my $g = $gfx ?? $gfx !! $page.gfx;
+    #my $g = $gfx ?? $gfx !! $page.gfx;
+    my $g = $page.gfx;
     $g.Save if not $clip;
 
     if not $clip {
@@ -611,7 +611,6 @@ sub draw-circle(
         $g.Clip;
         $g.EndPath;
     }
-    #}
 
 } # sub draw-circle(
 
@@ -1172,14 +1171,14 @@ sub simple-clip3(
     :$debug,
     ) is export {
 
-    # put the first examples on y = 1/4 page height from the top
-    # put the second examples on y = 3/4 page height from the top
+    # put the first example on y = 1/4 page height from the top
+    # put the second example on y = 2/4 page height from the top
 
     my $pg-width  = $page.media-box[2];
     my $pg-height = $page.media-box[3];
 
     my $cy1 = 0.75 * $pg-height;
-    my $cy2 = 0.25 * $pg-height;
+    my $cy2 = 0.50 * $pg-height;
 
     # title: plain-circle
     $x = 0.5 * $pg-width;
@@ -1195,12 +1194,14 @@ sub simple-clip3(
     draw-circle $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
 
     #== second example, clip to the circle
+    # Note the $page.gfx was NOT saved so the clipping should be good 
+    # till the end of the page.
+    $page.gfx.Save;
     draw-circle $x, $cy2, $radius, :clip, :$page;
 
-    #=begin comment
     draw-box :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), :height($side),
              :fill-color(color Blue), :fill, :$page; #, :gfx($page.gfx);
-    #=end comment
+    $page.gfx.Restore;
 
 
 } # sub simple-clip3(
@@ -1221,11 +1222,81 @@ sub get-base-name(UInt $N --> Str) is export {
     $base-name
 } # sub get-base-name(UInt $N --> Str)
 
+# TODO
+# from ps procs in file "boxtext.ps"
+# /boxtext { % string location_code [integer: 0-11] 
+#  (to place--relative to the current point);
+# 0 %               center of text bbox positioned at the current point
+# 1 %  center of left edge of text bbox positioned at the current point
+# 2 %    lower left corner of text bbox positioned at the current point
+# 3 % center of lower edge of text bbox positioned at the current point
+# 4 %   lower right corner of text bbox positioned at the current point
+# 5 % center of right edge of text bbox positioned at the current point
+# 6 %   upper right corner of text bbox positioned at the current point
+# 7 % center of upper edge of text bbox positioned at the current point
+# 8 %    upper left corner of text bbox positioned at the current point
+# 9 % on base line (y of current point), left-justified on current point
+#10 % on base line (y of current point), centered horizontally
+#11 % on base line (y of current point), right-justified on current point
+
+subset Loc of UInt where 0 <= $_ < 12;
 sub label(
-    $x, $y,
+    $x is copy, $y is copy,
     :$text!,
     :$page!,
-    :$position where 0 <= $_ < 8, # increments of 45 degrees, starting from 3 o'clock
+    # defaults
+    :$font-size = 12,
+    :$fnt = "t", # key to %fonts, value is the loaded font
+    # position of the enclosed text bbox in relation to the current point
+Loc :$position = 0, #  where {0 <= $_ < 12}, 
+    # optional constraints
+    :$width,
+    :$height,
     :$debug,
     ) is export {
+
+    my $font = %fonts{$fnt};
+    my PDF::Content::Text::Box $bbox;
+
+    #==========================================
+    # Determine text bbox size
+    if $width and $height {
+        # get constrained box size from PDF::Content
+        if $position (cont) <0 1 2 3 4 5 6 7 8 9 10 11>.Set {
+        }
+        $bbox .= new: :$text, :$font, :$font-size, :$width, :$height;
+    }
+    elsif $height {
+        # get constrained box size from PDF::Content
+        $bbox .= new: :$text, :$font, :$font-size, :$height;
+    }
+    elsif $width {
+        # get constrained box size from PDF::Content
+        $bbox .= new: :$text, :$font, :$font-size, :$width;
+    }
+    else {
+        # get natural box size from PDF::Content
+        $bbox .= new: :$text, :$font, :$font-size;
+    }
+
+    # Determine location of the text box based on calculated bbox above
+    
+    # query the bbox
+    my $bwidth  = $bbox.content-width;
+    my $bheight = $bbox.content-height;
+    my $bllx;
+    my $blly;    
+
+=begin comment
+    $page.graphics: {
+        my $tx = $cx;
+        my $ty = $cy + ($height * 0.5) - $line1Y;
+        .transform: :translate($tx, $ty); # where $x/$y is the desired reference point
+        .FillColor = color White; #rgb(0, 0, 0); # color Black
+        .font = %fonts<hb>, #.core-font('HelveticaBold'),
+                 $line1size; # the size
+        .print: $gb, :align<center>, :valign<center>;
+    }
+=end comment
+
 } # sub label(
