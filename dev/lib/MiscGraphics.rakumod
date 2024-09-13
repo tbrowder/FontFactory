@@ -303,23 +303,28 @@ sub make-label(
 
 } # sub make-label(
 
-=begin comment
 our &draw-disk = &draw-ring;
 sub draw-ring(
     $x, $y,  # center point
     $r,      # radius
-    :$thick!,
+    :$thick!, # outer radius - inner radius
     :$page!,
-    :$fill = True, # else stroke
-    :$color = [1], # white
+    :$fill, 
+    :$stroke, 
+    :$color,
     :$linewidth = 0,
+    :$debug,
     ) is export {
+
+# TODO clip needed
 
     # need inside clip of a disk
     # first draw the outer circle path clockwise
     # then draw the inner circle path counterclockwise
     # then clip
 
+    
+    =begin comment
     $page.graphics: {
         .SetLineWidth: $linewidth; #, :$color;
 	.StrokeColor = color $color;
@@ -361,8 +366,8 @@ sub draw-ring(
             .Stroke;
         }
     }
+    =end comment
 }
-=end comment
 
 
 =begin comment
@@ -403,12 +408,6 @@ sub make-cross(
     if $debug {
         say "    Drawing a filled, white circle...";
     }
-
-#   draw-circle $cx, $cy, $radius, :fill-color(color Red), :fill(1), :$page, :$debug;
-#    draw-circle $cx, $cy, $radius-$thick, :fill-color(0), :fill, :$page;
-
-# good to this point
-# TODO get it going!!
 
     # create a clipped, inner circular path with radius inside
     # by the thickness
@@ -927,7 +926,6 @@ sub draw-color-wheel(
     # a hex wheel of different-colored triangles centered
     # on the circle defined with the inputs
 
-# TODO
     note "DEBUG: in sub draw-color-wheel" if $debug;
     my $g = $page.gfx;
     #$page.gfx: {
