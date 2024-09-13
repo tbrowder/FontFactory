@@ -189,7 +189,7 @@ sub make-label(
 
     # cross/rose window params
     my $diam    = 0.35*72;
-    my $thick   = 3;
+    my $thick   = 2;
     my $cwidth  = 1*72;
     my $cheight = 0.3 * 72;
     my $ccxL    = $cx - ($width * 0.5);
@@ -236,8 +236,8 @@ sub make-label(
 
     make-cross(:$diam, :$thick, :width($cwidth),
                 :height($cheight), :cx($ccxL), :cy($ccy), :$page, :$debug);
-#   make-cross(:$diam, :$thick, :width($cwidth),
-#               :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
+    make-cross(:$diam, :$thick, :width($cwidth),
+                :height($cheight), :cx($ccxR), :cy($ccy), :$page, :$debug);
 
     #==========================================
     # gbumc text in the blue part
@@ -416,7 +416,14 @@ sub make-cross(
     # to the height and width of the circle
     $page.gfx.Save;
     draw-circle-clip $cx, $cy, $radius, :clip, :$page;
-    draw-color-wheel :$cx, :$cy, :radius($radius+10), :$page;
+    draw-circle-clip $cx, $cy, $radius, :fill, :fill-color(color White), 
+                     :stroke, :stroke-color(color White), :$page;
+
+    # the colored pattern
+    draw-circle-clip $cx, $cy, $radius-2, :clip, :$page;
+    draw-color-wheel :$cx, :$cy, :radius($radius+20), :$page;
+    draw-cross-parts :x($cx), :y($cy), :$width, :$height,
+                     :$page; 
     $page.gfx.Restore;
 
     =begin comment
@@ -942,7 +949,7 @@ sub draw-color-wheel(
                        :fill, :$fill-color, :$stroke-color, :$page;
     }
     $g.Restore;
-    #}
+    
 } # sub draw-color-wheel(
 
 sub draw-hex-wedge(
@@ -1319,3 +1326,36 @@ Loc :$position = 0, #  where {0 <= $_ < 12},
 =end comment
 
 } # sub label(
+
+sub draw-cross-parts(
+    :$x, 
+    :$y, 
+    :$width!, 
+    :$height!, 
+    :$thick  = 2,
+    :$xdelta = 0,
+    :$ydelta = 0,
+    :$fill   = 1, :$fill-color   = (color White),
+    :$stroke = 1, :$stroke-color = (color White),
+    :$page!,
+    :$debug,
+    ) is export {
+
+    my $g = $page.gfx;
+    $g.Save;
+
+    # move to x,y and draw the arms with thickness
+    # horizontal arm
+    my ($llx, $lly);
+    $llx = ($x - 0.5*$width) + $xdelta;
+    $lly = ($y - 0.5*$thick) + $ydelta;
+    draw-rectangle-clip  :$llx, :$lly, :$width, :height($thick), :fill, :$page;
+
+    # verical arm
+    $llx = ($x - 0.5*$thick)  + $xdelta;
+    $lly = ($y - 0.5*$height) + $ydelta;
+    draw-rectangle-clip  :$llx, :$lly, :width($thick), :$height, :fill, :$page;
+
+    $g.Restore;
+
+} # sub draw-cross-parts(

@@ -1,3 +1,17 @@
+Consider making this a module named something like:
+  Raku::PDF-Notes
+  PDF::Notes
+
+Consider making a pure PDF module for PDF operators
+  (started in PDF::Document but make it a separate module?)
+
+Look at Pod::To::Markdown as base for
+  Pod::To::PDF (or alternative name)
+OR 
+  David's Pod::To::Pdf
+    (but what is 'Cairo'?)
+
+
 Clipping
 ========
 
