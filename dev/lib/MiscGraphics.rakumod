@@ -8,6 +8,20 @@ use PDF::Content::Text::Box;
 
 use FreeFonts;
 
+# My initial guess at the rose window colors (rgb triplets)
+# based on my comparing the image on the church website
+# to the W3C rgb color picker website.
+#
+# I may update the values as needed after seeing printed results.
+constant %colors = %(
+    1 => [255, 204, 102],
+    2 => [  0,   0,   0],
+    3 => [153, 204, 255],
+    4 => [  0, 102, 255],
+    5 => [ 51, 153, 102],
+    6 => [204,  51,   0],
+);
+
 # Letter paper
 #==============
 # letter, portrait
@@ -350,19 +364,6 @@ sub draw-ring(
 }
 =end comment
 
-# My initial guess at the rose window colors (rgb triplets)
-# based on my comparing the image on the church website
-# to the W3C rgb color picker website.
-#
-# I may update the values as needed after seeing printed results.
-constant %colors = %(
-    1 => [255, 204, 102],
-    2 => [  0,   0,   0],
-    3 => [153, 204, 255],
-    4 => [  0, 102, 255],
-    5 => [ 51, 153, 102],
-    6 => [204,  51,   0],
-);
 
 =begin comment
 sub draw-cross(
@@ -402,7 +403,8 @@ sub make-cross(
     if $debug {
         say "    Drawing a filled, white circle...";
     }
-    draw-circle $cx, $cy, $radius, :fill-color(color Red), :fill(1), :$page, :$debug;
+
+#   draw-circle $cx, $cy, $radius, :fill-color(color Red), :fill(1), :$page, :$debug;
 #    draw-circle $cx, $cy, $radius-$thick, :fill-color(0), :fill, :$page;
 
 # good to this point
@@ -413,8 +415,10 @@ sub make-cross(
     # create the stained-glass portion
     # as a rectangular pattern set
     # to the height and width of the circle
-# clip inside this sub:
-#draw-color-wheel :$cx, :$cy, :$radius, :$page;
+    $page.gfx.Save;
+    draw-circle $cx, $cy, $radius, :clip, :$page;
+    draw-color-wheel :$cx, :$cy, :radius($radius+10), :$page;
+    $page.gfx.Restore;
 
     =begin comment
     # 4 pieces
@@ -515,7 +519,7 @@ sub draw-star(
 sub draw-circle(
     $x, $y, $r,
     :$page!,
-    :$stroke-color = (color Black), 
+    :$stroke-color = (color Black),
     :$fill-color   = (color White),
     :$linewidth = 0,
     :$fill is copy,
@@ -710,6 +714,7 @@ sub show-nums($landscape = 0) is export {
     $nc, $nr, $hgutter, $vgutter
 } # sub show-nums($landscape = 0) is export {
 
+=begin comment
 # upper-left quadrant
 sub draw-ul-rect(
     :$llx!,       # in centimeters
@@ -718,8 +723,8 @@ sub draw-ul-rect(
     :$height!,    # in centimeters
     :$width-pts!, # in desired PS points, scale cm dimens accordingly
     # probably don't need these
-    :$stroke-color = [0], # black
-    :$fill-color   = [1], # white
+    :$stroke-color = (color Black),
+    :$fill-color   = (color White),
     :$page!,
     ) is export {
     # on the sketch are 10 rectangle numbers, use them here
@@ -773,6 +778,7 @@ sub draw-lr-rect(
     :$page!,
     ) is export {
 }
+=end comment
 
 our &draw-box = &draw-rectangle;
 sub draw-rectangle(
@@ -780,8 +786,8 @@ sub draw-rectangle(
     :$lly!,
     :$width!,
     :$height!,
-    :$stroke-color = [0], # black
-    :$fill-color   = [1], # white
+    :$stroke-color = (color Black),
+    :$fill-color   = (color White),
     :$fill is copy,
     :$stroke is copy,
     :$clip is copy,
@@ -916,66 +922,77 @@ sub draw-color-wheel(
     :$cx!, :$cy!,
     :$radius!,
     :$page!,
+    :$debug,
     ) is export {
     # a hex wheel of different-colored triangles centered
     # on the circle defined with the inputs
 
 # TODO
-
-    $page.gfx: {
-        .Save;
-        # clip to a circle
-        draw-circle $cx, $cy, $radius, :$page, :clip;
-
-        my $cnum = 0;
-        #my $stroke-color = color Black;
-        my $stroke-color = color White;
-        for 0..^6 {
-            my $angle = $_ * 60;
-            ++$cnum; # color number in %colors
-            my $fill-color = %colors{$cnum};
-            draw-hex-wedge :$cx, :$cy, :height($radius), :$angle, :stroke,
-                           :fill, :$fill-color, :$stroke-color, :$page;
-        }
-        .Restore;
+    note "DEBUG: in sub draw-color-wheel" if $debug;
+    my $g = $page.gfx;
+    #$page.gfx: {
+    $g.Save;
+    my $cnum = 0; # color number in %colors
+    #my $stroke-color = color Black;
+    my $stroke-color = color White;
+    for 0..^6 {
+        ++$cnum; # color number in %colors
+        my $angle = $_ * 60;
+        my $fill-color = color %colors{$cnum};
+        note "DEBUG: fill color = '$fill-color'" if $debug;
+        draw-hex-wedge :$cx, :$cy, :height($radius), :$angle, :stroke,
+                       :fill, :$fill-color, :$stroke-color, :$page;
     }
+    $g.Restore;
+    #}
 } # sub draw-color-wheel(
 
 sub draw-hex-wedge(
     :$cx!, :$cy!,
     :$height!, # apex at cx, ch, height is perpendicular at the base
     :$angle!,  # degrees ccw from 3 o'clock
-    :$fill,
-    :$stroke,
-    :$fill-color   = [1],
-    :$stroke-color = [0],
+    :$fill is copy,
+    :$stroke is copy,
+    :$fill-color, #   = (color Red),
+    :$stroke-color, # = (color Black),
     :$page!,
+    :$debug,
     ) is export {
+
+    $fill   = 0 if not $fill.defined;
+    $stroke = 0 if not $stroke.defined;
+    unless ($fill or $stroke) {
+        $stroke = 1;
+    }
+
     #
     #          0
     #         /|\ equilateral triangle
     #        / | \ c
     #       /  |h \ 60 deg
     #    1 /---+---\ 2      given: h, angles 1 and 2 60 degrees each
-    #        a   a
+    #       -a   +a
     #                    h/a = tan 60 deg
-    #                    a   = h / tan 60
+    #                   |a|  = h / tan 60
     #
     my $a = $height / tan(deg2rad(60));
     # point 0 is $cx,$cy --> 0, 0
     # rotate as desired by $angle
     # draw the triangle
 
-    #my $g = $page.graphics;
+note "DEBUG: stroke color: $stroke-color" if $debug;
+note "DEBUG: fill   color: $fill-color" if $debug;
+
     my $g = $page.gfx;
     $g.Save;
-    $g.transform :translate($cx,$cy);
-    $g.transform :rotate(deg2rad($angle));
+    $g.transform :translate($cx,$cy); # now apex is at 0, 0
+    $g.transform :rotate(deg2rad($angle)); # h is positive x: 0 to h, y = 0
     $g.LineWidth = 0;
-    $g.FillColor = color $fill-color;
+    $g.FillColor   = color $fill-color;
     $g.StrokeColor = color $stroke-color;
-    $g.MoveTo: -$a, -$height;
-    $g.LineTo: +$a, -$height;
+    $g.MoveTo: 0, 0;
+    $g.LineTo: $height, -$a;
+    $g.LineTo: $height, +$a;
     $g.LineTo:   0,   0;
     $g.ClosePath;
     if $fill and $stroke {
@@ -989,28 +1006,6 @@ sub draw-hex-wedge(
     }
     $g.Restore;
 
-    =begin comment
-    $page.graphics: {
-        .transform :translate($cx,$cy);
-        .transform :rotate(deg2rad($angle));
-        .LineWidth = 0;
-        .FillColor = color $fill-color;
-        .StrokeColor = color $stroke-color;
-        .MoveTo: -$a, -$height;
-        .LineTo: +$a, -$height;
-        .LineTo:   0,   0;
-        .ClosePath;
-        if $fill and $stroke {
-            .FillStroke;
-        }
-        elsif $fill {
-            .Fill;
-        }
-        elsif $stroke {
-            .Stroke;
-        }
-    }
-    =end comment
 } # sub draw-hex-wedge(
 
 sub simple-clip1(
@@ -1173,12 +1168,14 @@ sub simple-clip3(
 
     # put the first example on y = 1/4 page height from the top
     # put the second example on y = 2/4 page height from the top
+    # put the third example on y = 3/4 page height from the top
 
     my $pg-width  = $page.media-box[2];
     my $pg-height = $page.media-box[3];
 
     my $cy1 = 0.75 * $pg-height;
     my $cy2 = 0.50 * $pg-height;
+    my $cy3 = 0.20 * $pg-height;
 
     # title: plain-circle
     $x = 0.5 * $pg-width;
@@ -1193,14 +1190,38 @@ sub simple-clip3(
     my $radius = 72;
     draw-circle $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
 
-    #== second example, clip to the circle
-    # Note the $page.gfx was NOT saved so the clipping should be good 
-    # till the end of the page.
     $page.gfx.Save;
+    #== second example, clip to the circle
+    # Note the $page.gfx was NOT saved after the clip so the clipping should be good
+    # till the end of the page or after the next .Restore
     draw-circle $x, $cy2, $radius, :clip, :$page;
-
     draw-box :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), :height($side),
-             :fill-color(color Blue), :fill, :$page; #, :gfx($page.gfx);
+             :fill-color(color Blue), :fill, :$page;
+    $page.gfx.Restore;
+
+    $page.gfx.Save;
+    #== third example, clip to the same circle moved down some
+    draw-circle $x, $cy3, $radius, :clip, :$page;
+    draw-color-wheel :cx($x), :cy($cy3), :radius($radius+10), :$page;
+
+    =begin comment
+    draw-hex-wedge :cx($x), :cy($cy3), :height($radius+10), :angle(0),
+                   :stroke, :fill, :$page;
+    draw-hex-wedge :cx($x), :cy($cy3), :height($radius+10), :angle(60),
+                   :stroke, :fill, :$page;
+    draw-hex-wedge :cx($x), :cy($cy3), :height($radius+10), :angle(120),
+                   :stroke, :fill, :$page;
+    draw-hex-wedge :cx($x), :cy($cy3), :height($radius+10), :angle(180),
+                   :stroke, :fill, :$page;
+    draw-hex-wedge :cx($x), :cy($cy3), :height($radius+10), :angle(240),
+                   :stroke, :fill, :$page;
+    =end comment
+
+    =begin comment
+    draw-box :llx($x-0.5*$side), :lly($cy3-0.5*$side), :width($side), :height($side),
+             :fill-color(color Red), :fill, :$page; #, :gfx($page.gfx);
+    =end comment
+
     $page.gfx.Restore;
 
 
@@ -1224,7 +1245,7 @@ sub get-base-name(UInt $N --> Str) is export {
 
 # TODO
 # from ps procs in file "boxtext.ps"
-# /boxtext { % string location_code [integer: 0-11] 
+# /boxtext { % string location_code [integer: 0-11]
 #  (to place--relative to the current point);
 # 0 %               center of text bbox positioned at the current point
 # 1 %  center of left edge of text bbox positioned at the current point
@@ -1248,7 +1269,7 @@ sub label(
     :$font-size = 12,
     :$fnt = "t", # key to %fonts, value is the loaded font
     # position of the enclosed text bbox in relation to the current point
-Loc :$position = 0, #  where {0 <= $_ < 12}, 
+Loc :$position = 0, #  where {0 <= $_ < 12},
     # optional constraints
     :$width,
     :$height,
@@ -1280,12 +1301,12 @@ Loc :$position = 0, #  where {0 <= $_ < 12},
     }
 
     # Determine location of the text box based on calculated bbox above
-    
+
     # query the bbox
     my $bwidth  = $bbox.content-width;
     my $bheight = $bbox.content-height;
     my $bllx;
-    my $blly;    
+    my $blly;
 
 =begin comment
     $page.graphics: {
