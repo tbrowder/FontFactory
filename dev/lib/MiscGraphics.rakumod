@@ -415,7 +415,7 @@ sub make-cross(
     # as a rectangular pattern set
     # to the height and width of the circle
     $page.gfx.Save;
-    draw-circle $cx, $cy, $radius, :clip, :$page;
+    draw-circle-clip $cx, $cy, $radius, :clip, :$page;
     draw-color-wheel :$cx, :$cy, :radius($radius+10), :$page;
     $page.gfx.Restore;
 
@@ -444,11 +444,11 @@ sub make-cross(
     =begin comment
     # inner filled with rose
     my $rose = [255, 153, 255]; # from color picker
-    draw-circle $cx, $cy, $radius-$thick, :color($rose), :$page;
+    draw-circle-clip $cx, $cy, $radius-$thick, :color($rose), :$page;
 
     # outer filled with white with a cross inside as part of it
     # is placed over the "rose" part
-    draw-circle $cx, $cy, $radius, :color(1), :$page;
+    draw-circle-clip $cx, $cy, $radius, :color(1), :$page;
     =end comment
 
     =begin comment
@@ -515,7 +515,7 @@ sub draw-star(
 
 } # sub draw-star(
 
-sub draw-circle(
+sub draw-circle-clip(
     $x, $y, $r,
     :$page!,
     :$stroke-color = (color Black),
@@ -615,7 +615,7 @@ sub draw-circle(
         $g.EndPath;
     }
 
-} # sub draw-circle(
+} # sub draw-circle-clip(
 
 sub write-cell-line(
     # text only
@@ -779,8 +779,8 @@ sub draw-lr-rect(
 }
 =end comment
 
-our &draw-box = &draw-rectangle;
-sub draw-rectangle(
+our &draw-box-clip = &draw-rectangle-clip;
+sub draw-rectangle-clip(
     :$llx!,
     :$lly!,
     :$width!,
@@ -1142,10 +1142,10 @@ sub simple-clip2(
     $g.FillColor   = color White;
 
     # clip
-    draw-circle 0, 0, $radius+60, :clip, :$page, :$debug;
+    draw-circle-clip 0, 0, $radius+60, :clip, :$page, :$debug;
 
     # stroke it
-    draw-circle 0, 0, $radius, :stroke, :$page, :$debug;
+    draw-circle-clip 0, 0, $radius, :stroke, :$page, :$debug;
 
     draw-star 0, 0, $radius+30, :stroke, :$page, :$debug;
 
@@ -1182,24 +1182,24 @@ sub simple-clip3(
     #== first example, no clip
     # draw a colored box
     my $side = 3*72;
-    draw-box :llx($x-0.5*$side), :lly($cy1-0.5*$side), :width($side), :height($side),
-             :fill-color(color Blue), :fill, :$page;
+    draw-box-clip :llx($x-0.5*$side), :lly($cy1-0.5*$side), :width($side),
+                  :height($side), :fill-color(color Blue), :fill, :$page;
     # on top of it draw a white-filled circle
     my $radius = 72;
-    draw-circle $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
+    draw-circle-clip $x, $cy1, $radius, :fill, :fill-color(color White), :$page;
 
     $page.gfx.Save;
     #== second example, clip to the circle
     # Note the $page.gfx was NOT saved after the clip so the clipping should be good
     # till the end of the page or after the next .Restore
-    draw-circle $x, $cy2, $radius, :clip, :$page;
-    draw-box :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), :height($side),
-             :fill-color(color Blue), :fill, :$page;
+    draw-circle-clip $x, $cy2, $radius, :clip, :$page;
+    draw-box-clip :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), 
+                  :height($side), :fill-color(color Blue), :fill, :$page;
     $page.gfx.Restore;
 
     $page.gfx.Save;
     #== third example, clip to the same circle moved down some
-    draw-circle $x, $cy3, $radius, :clip, :$page;
+    draw-circle-clip $x, $cy3, $radius, :clip, :$page;
     draw-color-wheel :cx($x), :cy($cy3), :radius($radius+10), :$page;
 
     =begin comment
@@ -1216,7 +1216,7 @@ sub simple-clip3(
     =end comment
 
     =begin comment
-    draw-box :llx($x-0.5*$side), :lly($cy3-0.5*$side), :width($side), :height($side),
+    draw-box-clip :llx($x-0.5*$side), :lly($cy3-0.5*$side), :width($side), :height($side),
              :fill-color(color Red), :fill, :$page; #, :gfx($page.gfx);
     =end comment
 
