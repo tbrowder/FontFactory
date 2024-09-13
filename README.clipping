@@ -1,0 +1,76 @@
+Clipping
+========
+
+Routines
+--------
+
+Almost always a PDF routine should be defined this way
+for page painting (and possible clipping)
+
+See $page notes below.
+
+sub draw-something-clip(  # I add '-clip' to routine names used for clipping
+    # args...
+    :$page!,
+    :$clip is copy   = 0, # add this arg if routine can be used for clipping
+    :$fill is copy   = 0, # if used for clipping
+    :$stroke is copy = 0, # if used for clipping
+    :$debug, # personal preference
+    ) {
+    # any prep work goes here...
+
+    my $g = $page.gfx; <== pointer to the page's PDF::Content object
+
+    # WARNING if clipping is desired, neither filling nor stroking is allowed
+    if $clip {
+        $fill = $stroke = 0;
+    }
+    $g.Save if not $clip; # but NOT if clipping
+
+    # do the work...
+
+    $g.Restore if not $clip;
+}
+
+Pages
+-----
+
+In general, I have found it best to avoid this construct:
+
+    $page.graphics: {
+        # .methods ...
+    }
+
+Instead, use:
+
+    my $g = $page.gfx: # <== pointer to the PDF::Content object
+    $g.Save;
+    # paint with $g.X operators
+    # call painting subs with the $page pointer
+    $g.Restore;
+     
+Clipping on a page
+------------------
+
+When creating a new PDF page, the Current Transformation Matfix (CTM is 
+the default one with
+the origin at the lower-left point of the Page.media-box which
+extends infinitely in 2D space. The user will typically
+define a standard page dimension based on ISO paper dimensions.
+Note Page.crop-box is set the same
+
+
+$page.graphics.Save; # save the default Page CTM and its clipping path
+# call a clipping path routine...
+
+# Now all painting will be constrained to inside the current
+# clipping path.
+
+# More clipping paths may added as subs (nested clipping paths)
+
+# After finihed with the enveloping xlipping path, restore
+# the origInal page CTM.
+$page.graphics.Restore;
+
+
+# whe
