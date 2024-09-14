@@ -3,6 +3,7 @@ unit module MiscGraphics;
 use PDF::API6;
 use PDF::Lite;
 use PDF::Content::Color :ColorName, :color;
+use PDF::Content::XObject;
 use PDF::Tags;
 use PDF::Content::Text::Box;
 
@@ -397,6 +398,14 @@ sub make-cross(
         say "  Making the cross parts...";
     }
 
+    =begin comment
+    # load the png image
+    my PDF::Content::XObject $image .= open: "./pic.png";
+    my $iwid = $image.width;
+    my $ihgt = $image.width;
+    place-image $cx, $cy, :$image, :$page;
+    =end comment
+
     # initial model will be a hollow circle with symmetrical spokes in
     # shape of a cross, with a rose background color to simulate
     # GBUMC's rose window
@@ -418,6 +427,7 @@ sub make-cross(
     draw-circle-clip $cx, $cy, $radius, :clip, :$page;
     draw-circle-clip $cx, $cy, $radius, :fill, :fill-color(color White), 
                      :stroke, :stroke-color(color White), :$page;
+
 
     # the colored pattern
     draw-circle-clip $cx, $cy, $radius-2, :clip, :$page;
@@ -1266,7 +1276,8 @@ sub get-base-name(UInt $N --> Str) is export {
 #11 % on base line (y of current point), right-justified on current point
 
 subset Loc of UInt where 0 <= $_ < 12;
-sub label(
+sub put-text(
+    # based on my PostScript function /puttext
     $x is copy, $y is copy,
     :$text!,
     :$page!,
@@ -1288,20 +1299,30 @@ Loc :$position = 0, #  where {0 <= $_ < 12},
     # Determine text bbox size
     if $width and $height {
         # get constrained box size from PDF::Content
+        #   define the applicable set of params affected
         if $position (cont) <0 1 2 3 4 5 6 7 8 9 10 11>.Set {
         }
         $bbox .= new: :$text, :$font, :$font-size, :$width, :$height;
     }
     elsif $height {
         # get constrained box size from PDF::Content
+        #   define the applicable set of params affected
+        if $position (cont) <0 1 2 3 4 5 6 7 8 9 10 11>.Set {
+        }
         $bbox .= new: :$text, :$font, :$font-size, :$height;
     }
     elsif $width {
         # get constrained box size from PDF::Content
+        #   define the applicable set of params affected
+        if $position (cont) <0 1 2 3 4 5 6 7 8 9 10 11>.Set {
+        }
         $bbox .= new: :$text, :$font, :$font-size, :$width;
     }
     else {
         # get natural box size from PDF::Content
+        #   define the applicable set of params affected
+        if $position (cont) <0 1 2 3 4 5 6 7 8 9 10 11>.Set {
+        }
         $bbox .= new: :$text, :$font, :$font-size;
     }
 
@@ -1359,3 +1380,22 @@ sub draw-cross-parts(
     $g.Restore;
 
 } # sub draw-cross-parts(
+
+=begin comment
+sub place-image(
+    $cx, $cy,
+    :$image!,
+    :$page!,
+    :$debug,
+    ) is export {
+
+    my $g = $page.gfx;
+    $g.Save;
+    $g.do: $image, :position($cx, $cy), :width($image.width), 
+           :height($image.height), :valign<center>, :align<center>;
+
+    $g.Restore;
+
+} # sub place-image(
+=end comment
+
