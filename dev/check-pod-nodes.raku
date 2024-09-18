@@ -1,12 +1,12 @@
 #!/usr/bin/env raku
 
-use experimental :rakuast;
+use File::Find;
 
+use experimental :rakuast;
 use Test;
 
-use FontFactory::Test-Files;
-
-my @files = FontFactory::Test-Files.pods;
+use "./lib";
+use TestPodss;
 
 =begin overview
 
@@ -35,9 +35,11 @@ Complain whenever we find them, except for infix:<> and prefix:<>
 
 =end overview
 
+my $dir = "../docs".IO;
+my @files = :$dir, :type<file>;
 
 if @files {
-    plan +@files;
+i    plan +@files;
 } else {
     plan :skip-all<No rakudoc files specified>
 }

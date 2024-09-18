@@ -33,9 +33,12 @@
     "FontFactory::FontUtils": "lib/FontFactory/FontUtils.rakumod",
     "FontFactory::OtherClasses": "lib/FontFactory/OtherClasses.rakumod",
     "FontFactory::PageProcs": "lib/FontFactory/PageProcs.rakumod",
+    "FontFactory::Pod::Cache": "lib/FontFactory/Pod/Cache.rakumod",
+    "FontFactory::Pod::Convenience": "lib/FontFactory/Pod/Convenience.rakumod",
     "FontFactory::PodUtils": "lib/FontFactory/PodUtils.rakumod",
     "FontFactory::Resources": "lib/FontFactory/Resources.rakumod",
     "FontFactory::Roles": "lib/FontFactory/Roles.rakumod",
+    "FontFactory::Test-Files": "lib/FontFactory/Test-Files.rakumod",
     "FontFactory::Utils": "lib/FontFactory/Utils.rakumod"
   },
   "resources": [

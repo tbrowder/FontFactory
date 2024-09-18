@@ -1,13 +1,5 @@
 #!/usr/bin/env raku
 
-use experimental :rakuast;
-
-use Test;
-
-use FontFactory::Test-Files;
-
-my @files = FontFactory::Test-Files.pods;
-
 =begin overview
 
 Validate, in a single pass, several characteristics of our
@@ -35,6 +27,14 @@ Complain whenever we find them, except for infix:<> and prefix:<>
 
 =end overview
 
+use experimental :rakuast;
+
+use Test;
+
+use lib $*PROGRAM.parent(2).child('lib');
+use Test-Files;
+
+my @files = Test-Files.pods;
 
 if @files {
     plan +@files;
