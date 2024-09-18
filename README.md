@@ -206,7 +206,7 @@ Listing a string's attributes:
 AUTHOR
 ======
 
-Tom Browder <tbrowder@acm.org>
+Tom Browder (mailto:tbrowder@acm.org)
 
 Summary of FONTS COPYRIGHT and LICENSE
 ======================================
