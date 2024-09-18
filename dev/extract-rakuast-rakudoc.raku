@@ -70,6 +70,10 @@ my @unhandled-pod;
 my @pod-chunks; # a global array to collect chunks from the pod walk
 
 for $pod-file.IO.slurp.AST.rakudoc -> $pod-node {
+    #dd $pod-node;
+    #next;
+
+
     #say dd $pod-node;
     #exit;
     #  $=pod
@@ -128,6 +132,10 @@ sub walk-pod($node, :$parent, :$level, :$debug) is export {
     say "    parent: $parent";
     say "    parents's level: $level";
     say "    child level:     {$level+1}";
+
+    dd $node;
+    return;
+
 
     my $pnode = PodNode.new: :$id, :$parent, :level($level+1);
     %nodes{$id} = $pnode; # hash of IDs and pod nodes
