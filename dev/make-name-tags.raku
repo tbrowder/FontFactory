@@ -19,6 +19,8 @@ my @names;
 #my $names-file = "more-names.txt";
 my $names-file = "less-names.txt";
 for $names-file.IO.lines {
+    next if $_ ~~ /\h* '#'/;
+
     my @w = $_.words;
     my $last = @w.pop;
     my $first = @w.shift;

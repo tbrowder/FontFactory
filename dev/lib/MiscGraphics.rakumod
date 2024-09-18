@@ -42,6 +42,9 @@ my $ph = 11*72;
 
 # current badge dimensions (width, height)
 my @badge = 3.84, 2.26; # Amazon, 0.1" less than listed dimensions to allow in-pocket
+# still too wide, trim another 1/8" of width
+@badge[0] -= 0.125;
+
 my $bwi = @badge.head; # badge width
 my $bhi = @badge.tail; # badge height
 # all dimens in PS points:
@@ -310,8 +313,8 @@ sub draw-ring(
     $r,      # radius
     :$thick!, # outer radius - inner radius
     :$page!,
-    :$fill, 
-    :$stroke, 
+    :$fill,
+    :$stroke,
     :$color,
     :$linewidth = 0,
     :$debug,
@@ -324,7 +327,7 @@ sub draw-ring(
     # then draw the inner circle path counterclockwise
     # then clip
 
-    
+
     =begin comment
     $page.graphics: {
         .SetLineWidth: $linewidth; #, :$color;
@@ -398,13 +401,11 @@ sub make-cross(
         say "  Making the cross parts...";
     }
 
-    =begin comment
+    #=begin comment
+    # TODO make test, file issue
     # load the png image
-    my PDF::Content::XObject $image .= open: "./pic.png";
-    my $iwid = $image.width;
-    my $ihgt = $image.width;
-    place-image $cx, $cy, :$image, :$page;
-    =end comment
+    my $image-path = "./GBUMC-logo.png";
+    #=end comment
 
     # initial model will be a hollow circle with symmetrical spokes in
     # shape of a cross, with a rose background color to simulate
@@ -425,15 +426,18 @@ sub make-cross(
     # to the height and width of the circle
     $page.gfx.Save;
     draw-circle-clip $cx, $cy, $radius, :clip, :$page;
-    draw-circle-clip $cx, $cy, $radius, :fill, :fill-color(color White), 
+    draw-circle-clip $cx, $cy, $radius, :fill, :fill-color(color White),
                      :stroke, :stroke-color(color White), :$page;
 
-
+    place-image $cx, $cy, :$image-path, :$page;
+    =begin comment
     # the colored pattern
     draw-circle-clip $cx, $cy, $radius-2, :clip, :$page;
     draw-color-wheel :$cx, :$cy, :radius($radius+20), :$page;
     draw-cross-parts :x($cx), :y($cy), :$width, :$height,
-                     :$page; 
+                     :$page;
+    =end comment
+
     $page.gfx.Restore;
 
     =begin comment
@@ -959,7 +963,7 @@ sub draw-color-wheel(
                        :fill, :$fill-color, :$stroke-color, :$page;
     }
     $g.Restore;
-    
+
 } # sub draw-color-wheel(
 
 sub draw-hex-wedge(
@@ -1210,7 +1214,7 @@ sub simple-clip3(
     # Note the $page.gfx was NOT saved after the clip so the clipping should be good
     # till the end of the page or after the next .Restore
     draw-circle-clip $x, $cy2, $radius, :clip, :$page;
-    draw-box-clip :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side), 
+    draw-box-clip :llx($x-0.5*$side), :lly($cy2-0.5*$side), :width($side),
                   :height($side), :fill-color(color Blue), :fill, :$page;
     $page.gfx.Restore;
 
@@ -1349,10 +1353,10 @@ Loc :$position = 0, #  where {0 <= $_ < 12},
 } # sub label(
 
 sub draw-cross-parts(
-    :$x, 
-    :$y, 
-    :$width!, 
-    :$height!, 
+    :$x,
+    :$y,
+    :$width!,
+    :$height!,
     :$thick  = 2,
     :$xdelta = 0,
     :$ydelta = 0,
@@ -1381,21 +1385,33 @@ sub draw-cross-parts(
 
 } # sub draw-cross-parts(
 
-=begin comment
+#=begin comment
 sub place-image(
     $cx, $cy,
-    :$image!,
+    :$image-path!,
     :$page!,
     :$debug,
     ) is export {
 
-    my $g = $page.gfx;
-    $g.Save;
-    $g.do: $image, :position($cx, $cy), :width($image.width), 
-           :height($image.height), :valign<center>, :align<center>;
+    if not $image-path.IO.r {
+        die "FATAL:  Image path '$image-path' cannot be opened.";
+    }
 
+    my PDF::Content::XObject $image .= open: $image-path;
+    if $debug {
+        note "DEBUG: using image path: $image-path";
+    }
+
+    my $w       = $image.width;
+    my $h       = $image.height;
+    my $hscaled = $h/30;
+    my $wscaled = $w/30;
+
+    my $g = $page.gfx: :trace;
+    $g.Save;
+    $g.do: $image, :position($cx, $cy), :width($wscaled), :height($hscaled),
+                   :valign<center>, :align<center>;
     $g.Restore;
 
 } # sub place-image(
-=end comment
-
+#=end comment

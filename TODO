@@ -1,5 +1,22 @@
+Consider making FontFactory into
+  (or separate into) simpler
+  font modules:
+    PDF-Fonts::GNU-FreeFonts
+    PDF-Fonts::URW-Base35
+      etc for standard fonts
+      available on Debian
+    PDF-Fonts::MICR
+
+    hook will be to use common roles
+      load by multi methods including
+        by using fontfonf
 SEE COKE's link for reading a pod file:
   Raku/doc/xt/rakuast-validate.rakutest
+
+  but now investigating David's
+     Pod::To::PDF
+     with my Slidemaker module
+
 
 
   in 0-TODO gmail label
@@ -202,4 +219,4 @@ Decide on the interface details:
       with a value of the object
 
 another option should be downloading the GNU file archive 
-  directly and unpacking   it
+  irectly and unpacking   it
