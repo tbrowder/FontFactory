@@ -2,6 +2,8 @@
 
 use experimental :rakuast;
 
+# use various debug numbers
+
 my $debug = 1;
 
 use Test;
@@ -48,10 +50,11 @@ my $*TRAILING-C-WHITESPACE-OK = False;
 my $*INSIDE-LINK = False;
 
 sub walk($node) {
-    if $debug {
+    if $debug == 1 {
         my $nam = $node.^name;
-        say "DEBUG: {$nam}";
-        say "  dumping";
+        say "DEBUG node.^name: {$nam}";
+    }
+    if $debug == 2 {
         say $node.raku;
     }
 
