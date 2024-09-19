@@ -5,5 +5,8 @@ if [[ -z "$1" ]]; then
     exit
 fi
 
-IFIL=../docs/README.rakudoc
-export RAKUDO_RAKUAST=1; raku --rakudoc $IFIL
+#IFIL=../docs/README.rakudoc
+IFIL=./docs/README.rakudoc
+#export RAKUDO_RAKUAST=1; raku --rakudoc $IFIL
+
+raku -I. xt/rakuast-validate.rakutest

@@ -6,7 +6,7 @@ use experimental :rakuast;
 use Test;
 
 use "./lib";
-use TestPodss;
+use TestPods;
 
 =begin overview
 

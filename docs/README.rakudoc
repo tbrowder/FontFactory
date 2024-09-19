@@ -49,6 +49,8 @@ $ choco install fontconfig # if available
 
 =end item
 
+=config :page-break
+
 =begin item
 The FontFactory font files
 
