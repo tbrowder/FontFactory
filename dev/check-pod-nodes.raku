@@ -5,10 +5,18 @@ use File::Find;
 use experimental :rakuast;
 
 BEGIN {
-unless %*ENV<RAKULIB>.defined and
-    %*ENV<RAKULIB> eq "./lib" {
-    die "FATAL: env var RAKULIB not set to RAKULIB=./lib ";
-}
+    CATCH {
+        default {
+            .payload.say;
+            exit;
+        }
+    };
+    if not %*ENV<RAKULIB>.defined {
+        die "FATAL: env var RAKULIB not set to RAKULIB=./lib ";
+    }
+    elsif %*ENV<RAKULIB> ne "./lib" {
+        die "FATAL: env var RAKULIB not set to RAKULIB=./lib ";
+    }
 }
 
 =begin overview
