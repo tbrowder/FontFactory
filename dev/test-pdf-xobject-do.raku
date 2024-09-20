@@ -2,7 +2,9 @@
 
 use PDF::API6;
 use PDF::Content;
+use PDF::Content::Image;
 use PDF::Content::XObject;
+#use PDF::Content::XObject-Form;
 use PDF::Content::FontObj; # required with XObject
 use PDF::Content::Color :rgb;
 use PDF::Lite;
@@ -21,37 +23,32 @@ my $cy1 = 0.25 * $ph;
 my $cy2 = 0.75 * $ph;
 
 my ($w, $h, $wscaled, $hscaled);
-
-my $g = $page.gfx;
-$g.Save;
-
-my PDF::Content::XObject $png .= $g.open("./GBUMC-logo.png");
-$w       = $png.width;
-$h       = $png.height;
+my PDF::Lite::XObject $png2 .= open("./GBUMC-logo.png");
+$w       = $png2.width;
+$h       = $png2.height;
 $wscaled = $w/30;
 $hscaled = $h/30;
 
+#my $g = $page.gfx;
+#$g.Save;
+$page.graphics: {
+
 #=begin comment
 # forms method
-my PDF::Content::XObject-Form $form = $g.xobject-form(:BBox[0, 0, $wscaled, $hscaled]);
-my $fg = $form.gfx;
-$fg.tag: 'P', {
-    .FillColor = color White;
-    .Rectangle: |$form<BBox>;
-    .paint: :fill;
-}
+     my PDF::Content::XObject-Form $form = .xobject-form(:BBox[0, 0, $wscaled, $hscaled]);
+    $form.graphics: {
+        .tag: 'P', {
+        .FillColor = color White;
+        .Rectangle: |$form<BBox>;
+        .paint: :fill;
+    }
+    my PDF::Lite::XObject $png .= open("./GBUMC-logo.png");
+    $page.resource-key($png) = 'png';
 
-$g.do: $form, :position($cx, $cy1), :width($wscaled), :height($hscaled), 
+    .do: $form, :position($cx, $cy1), :width($wscaled), :height($hscaled), 
               :valign<center>, :align<center>;
-#=end comment
 
-=begin comment
-# image method
-$g.do: $png, :position($cx, $cy2), :width($wscaled), :height($hscaled), :valign<center>, :align<center>;
-=end comment
-
-$g.Restore;
-
+}
 
 my $ofil = "do-test.pdf";
 $pdf.save-as: $ofil;

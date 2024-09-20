@@ -1,3 +1,11 @@
+Update: see David's input on XObject
+   $page.to-xobject() method
+   see latest Content t/do.t
+   how is the $pdf.pages method defined?
+      page(0) vs page(1)
+      with new pdf, check it after pdf.add-page
+         first page is .pages.head == .pages[0]
+
 Plan for forming the cross.
 
 The end result should look like Rose Window:
