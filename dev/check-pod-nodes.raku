@@ -3,10 +3,9 @@
 use File::Find;
 
 use experimental :rakuast;
-use Test;
 
 use "./lib";
-use TestPods;
+#use TestPods;
 
 =begin overview
 
@@ -35,19 +34,27 @@ Complain whenever we find them, except for infix:<> and prefix:<>
 
 =end overview
 
-my $dir = "../docs".IO;
-my @files = :$dir, :type<file>;
-
-if @files {
-i    plan +@files;
-} else {
-    plan :skip-all<No rakudoc files specified>
-}
+my $dir = "../docs"; #.IO;
+my @files = find :$dir, :type<file>;
+#say " $_" for @files;
+#exit;
 
 my $*TRAILING-C-WHITESPACE-OK = False;
 my $*INSIDE-LINK = False;
+sub walk($node, 
+         #:$parent = 0, # parent ID
+         :$debug,
+    ) {
+    if $debug == 1 {
+        my $nam = $node.^name;
+        say "DEBUG: .^name: $nam";
+    }
+    elsif $debug == 2 {
+        my $s = $node.gist;
+        say "DEBUG: gist";
+        say $s;
+    }
 
-sub walk($node) {
     my @children;
     my $check-empty-tags = True;
 
@@ -68,9 +75,10 @@ sub walk($node) {
         elsif $node.letter eq 'C' {
             my $content = ~$node.atoms;
             if $*TRAILING-C-WHITESPACE-OK {
-                pass "Allowed trailing space on $node";
+                #pass "Allowed trailing space on $node";
+                note "WARNING: Allowed trailing space on $node";
             } else {
-                ok $content eq $content.trim-trailing, $node;
+                #ok $content eq $content.trim-trailing, $node;
             }
             $*TRAILING-C-WHITESPACE-OK = False;
         } else {
@@ -78,32 +86,44 @@ sub walk($node) {
         }
     } else {
         # If this hits, need to adapt test
-        flunk "new node type: $node.^name";
+        #flunk "new node type: $node.^name";
+        say "WARNING: new node type: $node.^name";
     }
 
     for @children -> $child {
         if $child ~~ Str {
             if ! $*INSIDE-LINK {
                 if $child ~~ / $<url>=[ 'http' 's'? '://' <-[/]>* '/'? ] / {
-                    flunk "URL found: $<url>";
+                    #flunk "URL found: $<url>";
+                    say "URL found: $<url>";
                 }
             }
             if $check-empty-tags && $child ~~ / $<bracketed>=['<' .*? '>'] / {
                 next if $child.contains("prefix:<" | "infix:<" );
-                flunk ~$/<bracketed> ~ " is likely missing a formatting code";
+                #flunk ~$/<bracketed> ~ " is likely missing a formatting code";
+                say "WARNING: " ~  ~$/<bracketed> ~ " is likely missing a formatting code";
             }
         } else {
-            walk($child);
+            walk($child, :$debug);
         }
     }
     $*INSIDE-LINK = False;
 }
 
+use NewPod-Helper;
+
 for @files -> $file {
+    # handling just one file for now
     %*ENV<RAKUDO_RAKUAST>=1;
-    subtest $file => {
-        for $file.IO.slurp.AST.rakudoc -> $pod {
-            walk($pod);
-        }
+    for $file.IO.slurp.AST.rakudoc -> $pod {
+        my $ID  = 0;
+        my $gen = 0;
+        my $pid = ++$ID;
+        my $np  = NewPod.new: :$gen, :$pid, :$pod;
+        #walk($pod, :$np, :$debug);
+        #my $debug = 1;
+        my $debug = 2;
+        walk($pod, :$debug);
     }
+    last;
 }
