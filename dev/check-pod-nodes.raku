@@ -4,8 +4,12 @@ use File::Find;
 
 use experimental :rakuast;
 
-use "./lib";
-#use TestPods;
+BEGIN {
+unless %*ENV<RAKULIB> eq "./lib" {
+    note "FATAL: env var RAKULIB not set correctly...exiting";
+    exit;
+}
+}
 
 =begin overview
 
