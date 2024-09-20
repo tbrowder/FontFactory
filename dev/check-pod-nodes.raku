@@ -4,7 +4,9 @@ use File::Find;
 
 use experimental :rakuast;
 
+my $libdir;
 BEGIN {
+    $libdir = './lib';
     CATCH {
         default {
             .payload.say;
@@ -12,10 +14,13 @@ BEGIN {
         }
     };
     if not %*ENV<RAKULIB>.defined {
-        die "FATAL: env var RAKULIB not set to RAKULIB=./lib ";
+        die "FATAL: env var RAKULIB not set to RAKULIB=$libdir";
     }
-    elsif %*ENV<RAKULIB> ne "./lib" {
-        die "FATAL: env var RAKULIB not set to RAKULIB=./lib ";
+    elsif %*ENV<RAKULIB> ne $libdir {
+        die "FATAL: env var RAKULIB not set to RAKULIB=$libdir";
+    }
+    unless $libdir.IO.d {
+        die "FATAL: lib dir '$libdir' not found";
     }
 }
 
