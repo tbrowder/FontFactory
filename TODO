@@ -1,3 +1,6 @@
+work on pod eval
+
+
 Consider making FontFactory into
   (or separate into) simpler
   font modules:
@@ -9,7 +12,7 @@ Consider making FontFactory into
 
     hook will be to use common roles
       load by multi methods including
-        by using fontfonf
+        by using find-font
 SEE COKE's link for reading a pod file:
   Raku/doc/xt/rakuast-validate.rakutest
 
