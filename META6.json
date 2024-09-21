@@ -16,7 +16,7 @@
     "YAMLish",
     "PDF::Lite",
     "PDF::API6",
-    "PDF::Content:ver<0.8.6>",
+    "PDF::Content:ver<0.8.7>",
     "PDF::Tags:ver<0.1.7>",
     "PDF::Font::Loader:ver<0.8.7>"
   ],
