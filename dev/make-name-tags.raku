@@ -24,7 +24,7 @@ for $names-file.IO.lines {
     my @w = $_.words;
     my $last = @w.pop;
     my $first = @w.shift;
-    $first ~= " " ~ @w.pop if @w;;
+    $first ~= " " ~ @w.pop if @w;
     my $name = "$last $first";
     @names.push: $name;
 }
@@ -150,6 +150,7 @@ my PDF::Lite $pdf .= new;
 $pdf.media-box = [0, 0, %dims<pw>, %dims<ph>];
 my $page;
 my $page-num = 0;
+my $page0; # reference to the first page where XForm objects are stored
 while @n.elems {
 
     # a new page of names <= 8
@@ -160,9 +161,11 @@ while @n.elems {
     say "Working front page..." if $debug;
     # process the front page
     $page = $pdf.add-page;
+    $page0 = $page if not $page0; # for XObject form storage
+
     # put first and last name found in top margin
     ++$page-num;
-    make-badge-page @p, :side<front>, :$page, :$page-num, :$debug;
+    make-badge-page @p, :side<front>, :$page, :$page-num, :$debug, :$page0;
 
     say "Working back page..." if $debug;
     # process the back side of the page

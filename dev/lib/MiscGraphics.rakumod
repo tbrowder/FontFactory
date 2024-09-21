@@ -96,6 +96,7 @@ sub make-badge-page(
     @p,       # list of 8 or less names for a page
     :$side! where $side ~~ /front | back/,
     :$page!,
+    :$page0!,
     :$page-num!,
     :$debug,
 ) is export {
@@ -156,6 +157,7 @@ sub make-label(
     :$height,     # points
     :$cx!, :$cy!, # center of label in points
     :$page!,
+    :$page0!,
     :$debug,
     # default color for top portion is blue
 
@@ -313,6 +315,7 @@ sub draw-ring(
     $r,      # radius
     :$thick!, # outer radius - inner radius
     :$page!,
+    :$page0!,
     :$fill,
     :$stroke,
     :$color,
@@ -381,6 +384,7 @@ sub draw-cross(
     :$hcross = 0.5, # ratio of height and distance of crossbar from the top
     :$thick!,
     :$page!,
+    :$page0!,
     ) is export {
 }
 =end comment
@@ -393,6 +397,7 @@ sub make-cross(
     :$height!,    # points
     :$cx!, :$cy!, # points
     :$page!,
+    :$page0!,
     :$debug,
     # default color is white
 ) is export {
@@ -490,6 +495,7 @@ sub draw-star(
     :$stroke,
     :$fill,
     :$page,
+    :$page0,
     :$debug,
 ) is export {
     # draw a local 5-pointed star
@@ -539,6 +545,7 @@ sub draw-star(
 sub draw-circle-clip(
     $x, $y, $r,
     :$page!,
+    :$page0!,
     :$stroke-color = (color Black),
     :$fill-color   = (color White),
     :$linewidth = 0,
@@ -1385,17 +1392,29 @@ sub draw-cross-parts(
 
 } # sub draw-cross-parts(
 
-#=begin comment
 sub place-image(
     $cx, $cy,
     :$image-path!,
     :$page!,
+    :$page0!,
     :$debug,
     ) is export {
 
     if not $image-path.IO.r {
         die "FATAL:  Image path '$image-path' cannot be opened.";
     }
+
+    # TODO incorporate an XObject form on pages[0] for reuse. See how to
+    # do that in file 'xt/1-xform.t'.
+    # 
+    # Plan:
+=begin comment
+     At the creation of the first page (.pages[0]):
+       create the XOject form object
+       reference it by key 'Image1'
+       then use the form thereafter
+    my $page0 = $pdf.page(0);
+=end comment
 
     my PDF::Content::XObject $image .= open: $image-path;
     if $debug {
@@ -1414,4 +1433,3 @@ sub place-image(
     $g.Restore;
 
 } # sub place-image(
-#=end comment
