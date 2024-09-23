@@ -1,5 +1,10 @@
 #!/usr/bin/env raku
 
+die qq:to/HERE/;
+Tom, see work in module Slidemaker
+   AND @finanalyst's rakuast-rakudoc-render
+HERE
+
 # Ideas:
 #   treat like a vulnerability tree:
 #
