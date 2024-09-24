@@ -74,8 +74,8 @@ class FontClass is FontData is export {
         #   # substitute spaces for '-'
             $!fullname ~~ s:g/'-'/ /;
         }
-        $!shortname = $!fullname.lc;
-        $!shortname ~~ s:g/'-'/ /;
+        #$!shortname = $!fullname.lc;
+        #$!shortname ~~ s:g/'-'/ /;
         $!basename = $!path.IO.basename;
         if $!path ~~ /:i '.' otf $/ {
             $!type = 'OpenType';
