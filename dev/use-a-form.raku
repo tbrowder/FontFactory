@@ -3,34 +3,35 @@
 use PDF::API6;
 use PDF::Lite;
 
-use lib "./lib";
 use FreeFonts;
 
-my $p1 = "sample-form.pdf"; 
-my $p2 = "sample-form-150dpi.pdf";
-my $p3 = "sample-form-300dpi.pdf";
+my %fonts = get-loaded-fonts-hash;
+my $font = %fonts<tb>;
 
-my $i=0;
-for $p2, $p3 {
-    ++$i;
-    my $ver = $i;
-    my $ifil = $_;
-    my $ofil = "Form-v{$ver}.pdf";
-    unless $ifil.IO.r {
-        say "ERROR: Input file '$ifil' doesn't exist";
-    }
-    my PDF::Lite $pdf .= new; #$ifil.open;
-dd $pdf.Catalog;
+# the scanned files to be used as "watermarks"
+my $w1 = "sample-form.pdf";
+my $w2 = "sample-form-150dpi.pdf";
+my $w3 = "sample-form-300dpi.pdf";
 
-    exit;
-    $pdf.open: $ifil;
- #   $pdf.finish;
-    for $pdf.pages.kv -> $k, $v {
-        say "page $k";
-    }
+# my approach for now is to use pdftk
+# but we need the overprint in an input file
 
-    $pdf.save-as: $ofil;
-    say "See new pdf file: $ofil";
-    last;
+# create the simple "input" pdf
+my $ofil = "myinput.pdf";
+my PDF::Lite $pdf .= new; #$ifil.open;
+$pdf.media-box = [0, 0, 8.5*72, 11.0*72];
+my $cx = 0.5 * 8.5*72;
+my $cy = 0.5 * 11.0*72;
+
+my PDF::Lite::Page $page = $pdf.add-page;
+$page.graphics: {
+    .transform: :translate[$cx, $cy];
+    .transform: :rotate(0.25*pi);
+    .font = $font, 20;
+    .print: "Testing over printing a scanned form",
+            :align<center>, :valign<center>;
 }
 
+$page.finish;
+$pdf.save-as: $ofil;
+say "See new pdf file: $ofil";
