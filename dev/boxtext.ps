@@ -1,0 +1,50 @@
+/boxtext { % string location_code [integer: 0-11] (to place--relative to the current point);
+           % must have a current and correct font
+  /code exch def
+  /stname exch def
+  gsave
+  currentpoint translate np
+  0 0 mt stname false charpath flattenpath pathbbox
+  /ury exch def
+  /urx exch def
+  /lly exch def
+  /llx exch def
+  /mx urx llx add .5 mul def
+  /my ury lly add .5 mul def
+
+  0 code eq {/ox 0 mx  sub def /oy 0 my  sub def} if %               center of text bounding box positioned at the current point
+  1 code eq {/ox 0 llx sub def /oy 0 my  sub def} if %  center of left edge of text bounding box positioned at the current point
+  2 code eq {/ox 0 llx sub def /oy 0 lly sub def} if %    lower left corner of text bounding box positioned at the current point
+  3 code eq {/ox 0 mx  sub def /oy 0 lly sub def} if % center of lower edge of text bounding box positioned at the current point
+  4 code eq {/ox 0 urx sub def /oy 0 lly sub def} if %   lower right corner of text bounding box positioned at the current point
+  5 code eq {/ox 0 urx sub def /oy 0 my  sub def} if % center of right edge of text bounding box positioned at the current point
+  6 code eq {/ox 0 urx sub def /oy 0 ury sub def} if %   upper right corner of text bounding box positioned at the current point
+  7 code eq {/ox 0 mx  sub def /oy 0 ury sub def} if % center of upper edge of text bounding box positioned at the current point
+  8 code eq {/ox 0 llx sub def /oy 0 ury sub def} if %    upper left corner of text bounding box positioned at the current point
+  9 code eq {/ox 0 llx sub def /oy 0         def} if % on base line (y of current point), left-justified on current point
+ 10 code eq {/ox 0 mx  sub def /oy 0         def} if % on base line (y of current point), centered horizontally
+ 11 code eq {/ox 0 urx sub def /oy 0         def} if % on base line (y of current point), right-justified on current point
+
+  ox oy translate
+
+  gsave
+  1 setgray
+    llx 3 sub lly 3 sub mt
+    urx 3 add lly 3 sub lineto
+    urx 3 add ury 3 add lineto
+    llx 3 sub ury 3 add lineto closepath fill
+  grestore
+  gsave
+  0 setgray
+  np 0 0 mt stname show
+  grestore
+
+%for debug
+%  gsave
+%  [3] 0 setdash
+%  .1 setlinewidth np
+%  llx lly mt urx lly lineto urx ury lineto llx ury lineto closepath stroke
+%  grestore
+
+  grestore
+} bibd def % boxtext

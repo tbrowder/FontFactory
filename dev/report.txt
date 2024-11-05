@@ -1,0 +1,18 @@
+InfoBegin
+InfoKey: Creator
+InfoValue: XSane version 0.999 (sane 1.0) - by Oliver Rauch
+InfoBegin
+InfoKey: CreationDate
+InfoValue: D:20240925103548+00&apos;00&apos;
+InfoBegin
+InfoKey: Producer
+InfoValue: XSane 0.999
+InfoBegin
+InfoKey: Title
+InfoValue: XSane scanned image
+NumberOfPages: 1
+PageMediaBegin
+PageMediaNumber: 1
+PageMediaRotation: 0
+PageMediaRect: 0 0 612 842
+PageMediaDimensions: 612 842

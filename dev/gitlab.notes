@@ -1,0 +1,7 @@
+Patrick, I applaud your effort, but I would rather see a project to improve the user display to do things like:
+
+Eliminate duplicate author names in lists
+Allow authors to flag their modules with some standard codes such as "obsolete" or "deprecated" or "danger, do not use"
+
+I think the RakuDoc project itself is great, but I'm not sure our small community can afford to put that effort here. I think it's the job of module authors to provide better docs using RakuDoc themselves (very easy to do with App::Mi6).
+But perhaps I do not really understand the advantages of your proposal.

@@ -1,0 +1,12 @@
+From top entry in a script...calling subs in a module
+
+```
+my PDF::Lite $pdf .= new;
+my $page;
+for @stext {
+    $page = $pdf-add-page;
+    make-badge-page @args, :$page;
+    calls ==> make-label @args2, :$page;
+              calls ==> make-cross @args3;
+}
+```

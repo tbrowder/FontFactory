@@ -1,0 +1,2 @@
+Unexpected operation 'S' (Stroke) used in Page context, following 'f' (Fill)
+  in block  at /home/tbrowde/.raku/sources/7E3B47B599BF78A5D9F42FD22957A4C89A07AC6A (PDF::Content::Ops) line 1039
