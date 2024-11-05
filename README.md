@@ -5,7 +5,7 @@ NAME
 
 **FontFactory** - Provides convenience classes to ease OpenType and TrueType font handling in different faces and sizes.
 
-**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS. The package requires use of the 'PDF::Font::Loader:ver<0.8.7>' which has recently been ported to those two systems.
+**NOTE**: The intent is for this module to work on Linux, MacOS, and Windows. Please file an issue if you need it on your OS. The package requires use of the 'PDF::Font::Loader:ver<0.8.8>' which has recently been ported to those two systems.
 
 SYNOPSIS
 ========

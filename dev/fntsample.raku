@@ -9,7 +9,7 @@ use Font::FreeType::SizeMetrics;
 use Proc::Easier;
 
 use lib <./lib>;
-use PS-Fonts;
+use FreeFonts;
 
 # vars defined in BEGIN block
 my (%fonts, $fdir, $udir, $tdir);

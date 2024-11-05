@@ -18,7 +18,7 @@ BuildUtils
 # FontUtils; # to become its own repo later
 # BuildUtils; # to be removed
 
-plan @modules.elems + 1;;
+plan @modules.elems + 1;
 my $mod = "FontFactory";
 
 use-ok "$mod", "Module $mod can be used";

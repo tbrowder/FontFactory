@@ -1,6 +1,7 @@
 #!/usr/bin/env raku
 
 use QueryOS;
+use Bin::Utils;
 
 use FontFactory;
 use FontFactory::BuildUtils;
